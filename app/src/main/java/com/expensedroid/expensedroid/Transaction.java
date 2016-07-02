@@ -54,4 +54,8 @@ public class Transaction implements Serializable {
 
         return getDateString() + "\t" + title + "\t" + amount;
     }
+
+    public double getAmount() {
+        return amount;
+    }
 }
