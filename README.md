@@ -9,3 +9,10 @@ TODO:
 features to add:
 * filter date
 * export
+
+
+Database basic fields:
+id, title, amount, date
+
+fields to add later:
+notes, category or type
