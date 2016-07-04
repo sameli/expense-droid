@@ -7,11 +7,18 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * Created by S. Ameli on 02/07/16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
 
     public DatabaseHelper(Context context) {
         super(context, "database.db", null, 1);
@@ -65,5 +72,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows = (int) DatabaseUtils.queryNumEntries(db, "tr");
         return numRows;
+    }
+
+    public ArrayList<Transaction> getAllTransactions(Context context){
+
+        ArrayList<Transaction> array = new ArrayList<Transaction>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery( "select * from tr", null );
+        res.moveToFirst();
+        while(res.isAfterLast() == false) {
+
+            int id = res.getInt(res.getColumnIndex("id"));
+            String title = res.getString(res.getColumnIndex("title"));
+            double amount = res.getDouble(res.getColumnIndex("amount"));
+            String dateStr = res.getString(res.getColumnIndex("date"));
+            Date date = parseDate(dateStr);
+
+            System.out.println("Results from DB: " + title + " " + amount + " " + dateStr);
+            Transaction trans = new Transaction(title, amount, date);
+            trans.setDatabase_id(id);
+
+            array.add(trans);
+            res.moveToNext();
+        }
+
+        return array;
+    }
+
+    public static Date parseDate(String dateStr){
+        Date date = null;
+        DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+        try {
+            date =  df.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }

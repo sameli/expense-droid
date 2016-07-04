@@ -14,6 +14,8 @@ public class Transaction implements Serializable {
     private Date date;
     private int database_id;
 
+
+
     public int getDatabase_id() {
         return database_id;
     }
