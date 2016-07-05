@@ -57,6 +57,10 @@ public class Transaction implements Serializable {
         return getDateString() + "\t" + title + "\t" + amount;
     }
 
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
     public double getAmount() {
         return amount;
     }
