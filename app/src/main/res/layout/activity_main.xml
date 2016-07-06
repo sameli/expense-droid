@@ -33,6 +33,12 @@
         android:layout_alignParentEnd="true"
         android:textStyle=""/>
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/textView_amount_total"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

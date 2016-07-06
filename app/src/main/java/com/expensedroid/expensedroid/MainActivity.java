@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -27,6 +30,21 @@ public class MainActivity extends AppCompatActivity {
         view1.setBackgroundColor(Color.argb(255, 204, 255, 204));
 
         data = mydb.getAllTransactions(this);
+
+
+        ArrayAdapter<Transaction> transArrayAdapter = new ArrayAdapter<Transaction>(this, android.R.layout.simple_list_item_1, data);
+        ListView listview = (ListView) findViewById(R.id.listView);
+        listview.setAdapter(transArrayAdapter);
+
+        // adding events to ListView
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Transaction trans = data.get(position);
+                displayDetail(trans);
+            }
+        });
+
 
     }
 
