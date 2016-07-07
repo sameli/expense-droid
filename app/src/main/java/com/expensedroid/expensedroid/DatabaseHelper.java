@@ -101,6 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return array;
     }
 
+    // this must be static so we can access it in objects without waiting to initialize the db
     public static Date parseDate(String dateStr){
         Date date = null;
         DateFormat df = new SimpleDateFormat(DATE_FORMAT);
