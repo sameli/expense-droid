@@ -19,6 +19,7 @@ import java.util.Date;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String TABLE_NAME = "tr";
 
     public DatabaseHelper(Context context) {
         super(context, "database.db", null, 1);
@@ -33,13 +34,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS tr");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 
     public Cursor getData(int id){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from tr where id="+id+"", null );
+        Cursor res =  db.rawQuery( "select * from"+TABLE_NAME+"where id="+id+"", null );
         return res;
     }
 
@@ -49,7 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("title", trans.getTitle());
         contentValues.put("amount", trans.getAmount());
         contentValues.put("date", trans.getDateString());
-        db.insert("tr", null, contentValues);
+        db.insert(TABLE_NAME, null, contentValues);
         return true;
     }
 
@@ -59,13 +60,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("title", title);
         contentValues.put("amount", amount);
         contentValues.put("date", dateStr);
-        db.update("tr", contentValues, "id = ? ", new String[] {Integer.toString(id)});
+        db.update(TABLE_NAME, contentValues, "id = ? ", new String[] {Integer.toString(id)});
         return true;
     }
 
     public Integer deleteTransaction(Integer id){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("tr", "id = ? ", new String[] {Integer.toString(id)});
+        return db.delete(TABLE_NAME, "id = ? ", new String[] {Integer.toString(id)});
     }
 
     public int numberOfRows(){
@@ -79,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Transaction> array = new ArrayList<Transaction>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "select * from tr", null );
+        Cursor res = db.rawQuery( "select * from "+ TABLE_NAME, null );
         res.moveToFirst();
         while(res.isAfterLast() == false) {
 
