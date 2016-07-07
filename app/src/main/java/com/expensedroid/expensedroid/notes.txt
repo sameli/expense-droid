@@ -2,3 +2,6 @@ notes file
 
 
 * Month from Date picker is from 0-11. So we add one: Month +1
+
+
+* to send data to another acticity we can either use bundle or Serializable.
