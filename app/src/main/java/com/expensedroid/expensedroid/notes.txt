@@ -4,4 +4,15 @@ notes file
 * Month from Date picker is from 0-11. So we add one: Month +1
 
 
-* to send data to another acticity we can either use bundle or Serializable.
+* to send data to another acticity we can either use bundle.
+
+Serializable object to send data:
+
+public class SomeClass implements Serializable
+// then in main activity:
+intent.putExtra("key", SomeClass_instance);
+startActivity(intent);
+
+// in the other activity to get data:
+Intent intent = getIntent();
+SomeClass class = (SomeClass) intent.getExtras().getSerializable("key")
