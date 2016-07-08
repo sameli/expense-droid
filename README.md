@@ -1,10 +1,14 @@
 Expense Droid app:
 
 TODO:
+* fix listview
+* attach edit view to main activity
+* fix datapicker in the edit view
+
+
+TODO (less important):
 * add amount dialog filter
-* build a list for the main view
-* build edit view
-* add datepicker to the edit view
+
 
 features to add:
 * filter date
