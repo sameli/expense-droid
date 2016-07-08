@@ -14,13 +14,13 @@ public class SettingsIO {
         SharedPreferences settings = context.getSharedPreferences(SETTINGS_TITLE, 0);
 
         if(data instanceof String){
-            return (T) (String) settings.getString(key,data);
+            return (T) (String) settings.getString(key, (String)data);
 
         }else if(data instanceof Integer){
-            return (T) (Integer) settings.getInt(key, data);
+            return (T) (Integer) settings.getInt(key, (Integer)data);
 
         }else if(data instanceof Boolean){
-            return (T) (Boolean) settings.getBoolean(key, data);
+            return (T) (Boolean) settings.getBoolean(key, (Boolean)data);
         }
 
         return null;
