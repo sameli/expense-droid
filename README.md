@@ -1,7 +1,7 @@
 Expense Droid app:
 
 TODO:
-* fix listview
+* listview > edit activity
 * attach edit view to main activity
 * fix datapicker in the edit view
 
