@@ -20,7 +20,7 @@ public class CustomListViewAdapter extends BaseAdapter {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
     }
-    
+
     @Override
     public int getCount() {
         return 0;

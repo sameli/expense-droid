@@ -32,9 +32,20 @@ public class MainActivity extends AppCompatActivity {
         data = mydb.getAllTransactions(this);
 
 
-        ArrayAdapter<Transaction> transArrayAdapter = new ArrayAdapter<Transaction>(this, android.R.layout.simple_list_item_1, data);
+        //ArrayAdapter<Transaction> transArrayAdapter = new ArrayAdapter<Transaction>(this, android.R.layout.simple_list_item_1, data);
         ListView listview = (ListView) findViewById(R.id.listView);
-        listview.setAdapter(transArrayAdapter);
+        //listview.setAdapter(transArrayAdapter);
+        listview.setAdapter(new CustomListViewAdapter(this, data));
+
+
+        // adding events to ListView
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Transaction trans = data.get(position);
+                displayDetail(trans);
+            }
+        });
 
         // adding events to ListView
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
