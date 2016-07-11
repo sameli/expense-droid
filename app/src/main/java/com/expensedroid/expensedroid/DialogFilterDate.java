@@ -41,14 +41,11 @@ public class DialogFilterDate  extends DialogFragment {
 
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.filter_date_spinner);
 
-        // Spinner click listener
-        // spinner.setOnItemSelectedListener(new setonitemclicklistener
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String str = (String) spinner.getItemAtPosition(i);
-                //System.out.println(">>>> onItemSelected: " + i + ", str: " + str);
                 selectedEquality = str;
             }
 
@@ -68,6 +65,14 @@ public class DialogFilterDate  extends DialogFragment {
 
 
 
+        Button applyFilterButton = (Button) rootView.findViewById(R.id.btn_filter_date_applyfilter);
+        applyFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO
+                dismiss();
+            }
+        });
 
 
         return rootView;
