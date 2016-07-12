@@ -1,7 +1,7 @@
 Expense Droid app:
 
 TODO:
-* fix dialog filter
+* fix menu
 * attach edit view to main activity
 * fix datapicker in the edit view
 

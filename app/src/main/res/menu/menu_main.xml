@@ -11,4 +11,12 @@
         android:orderInCategory="102"
         android:title="Exit"
         android:onClick="onMenuExit"/>
+    <item
+        android:id="@+id/submenu_filter_date"
+        android:title="Date"
+        android:checkable="true"/>
+    <item
+        android:id="@+id/submenu_filter_amount"
+        android:title="Amount"
+        android:checkable="true"/>
 </menu>
