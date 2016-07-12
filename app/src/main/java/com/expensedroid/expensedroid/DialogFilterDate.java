@@ -93,8 +93,10 @@ public class DialogFilterDate  extends DialogFragment {
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
         int year = datePicker.getYear();
+        String monthStr = String.format("%02d", (month+1));
+        String dayStr = String.format("%02d", day);
 
-        str = year + "-" + month + "-" + day;
+        str = year + "-" + monthStr + "-" + dayStr;
         System.out.println(">>>> str: " + str);
 
 
