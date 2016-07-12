@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 
 /**
@@ -69,12 +70,34 @@ public class DialogFilterDate  extends DialogFragment {
         applyFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+
+                DialogFilterDateListener activity = (DialogFilterDateListener) getActivity();
+                try{
+                    activity.onApplyFilterBtn(selectedEquality, getDatePickerDate());
+
+                }catch(Exception e){
+                    System.out.println(e);
+                }
                 dismiss();
             }
         });
 
 
         return rootView;
+    }
+
+    private String getDatePickerDate(){
+        String str = "";
+        DatePicker datePicker = (DatePicker) this.getDialog().findViewById(R.id.filter_date_datePicker);
+
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year = datePicker.getYear();
+
+        str = year + "-" + month + "-" + day;
+        System.out.println(">>>> str: " + str);
+
+
+        return str;
     }
 }
