@@ -8,6 +8,7 @@ TODO:
 
 TODO (less important):
 * add amount dialog filter
+* fix datebase upgrade
 
 
 features to add:
