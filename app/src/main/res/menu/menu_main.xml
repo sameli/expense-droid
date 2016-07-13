@@ -7,16 +7,25 @@
         android:title="Add new item"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/menu_id_filter"
+        android:orderInCategory="101"
+        android:title="Filter"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <item
+                android:id="@+id/submenu_filter_date"
+                android:title="Date"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/submenu_filter_amount"
+                android:title="Amount"
+                android:checkable="true"/>
+        </menu>
+    </item>
+    <item
         android:id="@+id/menu_id_exit"
         android:orderInCategory="102"
         android:title="Exit"
         android:onClick="onMenuExit"/>
-    <item
-        android:id="@+id/submenu_filter_date"
-        android:title="Date"
-        android:checkable="true"/>
-    <item
-        android:id="@+id/submenu_filter_amount"
-        android:title="Amount"
-        android:checkable="true"/>
 </menu>
