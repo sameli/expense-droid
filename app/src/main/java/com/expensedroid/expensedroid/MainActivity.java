@@ -2,10 +2,12 @@ package com.expensedroid.expensedroid;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     protected ArrayList<Transaction> data;
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
     DatabaseHelper mydb;
+    private DialogFilterDate dialogFilterDate;
+
 
 
     @Override
@@ -59,12 +63,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
 
-        return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_id_add:
+                Intent editIntent = new Intent(this, EditActivity.class);
+                startActivity(editIntent);
+                return true;
+            case R.id.submenu_filter_date:
+
+
+                System.out.println("item.isChecked(): " + item.isChecked());
+
+                if(item.isChecked() == false){
+                    FragmentManager fm = getSupportFragmentManager();
+                    dialogFilterDate.show(fm, "Date filter dialog");
+                }else{
+                    finish();
+                    startActivity(getIntent());
+                }
+
+/*
+                isMenuItemChecked_put(item, "menu_filter_date_checkbox");
+                checkIfAllFilterItemsChecked();
+                invalidateOptionsMenu();
+                */
+
+                return true;
+            case R.id.submenu_filter_amount:
+                //isMenuItemChecked_put(item, "menu_filter_amount_checkbox");
+                //checkIfAllFilterItemsChecked();
+                //invalidateOptionsMenu();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void displayDetail(Transaction trans) {
@@ -72,4 +104,6 @@ public class MainActivity extends AppCompatActivity {
         editIntent.putExtra(INTENT_EDIT_MSG_ID, trans);
         startActivity(editIntent);
     }
+
+
 }
