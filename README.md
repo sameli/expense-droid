@@ -1,7 +1,7 @@
 Expense Droid app:
 
 TODO:
-* fix menu
+* change menu color on selecting filter
 * attach edit view to main activity
 * fix datapicker in the edit view
 
@@ -13,7 +13,9 @@ TODO (less important):
 
 features to add:
 * filter date
-* export
+* filter amount
+* export for backup/restore
+* save in csv format
 
 features to skip for now:
 * multiple accounts

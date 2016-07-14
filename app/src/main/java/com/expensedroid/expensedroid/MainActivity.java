@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -60,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        TextView amountTotal = (TextView)findViewById(R.id.textView_amount_total);
+        double sum = calcTotal(data);
+        amountTotal.setText("$" + String.format("%.2f", sum));
+
 
     }
 
@@ -83,20 +88,20 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(getIntent());
                 }
 
-/*
-                isMenuItemChecked_put(item, "menu_filter_date_checkbox");
-                checkIfAllFilterItemsChecked();
-                invalidateOptionsMenu();
-                */
-
                 return true;
             case R.id.submenu_filter_amount:
-                //isMenuItemChecked_put(item, "menu_filter_amount_checkbox");
-                //checkIfAllFilterItemsChecked();
-                //invalidateOptionsMenu();
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private double calcTotal(ArrayList<Transaction> data){
+        double sum = 0;
+        for(int i =0;i<data.size();i++){
+            sum += data.get(i).getAmount();
+        }
+        return sum;
     }
 
     private void displayDetail(Transaction trans) {
