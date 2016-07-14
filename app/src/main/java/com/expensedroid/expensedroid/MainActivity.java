@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
     DatabaseHelper mydb;
     private DialogFilterDate dialogFilterDate;
+    private boolean filterActivated = false;
+
 
 
 
@@ -66,6 +68,25 @@ public class MainActivity extends AppCompatActivity {
         amountTotal.setText("$" + String.format("%.2f", sum));
 
 
+    }
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+
+        //checkIfAllFilterItemsChecked();
+        if(filterActivated) {
+            changeFilterMenuColor(menu, Color.GREEN);
+        }else{
+            changeFilterMenuColor(menu, Color.WHITE);
+        }
+
+
+        boolean isChecked_filter_amount = SettingsIO.readData(this, false, "menu_filter_amount_checkbox");
+
+        return true;
     }
 
 
