@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
 
 
-        //checkIfAllFilterItemsChecked();
+        checkIfAllFilterItemsChecked();
         if(filterActivated) {
             changeFilterMenuColor(menu, Color.GREEN);
         }else{
@@ -125,10 +125,26 @@ public class MainActivity extends AppCompatActivity {
         return sum;
     }
 
+    // check if all of the menu items are checked from the settings
+    private void checkIfAllFilterItemsChecked() {
+        boolean isChecked_menu_filter_date = SettingsIO.readData(this, false, "menu_filter_date_checkbox");// settings.getBoolean("menu_filter_date_checkbox", false);
+        boolean isChecked_menu_filter_amount = SettingsIO.readData(this, false, "menu_filter_amount_checkbox");// settings.getBoolean("menu_filter_amount_checkbox", false);
+
+        if (isChecked_menu_filter_date || isChecked_menu_filter_amount) {
+            filterActivated = true;
+        } else {
+            filterActivated = false;
+        }
+    }
+
     private void displayDetail(Transaction trans) {
         Intent editIntent = new Intent(this, EditActivity.class);
         editIntent.putExtra(INTENT_EDIT_MSG_ID, trans);
         startActivity(editIntent);
+    }
+
+    private void changeFilterMenuColor(Menu menu, int color){
+        //TODO
     }
 
 
