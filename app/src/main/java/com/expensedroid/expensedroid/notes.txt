@@ -16,3 +16,11 @@ startActivity(intent);
 // in the other activity to get data:
 Intent intent = getIntent();
 SomeClass class = (SomeClass) intent.getExtras().getSerializable("key")
+
+
+Example listview
+List<Transaction> data = new ArrayList<>();
+// add new Transactions to data
+ArrayAdapter<Transaction> transArrayAdapter = new ArrayAdapter<Transaction>(this, android.R.layout.simple_list_item_1, data);
+ListView listview = (ListView) findViewById(R.id.listView);
+listview.setAdapter(transArrayAdapter);
