@@ -24,3 +24,6 @@ List<Transaction> data = new ArrayList<>();
 ArrayAdapter<Transaction> transArrayAdapter = new ArrayAdapter<Transaction>(this, android.R.layout.simple_list_item_1, data);
 ListView listview = (ListView) findViewById(R.id.listView);
 listview.setAdapter(transArrayAdapter);
+
+
+Usefull site to modify icons: http://romannurik.github.io/AndroidAssetStudio/
