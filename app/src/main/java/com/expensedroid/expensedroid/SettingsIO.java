@@ -25,4 +25,11 @@ public class SettingsIO {
 
         return null;
     }
+
+    public static <T> Boolean saveData(Context context, T data, String key) {
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS_TITLE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        //TODO
+        return null;
+    }
 }
