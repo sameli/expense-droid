@@ -32,10 +32,24 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
+    // this is set from the xml
+    public void btnOpenDateDialog(View view) {
+        DatePickerFrag newFragment = new DatePickerFrag();
+        newFragment.set_id_btn_to_modify(R.id.btn_date);
+        newFragment.show(getFragmentManager(),"Date Picker");
+    }
+
 
     public void btnDiscard(View view) {
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent); // this will switch to DetailActivity
+    }
+
+    public void btnDelete(View view) {
+        if(database_id != -1){
+            //TODO
+
+        }
     }
 
 }
