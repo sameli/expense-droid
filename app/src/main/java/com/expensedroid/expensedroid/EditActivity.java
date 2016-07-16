@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * Created by S. Ameli on 03/07/16.
@@ -32,6 +33,11 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
+    private void gotoMainActivity(){
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        startActivity(mainIntent); // this will switch to DetailActivity
+    }
+    
     // this is set from the xml
     public void btnOpenDateDialog(View view) {
         DatePickerFrag newFragment = new DatePickerFrag();
@@ -47,8 +53,10 @@ public class EditActivity extends AppCompatActivity {
 
     public void btnDelete(View view) {
         if(database_id != -1){
-            //TODO
-
+            DatabaseHelper mydb = new DatabaseHelper(this);
+            mydb.deleteTransaction(database_id);
+            Toast.makeText(EditActivity.this, "Deleted item", Toast.LENGTH_LONG).show();
+            gotoMainActivity();
         }
     }
 
