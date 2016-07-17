@@ -60,7 +60,14 @@ public class EditActivity extends AppCompatActivity {
 
         DatabaseHelper mydb = new DatabaseHelper(this);
         if(database_id == -1){ // this means database row id has not been set, and we add new item to database
-           //TODO
+            // title, amount, expenses
+            mydb.insertTransaction(new Transaction(title, amount , DatabaseHelper.parseDate(dateStr)));
+
+            Toast.makeText(EditActivity.this, "Added new item to database", Toast.LENGTH_LONG).show();
+        }else{ // we have an database_id. we need to update that row on database
+            mydb.updateTransaction(database_id, title, amount, dateStr);
+
+            Toast.makeText(EditActivity.this, "Updated item", Toast.LENGTH_LONG).show();
         }
 
 
