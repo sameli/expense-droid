@@ -58,6 +58,11 @@ public class EditActivity extends AppCompatActivity {
         //Date date = DatabaseHelper.parseDate(dateStr);
 
 
+        DatabaseHelper mydb = new DatabaseHelper(this);
+        if(database_id == -1){ // this means database row id has not been set, and we add new item to database
+           //TODO
+        }
+
 
         gotoMainActivity();
 
