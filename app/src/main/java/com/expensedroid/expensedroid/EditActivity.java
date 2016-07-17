@@ -43,8 +43,8 @@ public class EditActivity extends AppCompatActivity {
         EditText editText_amount = (EditText) findViewById(R.id.editText_amount);
         String amount_str = editText_amount.getText().toString();
 
-        Button refresh_btn = (Button) findViewById(R.id.btnRefresh);
-
+        Button btn_date = (Button) findViewById(R.id.btn_date);
+        String date_str = btn_date.getText().toString();
 
 
         if(title.length() == 0 || amount_str.length() == 0 || date_str.length() == 0){
@@ -53,7 +53,10 @@ public class EditActivity extends AppCompatActivity {
         }
 
         double amount = Double.parseDouble(amount_str);
+        //int expenses = Integer.parseInt(expenses_str); // replace with date parse from string
         String dateStr = ((Button) findViewById(R.id.btn_date)).getText().toString();
+        //Date date = DatabaseHelper.parseDate(dateStr);
+
 
 
         gotoMainActivity();
