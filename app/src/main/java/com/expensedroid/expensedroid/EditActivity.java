@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 /**
@@ -33,11 +35,37 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
+
+    public void btnSave(View view) {
+        EditText editText_title = (EditText) findViewById(R.id.editText_title);
+        String title = editText_title.getText().toString();
+
+        EditText editText_amount = (EditText) findViewById(R.id.editText_amount);
+        String amount_str = editText_amount.getText().toString();
+
+        Button refresh_btn = (Button) findViewById(R.id.btnRefresh);
+
+
+
+        if(title.length() == 0 || amount_str.length() == 0 || date_str.length() == 0){
+            Toast.makeText(EditActivity.this, "fill all blank spots", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        double amount = Double.parseDouble(amount_str);
+        String dateStr = ((Button) findViewById(R.id.btn_date)).getText().toString();
+
+
+        gotoMainActivity();
+
+    }
+
+
     private void gotoMainActivity(){
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent); // this will switch to DetailActivity
     }
-    
+
     // this is set from the xml
     public void btnOpenDateDialog(View view) {
         DatePickerFrag newFragment = new DatePickerFrag();
