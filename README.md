@@ -1,7 +1,6 @@
 Expense Droid app:
 
 TODO:
-* change menu color on selecting filter
 * attach edit view to main activity
 * fix datapicker in the edit view
 

@@ -27,3 +27,4 @@ listview.setAdapter(transArrayAdapter);
 
 
 Usefull site to modify icons: http://romannurik.github.io/AndroidAssetStudio/
+resize app images: https://github.com/redwarp/9-Patch-Resizer/releases
