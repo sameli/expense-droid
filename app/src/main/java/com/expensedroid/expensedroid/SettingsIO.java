@@ -29,7 +29,13 @@ public class SettingsIO {
     public static <T> Boolean saveData(Context context, T data, String key) {
         SharedPreferences settings = context.getSharedPreferences(SETTINGS_TITLE, 0);
         SharedPreferences.Editor editor = settings.edit();
-        //TODO
+
+        if (data instanceof String) {
+            System.out.println("saveData: data is String");
+            editor.putString(key, (String) data);
+            editor.commit();
+        }
+
         return null;
     }
 }
