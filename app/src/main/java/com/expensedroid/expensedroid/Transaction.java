@@ -7,14 +7,15 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Transaction implements Serializable {
+/**
+ * Created by S. Ameli on 03/07/16.
+ */
+public class Transaction implements Serializable { // we need serializable so we can send the entire object to other activities
 
     private String title;
     private double amount;
     private Date date;
-    private int database_id;
-
-
+    private int database_id; // this is row ID in the database for this transaction
 
     public int getDatabase_id() {
         return database_id;
@@ -37,6 +38,15 @@ public class Transaction implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -52,16 +62,8 @@ public class Transaction implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public String toString() { // this is called in the main menu when adding to listview
 
         return getDateString() + "\t" + title + "\t" + amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public double getAmount() {
-        return amount;
     }
 }
