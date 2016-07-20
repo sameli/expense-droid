@@ -21,8 +21,6 @@ import java.util.Date;
 /**
  * Created by S. Ameli on 03/07/16.
  */
-
-
 public class EditActivity extends AppCompatActivity {
 
     private int database_id = -1;
