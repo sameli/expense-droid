@@ -1,17 +1,28 @@
 package com.expensedroid.expensedroid;
 
+import android.app.DialogFragment;
 import android.content.Intent;
-import android.os.Bundle;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Date;
 
 /**
  * Created by S. Ameli on 03/07/16.
  */
+
+
 public class EditActivity extends AppCompatActivity {
 
     private int database_id = -1;
@@ -20,21 +31,48 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-    }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_id_add:
-                Intent editIntent = new Intent(this, EditActivity.class);
-                //editIntent.putExtra(INTENT_EDIT_MSG_ID, "some message here blabla");
-                startActivity(editIntent); // this will switch to DetailActivity
-                return true;
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            default:
-                return super.onOptionsItemSelected(item);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(Color.parseColor("#FF303F9F"));
+
+        Intent intent = getIntent();
+
+        if(intent.getExtras() != null){
+            getSupportActionBar().setTitle("Edit");
+
+            Transaction trans = (Transaction) intent.getExtras().getSerializable(MainActivity.INTENT_EDIT_MSG_ID);
+
+            EditText editText_title = (EditText) findViewById(R.id.editText_title);
+            editText_title.setText(trans.getTitle());
+
+            EditText editText_amount = (EditText) findViewById(R.id.editText_amount);
+            editText_amount.setText(String.valueOf(trans.getAmount()));
+
+            Button btn_date = (Button) findViewById(R.id.btn_date);
+            btn_date.setText(String.valueOf(trans.getDateString()));
+
+
+            database_id = trans.getDatabase_id();
+
+            TextView textview = (TextView) findViewById(R.id.textView2);
+            textview.setText("id is: " + String.valueOf(database_id));
+
+
+
+        }else{
+            getSupportActionBar().setTitle("Add new item");
+            //System.out.println("Intent extra is empty, this is from add btn on main page");
+            database_id = -1;
+            Button btnDelete = (Button) findViewById(R.id.btn_delete);
+            btnDelete.setVisibility(View.INVISIBLE);
         }
-    }
 
+    }
 
     public void btnSave(View view) {
         EditText editText_title = (EditText) findViewById(R.id.editText_title);
@@ -75,7 +113,6 @@ public class EditActivity extends AppCompatActivity {
 
     }
 
-
     private void gotoMainActivity(){
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent); // this will switch to DetailActivity
@@ -88,7 +125,6 @@ public class EditActivity extends AppCompatActivity {
         newFragment.show(getFragmentManager(),"Date Picker");
     }
 
-
     public void btnDiscard(View view) {
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent); // this will switch to DetailActivity
@@ -100,7 +136,7 @@ public class EditActivity extends AppCompatActivity {
             mydb.deleteTransaction(database_id);
             Toast.makeText(EditActivity.this, "Deleted item", Toast.LENGTH_LONG).show();
             gotoMainActivity();
+
         }
     }
-
 }
