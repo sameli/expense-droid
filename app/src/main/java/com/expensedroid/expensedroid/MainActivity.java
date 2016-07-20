@@ -5,14 +5,16 @@ import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -89,29 +91,41 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_id_add:
                 Intent editIntent = new Intent(this, EditActivity.class);
-                startActivity(editIntent);
+                //editIntent.putExtra(INTENT_EDIT_MSG_ID, "some message here blabla");
+                startActivity(editIntent); // this will switch to DetailActivity
                 return true;
             case R.id.submenu_filter_date:
 
 
-                System.out.println("item.isChecked(): " + item.isChecked());
+                printMsg("item.isChecked(): " + item.isChecked());
 
                 if(item.isChecked() == false){
                     FragmentManager fm = getSupportFragmentManager();
                     dialogFilterDate.show(fm, "Date filter dialog");
                 }else{
-                    finish();
-                    startActivity(getIntent());
+                    // if menu item is checked, then we set the menu date checkbox to false in the settings
+                    // then call invalidateOptionsMenu() to refresh the menu. the onCreateOptionsMenu() will be called and
+                    // it reads the settings to update status and style of menu
+                    SettingsIO.saveData(this, false, "menu_filter_date_checkbox");
+                    //invalidateOptionsMenu();
+                    refreshActivity();
                 }
+
+/*
+                isMenuItemChecked_put(item, "menu_filter_date_checkbox");
+                checkIfAllFilterItemsChecked();
+                invalidateOptionsMenu();
+                */
 
                 return true;
             case R.id.submenu_filter_amount:
-
+                //isMenuItemChecked_put(item, "menu_filter_amount_checkbox");
+                //checkIfAllFilterItemsChecked();
+                //invalidateOptionsMenu();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -147,5 +161,9 @@ public class MainActivity extends AppCompatActivity {
         //TODO
     }
 
+    private void refreshActivity(){
+        finish();
+        startActivity(getIntent());
+    }
 
 }

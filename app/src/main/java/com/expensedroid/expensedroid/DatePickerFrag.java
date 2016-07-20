@@ -12,7 +12,7 @@ import java.util.Calendar;
 /**
  * Created by S. Ameli on 05/07/16.
  */
-public class DatePickerFrag  extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class DatePickerFrag extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private int id_btn_to_modify;
 
