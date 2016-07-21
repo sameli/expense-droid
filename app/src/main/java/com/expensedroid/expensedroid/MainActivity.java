@@ -18,25 +18,53 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by S. Ameli on 01/07/16.
+ */
+public class MainActivity extends AppCompatActivity implements DialogFilterDateListener{
 
     protected ArrayList<Transaction> data;
-    public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
     DatabaseHelper mydb;
-    private DialogFilterDate dialogFilterDate;
+    public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
     private boolean filterActivated = false;
 
-
-
+    private DialogFilterDate dialogFilterDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         View view1 = (View) findViewById(R.id.mainview1);
         //view1.setBackgroundColor(Color.argb(100,0,200,0));
         view1.setBackgroundColor(Color.argb(255, 204, 255, 204));
+
+        dialogFilterDate = new DialogFilterDate();
+
+
+        printMsg(">>>>>>>MainActivity onCreate ------");
+
+
+        //data = new ArrayList<>();
+        /*
+        for(int i = 0;i<30;i++) {
+            data.add(new Transaction("transaction# " + i, 500 + i, 100+i));
+        }
+        */
+
+
+        mydb = new DatabaseHelper(this);
+
+        /*
+        int numberOfRows = mydb.numberOfRows();
+
+        for(int i = 0;i<3;i++) {
+            mydb.insertTransaction(new Transaction("transaction# " + numberOfRows, 500 + i, 100+i));
+            numberOfRows++;
+        }
+        */
+
 
         data = mydb.getAllTransactions(this);
 
@@ -56,26 +84,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // adding events to ListView
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Transaction trans = data.get(position);
-                displayDetail(trans);
-            }
-        });
 
         TextView amountTotal = (TextView)findViewById(R.id.textView_amount_total);
         double sum = calcTotal(data);
         amountTotal.setText("$" + String.format("%.2f", sum));
 
-
     }
 
+    private double calcTotal(ArrayList<Transaction> data){
+        double sum = 0;
+        for(int i =0;i<data.size();i++){
+            sum += data.get(i).getAmount();
+        }
+        return sum;
+    }
+
+    private void changeFilterMenuColor(Menu menu, int color){
+        MenuItem menuItem = menu.findItem(R.id.menu_id_filter);
+        CharSequence menuTitle = menuItem.getTitle();
+        SpannableString styledMenuTitle = new SpannableString(menuTitle);
+        styledMenuTitle.setSpan(new ForegroundColorSpan(color), 0, menuTitle.length(), 0);
+        menuItem.setTitle(styledMenuTitle);
+    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+        //menu.add("Connected").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        //TextView filterItem = (TextView) menu.findItem(R.id.menu_id_filter).getActionView();
+        //filterItem.setTextColor(Color.RED);
 
 
         checkIfAllFilterItemsChecked();
@@ -85,8 +123,27 @@ public class MainActivity extends AppCompatActivity {
             changeFilterMenuColor(menu, Color.WHITE);
         }
 
+        boolean isChecked_filter_date = SettingsIO.readData(this, false, "menu_filter_date_checkbox");// readSettings_booleanItem("menu_filter_date_checkbox", false);
+        MenuItem item_filter_date = menu.findItem(R.id.submenu_filter_date);
+        item_filter_date.setChecked(isChecked_filter_date);
 
-        boolean isChecked_filter_amount = SettingsIO.readData(this, false, "menu_filter_amount_checkbox");
+        /*
+        SettingsIO.saveData(this, selectedEquality, "menu_filter_date_checkbox_selectedequality");
+        SettingsIO.saveData(this, selectedDate, "menu_filter_date_checkbox_selecteddate");
+         */
+        if(isChecked_filter_date){
+            String dateStr = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selecteddate");
+            String selectedEquality = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selectedequality");
+            String operatorStr = DialogFilterDate.getSmallOperatorStr(selectedEquality);
+
+            item_filter_date.setTitle("Date " + operatorStr + " " + dateStr);
+        }else {
+            item_filter_date.setTitle("Date");
+        }
+
+        boolean isChecked_filter_amount = SettingsIO.readData(this, false, "menu_filter_amount_checkbox");//readSettings_booleanItem("menu_filter_amount_checkbox", false);
+        MenuItem item_filter_amount = menu.findItem(R.id.submenu_filter_amount);
+        item_filter_amount.setChecked(isChecked_filter_amount);
 
         return true;
     }
@@ -131,22 +188,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private double calcTotal(ArrayList<Transaction> data){
-        double sum = 0;
-        for(int i =0;i<data.size();i++){
-            sum += data.get(i).getAmount();
-        }
-        return sum;
-    }
-
     // check if all of the menu items are checked from the settings
-    private void checkIfAllFilterItemsChecked() {
+    private void checkIfAllFilterItemsChecked(){
         boolean isChecked_menu_filter_date = SettingsIO.readData(this, false, "menu_filter_date_checkbox");// settings.getBoolean("menu_filter_date_checkbox", false);
         boolean isChecked_menu_filter_amount = SettingsIO.readData(this, false, "menu_filter_amount_checkbox");// settings.getBoolean("menu_filter_amount_checkbox", false);
 
-        if (isChecked_menu_filter_date || isChecked_menu_filter_amount) {
+        if(isChecked_menu_filter_date || isChecked_menu_filter_amount){
             filterActivated = true;
-        } else {
+        }else{
             filterActivated = false;
         }
     }
@@ -157,13 +206,33 @@ public class MainActivity extends AppCompatActivity {
         startActivity(editIntent);
     }
 
-    private void changeFilterMenuColor(Menu menu, int color){
-        //TODO
+
+    private void printMsg(String str){
+        System.out.println(str);
+    }
+
+    public void onMenuExit(MenuItem item) {
+        this.finishAffinity();
+    }
+
+    @Override
+    public void onApplyFilterBtn(String selectedEquality, String selectedDate) {
+
+        SettingsIO.saveData(this, true, "menu_filter_date_checkbox");
+        SettingsIO.saveData(this, selectedEquality, "menu_filter_date_checkbox_selectedequality");
+        SettingsIO.saveData(this, selectedDate, "menu_filter_date_checkbox_selecteddate");
+        //invalidateOptionsMenu();
+        Toast.makeText(this, "Filter applied", Toast.LENGTH_LONG).show();
+
+        refreshActivity();
+
+
+        printMsg(">>>> onApplyFilterBtn: " + selectedEquality + ", " + selectedDate);
+
     }
 
     private void refreshActivity(){
         finish();
         startActivity(getIntent());
     }
-
 }

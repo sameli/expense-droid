@@ -12,8 +12,8 @@ import java.util.ArrayList;
 /**
  * Created by S. Ameli on 09/07/16.
  */
-public class CustomListViewAdapter extends BaseAdapter {
 
+public class CustomListViewAdapter extends BaseAdapter{
     private ArrayList<Transaction> listData;
     private LayoutInflater layoutInflater;
 
@@ -24,19 +24,18 @@ public class CustomListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return listData.size();
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public Object getItem(int position) {
+        return listData.get(position);
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public long getItemId(int position) {
+        return position;
     }
-
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;

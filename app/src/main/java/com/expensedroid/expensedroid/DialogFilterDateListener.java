@@ -5,5 +5,4 @@ package com.expensedroid.expensedroid;
  */
 public interface DialogFilterDateListener {
     void onApplyFilterBtn(String selectedEquality, String selectedDate);
-    void onApplyFilterMain(String data);
 }

@@ -33,12 +33,21 @@
         android:layout_alignParentEnd="true"
         android:textStyle=""/>
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="#000000"
+        android:layout_above="@+id/listView"
+        android:layout_alignParentStart="true" />
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_below="@+id/textView_amount_total"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView_total"
+        android:divider="#191970"
+        android:dividerHeight="1dp"/>
 
 
 </RelativeLayout>

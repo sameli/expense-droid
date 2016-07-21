@@ -4,10 +4,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import java.util.Calendar;
 
+import java.util.Calendar;
 
 /**
  * Created by S. Ameli on 05/07/16.

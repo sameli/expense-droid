@@ -18,30 +18,27 @@ import java.util.Date;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DATABASE_NAME = "mydatabase.db";
     public static final String TABLE_NAME = "tr";
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+
 
     public DatabaseHelper(Context context) {
-        super(context, "database.db", null, 1);
+        super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(
-                "create table tr (id integer primary key, title TEXT,amount REAL,date DATETIME)"
+                "create table " + TABLE_NAME +
+                        " (id integer primary key, title TEXT,amount REAL,date DATETIME)"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(sqLiteDatabase);
-    }
-
-    public Cursor getData(int id){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from"+TABLE_NAME+"where id="+id+"", null );
-        return res;
     }
 
     public boolean insertTransaction(Transaction trans){
@@ -52,6 +49,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("date", trans.getDateString());
         db.insert(TABLE_NAME, null, contentValues);
         return true;
+    }
+
+    public Cursor getData(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + TABLE_NAME + " where id="+id+"", null );
+        return res;
+    }
+
+    public int numberOfRows(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+        return numRows;
     }
 
     public boolean updateTransaction(Integer id, String title, double amount, String dateStr){
@@ -69,18 +78,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_NAME, "id = ? ", new String[] {Integer.toString(id)});
     }
 
-    public int numberOfRows(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, "tr");
-        return numRows;
-    }
-
     public ArrayList<Transaction> getAllTransactions(Context context){
 
         ArrayList<Transaction> array = new ArrayList<Transaction>();
 
+
+        // load filters
+        Boolean isDateFilterActive = SettingsIO.readData(context, false, "menu_filter_date_checkbox");
+
+        String dateFilterSQL = "";//"where date(date) = '2016-07-30'";
+        if(isDateFilterActive){
+
+            //where date(dateofbirth)>date('1980-12-01')
+            String selectedEquality = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selectedequality");
+            String operatorSign = DialogFilterDate.getSmallOperatorStr(selectedEquality);
+
+            String selectedDate = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selecteddate");
+
+            dateFilterSQL = "where date(date) " + operatorSign + " date('" + selectedDate + "')";
+            System.out.println(">>> sql: " + dateFilterSQL);
+        }
+        //System.out.println(">>> sql: " + dateFilterSQL);
+
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "select * from "+ TABLE_NAME, null );
+        Cursor res = db.rawQuery( "select * from " + TABLE_NAME + " " + dateFilterSQL, null );
         res.moveToFirst();
         while(res.isAfterLast() == false) {
 
@@ -101,7 +122,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return array;
     }
 
-    // this must be static so we can access it in objects without waiting to initialize the db
     public static Date parseDate(String dateStr){
         Date date = null;
         DateFormat df = new SimpleDateFormat(DATE_FORMAT);
