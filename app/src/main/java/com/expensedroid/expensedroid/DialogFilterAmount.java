@@ -8,28 +8,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 /**
- * Created by S. Ameli on 11/07/16.
+ * Created by S. Ameli on 21/07/16.
  */
-public class DialogFilterDate extends DialogFragment {
-
+public class DialogFilterAmount extends DialogFragment {
     private String selectedEquality; // Equals, Before or After
-    private String selectedDate; // 2016-12-30
+    private int selectedAmount = 0;
 
-    private static final String EQUAL_STR = "Equal";
-    private static final String BEFORE_STR = "Before";
-    private static final String AFTER_STR = "After";
+    private static final String EQUAL_STR = "=";
+    private static final String BEFORE_STR = "<";
+    private static final String AFTER_STR = ">";
 
-
-    // private FragmentManager fragmentManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.dialog_filter_date, container, false);
+        View rootView = inflater.inflate(R.layout.dialog_filter_amount, container, false);
         getDialog().setTitle("Simple Dialog");
+
 
         Button dismissButton = (Button) rootView.findViewById(R.id.dialog_filter_amount_btn_cancel);
         dismissButton.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +38,7 @@ public class DialogFilterDate extends DialogFragment {
         });
 
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.filter_amount_spinner);
+
 
         // Spinner click listener
         // spinner.setOnItemSelectedListener(new setonitemclicklistener
@@ -59,6 +58,7 @@ public class DialogFilterDate extends DialogFragment {
         });
 
 
+
         String[] items = new String[] { EQUAL_STR, BEFORE_STR, AFTER_STR};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -66,6 +66,8 @@ public class DialogFilterDate extends DialogFragment {
 
         spinner.setAdapter(adapter);
 
+
+        final EditText editText = (EditText) rootView.findViewById(R.id.editText_filter_dialog_amount);
 
 
         Button applyFilterButton = (Button) rootView.findViewById(R.id.dialog_filter_amount_btn_applyfilter);
@@ -75,7 +77,8 @@ public class DialogFilterDate extends DialogFragment {
 
                 DialogFilterListener activity = (DialogFilterListener) getActivity();
                 try{
-                    activity.onApplyFilterDateBtn(selectedEquality, getDatePickerDate());
+                    selectedAmount = Integer.parseInt(editText.getText().toString());
+                    activity.onApplyFilterAmountBtn(selectedEquality, selectedAmount);
 
                 }catch(Exception e){
                     System.out.println(e);
@@ -83,6 +86,7 @@ public class DialogFilterDate extends DialogFragment {
                 dismiss();
             }
         });
+
 
 
         /*
@@ -101,60 +105,6 @@ public class DialogFilterDate extends DialogFragment {
 
         return rootView;
     }
-
-
-    private String getDatePickerDate(){
-        String str = "";
-        DatePicker datePicker = (DatePicker) this.getDialog().findViewById(R.id.filter_date_datePicker);
-
-        int day = datePicker.getDayOfMonth();
-        int month = datePicker.getMonth();
-        int year = datePicker.getYear();
-        String monthStr = String.format("%02d", (month+1));
-        String dayStr = String.format("%02d", day);
-
-        str = year + "-" + monthStr + "-" + dayStr;
-        System.out.println(">>>> str: " + str);
-
-
-        return str;
-    }
-
-    public static String getSmallOperatorStr(String str){
-        if(str == null) return "";
-        String operatorStr = "";
-
-        if(str.equals(EQUAL_STR)){
-            operatorStr = "=";
-        }else if(str.equals(BEFORE_STR)){
-            operatorStr = "<";
-        }else if(str.equals(AFTER_STR)){
-            operatorStr = ">";
-        }
-        return operatorStr;
-    }
-
-    /*
-
-    public DialogFilterDate() {
-
-        //super(context);
-        //fragmentManager = this.getOwnerActivity().getFragmentManager()
-
-
-        //setting custom layout to dialog
-        setContentView(R.layout.dialog_filter_date);
-        setTitle("Custom Dialog");
-
-
-
-
-
-
-
-        //show();
-    }
-    */
 
 
 }

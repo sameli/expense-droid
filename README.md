@@ -1,12 +1,18 @@
 Expense Droid app:
 
+
+Personal notes:
+
 TODO:
+* add amount dialog filter
+* fix style of "dialog_filter_date.xml"
+* refactor settings keys like "menu_filter_date_checkbox". put them in one class as final strings
+
 * attach edit view to main activity
 * fix datapicker in the edit view
 
 
 TODO (less important):
-* add amount dialog filter
 * fix datebase upgrade
 
 

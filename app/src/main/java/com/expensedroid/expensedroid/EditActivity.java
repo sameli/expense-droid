@@ -125,7 +125,7 @@ public class EditActivity extends AppCompatActivity {
 
     public void btnDiscard(View view) {
         Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent); // this will switch to DetailActivity
+        startActivity(mainIntent); // this will switch to MainActivity
     }
 
     public void btnDelete(View view) {

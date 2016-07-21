@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filters items that are "
+            android:id="@+id/textView_amount_msg"
+            android:textSize="18dp"
+            android:textColor="#000000" />
+
+        <Spinner
+            android:layout_width="55dp"
+            android:layout_height="36dp"
+            android:id="@+id/filter_amount_spinner" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_filter_dialog_amount"
+            android:width="150dp"
+            android:inputType="numberDecimal"
+            android:layout_alignBottom="@+id/textView4"
+            android:layout_alignStart="@+id/editText_title" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/dialog_filter_amount_btn_cancel" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.94" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apply filter"
+            android:id="@+id/dialog_filter_amount_btn_applyfilter" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by S. Ameli on 01/07/16.
  */
-public class MainActivity extends AppCompatActivity implements DialogFilterDateListener{
+public class MainActivity extends AppCompatActivity implements DialogFilterListener {
 
     protected ArrayList<Transaction> data;
     DatabaseHelper mydb;
@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements DialogFilterDateL
     private boolean filterActivated = false;
 
     private DialogFilterDate dialogFilterDate;
+    private DialogFilterAmount dialogFilterAmount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements DialogFilterDateL
         view1.setBackgroundColor(Color.argb(255, 204, 255, 204));
 
         dialogFilterDate = new DialogFilterDate();
+        dialogFilterAmount = new DialogFilterAmount();
 
 
         printMsg(">>>>>>>MainActivity onCreate ------");
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements DialogFilterDateL
         SettingsIO.saveData(this, selectedDate, "menu_filter_date_checkbox_selecteddate");
          */
         if(isChecked_filter_date){
+            // if filter date is checked, then we read the selected date and selected equality from settings file and update the title of menu:
             String dateStr = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selecteddate");
             String selectedEquality = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selectedequality");
             String operatorStr = DialogFilterDate.getSmallOperatorStr(selectedEquality);
@@ -165,14 +169,13 @@ public class MainActivity extends AppCompatActivity implements DialogFilterDateL
                     dialogFilterDate.show(fm, "Date filter dialog");
                 }else{
                     // if menu item is checked, then we set the menu date checkbox to false in the settings
-                    // then call invalidateOptionsMenu() to refresh the menu. the onCreateOptionsMenu() will be called and
-                    // it reads the settings to update status and style of menu
+                    // then we refresh activity so that the onCreate of MainActivity can removes the filter
                     SettingsIO.saveData(this, false, "menu_filter_date_checkbox");
                     //invalidateOptionsMenu();
                     refreshActivity();
                 }
 
-/*
+                /*
                 isMenuItemChecked_put(item, "menu_filter_date_checkbox");
                 checkIfAllFilterItemsChecked();
                 invalidateOptionsMenu();
@@ -180,6 +183,13 @@ public class MainActivity extends AppCompatActivity implements DialogFilterDateL
 
                 return true;
             case R.id.submenu_filter_amount:
+                if(item.isChecked() == false){
+                    FragmentManager fm = getSupportFragmentManager();
+                    dialogFilterAmount.show(fm, "Amount filter dialog");
+                }else {
+                    SettingsIO.saveData(this, false, "menu_filter_amount_checkbox");
+                    refreshActivity();
+                }
                 //isMenuItemChecked_put(item, "menu_filter_amount_checkbox");
                 //checkIfAllFilterItemsChecked();
                 //invalidateOptionsMenu();
@@ -216,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements DialogFilterDateL
     }
 
     @Override
-    public void onApplyFilterBtn(String selectedEquality, String selectedDate) {
+    public void onApplyFilterDateBtn(String selectedEquality, String selectedDate) {
 
         SettingsIO.saveData(this, true, "menu_filter_date_checkbox");
         SettingsIO.saveData(this, selectedEquality, "menu_filter_date_checkbox_selectedequality");
@@ -227,7 +237,13 @@ public class MainActivity extends AppCompatActivity implements DialogFilterDateL
         refreshActivity();
 
 
-        printMsg(">>>> onApplyFilterBtn: " + selectedEquality + ", " + selectedDate);
+        printMsg(">>>> onApplyFilterDateBtn: " + selectedEquality + ", " + selectedDate);
+
+    }
+
+    @Override
+    public void onApplyFilterAmountBtn(String selectedEquality, int selectedAmount) {
+        printMsg(">>>> onApplyFilterAmountBtn: " + selectedEquality + ", " + selectedAmount);
 
     }
 
