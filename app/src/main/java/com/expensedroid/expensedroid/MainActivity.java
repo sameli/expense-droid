@@ -145,9 +145,21 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
             item_filter_date.setTitle("Date");
         }
 
+        //---------------------------
+
         boolean isChecked_filter_amount = SettingsIO.readData(this, false, "menu_filter_amount_checkbox");//readSettings_booleanItem("menu_filter_amount_checkbox", false);
         MenuItem item_filter_amount = menu.findItem(R.id.submenu_filter_amount);
         item_filter_amount.setChecked(isChecked_filter_amount);
+
+        if(isChecked_filter_amount){
+            // if filter date is checked, then we read the selected date and selected equality from settings file and update the title of menu:
+            int selectedamount = SettingsIO.readData(this, 0, "menu_filter_amount_checkbox_selectedamount");
+            String selectedEquality = SettingsIO.readData(this, "", "menu_filter_amount_checkbox_selectedequality");
+
+            item_filter_amount.setTitle("Amount " + selectedEquality + " " + selectedamount);
+        }else {
+            item_filter_amount.setTitle("Amount");
+        }
 
         return true;
     }
@@ -232,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
         SettingsIO.saveData(this, selectedEquality, "menu_filter_date_checkbox_selectedequality");
         SettingsIO.saveData(this, selectedDate, "menu_filter_date_checkbox_selecteddate");
         //invalidateOptionsMenu();
-        Toast.makeText(this, "Filter applied", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Date filter applied", Toast.LENGTH_LONG).show();
 
         refreshActivity();
 
@@ -243,6 +255,14 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
 
     @Override
     public void onApplyFilterAmountBtn(String selectedEquality, int selectedAmount) {
+
+        SettingsIO.saveData(this, true, "menu_filter_amount_checkbox");
+        SettingsIO.saveData(this, selectedEquality, "menu_filter_amount_checkbox_selectedequality");
+        SettingsIO.saveData(this, selectedAmount, "menu_filter_amount_checkbox_selectedamount");
+        //invalidateOptionsMenu();
+        Toast.makeText(this, "Amount filter applied", Toast.LENGTH_LONG).show();
+
+        refreshActivity();
         printMsg(">>>> onApplyFilterAmountBtn: " + selectedEquality + ", " + selectedAmount);
 
     }

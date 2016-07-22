@@ -31,7 +31,7 @@ public class DialogFilterDate extends DialogFragment {
         View rootView = inflater.inflate(R.layout.dialog_filter_date, container, false);
         getDialog().setTitle("Simple Dialog");
 
-        Button dismissButton = (Button) rootView.findViewById(R.id.dialog_filter_amount_btn_cancel);
+        Button dismissButton = (Button) rootView.findViewById(R.id.btn_filter_date_cancel);
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,7 +39,7 @@ public class DialogFilterDate extends DialogFragment {
             }
         });
 
-        final Spinner spinner = (Spinner) rootView.findViewById(R.id.filter_amount_spinner);
+        final Spinner spinner = (Spinner) rootView.findViewById(R.id.filter_date_spinner);
 
         // Spinner click listener
         // spinner.setOnItemSelectedListener(new setonitemclicklistener
@@ -68,7 +68,7 @@ public class DialogFilterDate extends DialogFragment {
 
 
 
-        Button applyFilterButton = (Button) rootView.findViewById(R.id.dialog_filter_amount_btn_applyfilter);
+        Button applyFilterButton = (Button) rootView.findViewById(R.id.btn_filter_date_applyfilter);
         applyFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

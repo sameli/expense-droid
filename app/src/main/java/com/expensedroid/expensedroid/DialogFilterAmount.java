@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 /**
  * Created by S. Ameli on 21/07/16.
@@ -75,15 +76,21 @@ public class DialogFilterAmount extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                DialogFilterListener activity = (DialogFilterListener) getActivity();
-                try{
-                    selectedAmount = Integer.parseInt(editText.getText().toString());
-                    activity.onApplyFilterAmountBtn(selectedEquality, selectedAmount);
 
-                }catch(Exception e){
-                    System.out.println(e);
+                String amountStr = editText.getText().toString();
+                if(amountStr == null || amountStr.isEmpty()) {
+                    Toast.makeText(v.getContext(), "Amount field is empty", Toast.LENGTH_LONG).show();
+                }else {
+                    DialogFilterListener activity = (DialogFilterListener) getActivity();
+                    try {
+                        selectedAmount = Integer.parseInt(editText.getText().toString());
+                        activity.onApplyFilterAmountBtn(selectedEquality, selectedAmount);
+
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                    dismiss();
                 }
-                dismiss();
             }
         });
 

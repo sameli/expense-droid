@@ -95,13 +95,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             String selectedDate = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selecteddate");
 
-            dateFilterSQL = "where date(date) " + operatorSign + " date('" + selectedDate + "')";
-            System.out.println(">>> sql: " + dateFilterSQL);
+            dateFilterSQL = "date(date) " + operatorSign + " date('" + selectedDate + "')";
+            System.out.println(">>> dateFilterSQL: " + dateFilterSQL);
         }
-        //System.out.println(">>> sql: " + dateFilterSQL);
+
+        Boolean isAmountFilterActive = SettingsIO.readData(context, false, "menu_filter_amount_checkbox");
+
+        String amountFilterSQL = "";
+        if(isAmountFilterActive){
+
+            String selectedEquality = SettingsIO.readData(context, "", "menu_filter_amount_checkbox_selectedequality");
+
+            int selectedAmount = SettingsIO.readData(context, 0, "menu_filter_amount_checkbox_selectedamount");
+
+            amountFilterSQL = "amount " + selectedEquality + " " + selectedAmount;
+            System.out.println(">>> amountFilterSQL: " + amountFilterSQL);
+        }
+
+        String filtersSql = "";
+        if(isDateFilterActive && !isAmountFilterActive){
+            filtersSql = "where " + dateFilterSQL;
+        }else if(!isDateFilterActive && isAmountFilterActive){
+            filtersSql = "where " + amountFilterSQL;
+        }else if (isDateFilterActive && isDateFilterActive){
+            filtersSql = "where " + dateFilterSQL + " and " + amountFilterSQL;
+        }
+
+
+        System.out.println(">>> filtersSql: " + filtersSql);
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "select * from " + TABLE_NAME + " " + dateFilterSQL, null );
+        Cursor res = db.rawQuery( "select * from " + TABLE_NAME + " " + filtersSql, null );
         res.moveToFirst();
         while(res.isAfterLast() == false) {
 
