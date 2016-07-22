@@ -23,9 +23,12 @@
                 android:checkable="true"/>
         </menu>
     </item>
+
+    <!--
     <item
         android:id="@+id/menu_id_exit"
         android:orderInCategory="102"
         android:title="Exit"
         android:onClick="onMenuExit"/>
+        -->
 </menu>

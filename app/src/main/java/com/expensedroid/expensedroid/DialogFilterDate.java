@@ -28,8 +28,10 @@ public class DialogFilterDate extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
         View rootView = inflater.inflate(R.layout.dialog_filter_date, container, false);
-        getDialog().setTitle("Simple Dialog");
+
+        //getDialog().setTitle("Filter Date");
 
         Button dismissButton = (Button) rootView.findViewById(R.id.btn_filter_date_cancel);
         dismissButton.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +63,10 @@ public class DialogFilterDate extends DialogFragment {
 
         String[] items = new String[] { EQUAL_STR, BEFORE_STR, AFTER_STR};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_item, items);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, items);
+
+        ArrayAdapter adapter = new ArrayAdapter<CharSequence>(getContext(), R.layout.custom_spinner_layout, items);
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
 
         spinner.setAdapter(adapter);
 

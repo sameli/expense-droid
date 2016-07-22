@@ -1,13 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textAllCaps">false</item> <!-- to change All caps of menu items in action bar, also this fixes the color of menus -->
-        <item name="android:actionMenuTextAppearance">@style/customActionBar</item> <!-- to change font size of menu -->
+        <item name="textAllCaps">false</item> <!-- to change All caps of menu items in action bar, also this fixes the color of menus -->
+        <item name="actionMenuTextAppearance">@style/customActionBar</item> <!-- to change font size of menu -->
 
     </style>
 

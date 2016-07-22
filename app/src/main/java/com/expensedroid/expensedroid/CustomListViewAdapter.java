@@ -51,7 +51,7 @@ public class CustomListViewAdapter extends BaseAdapter{
         }
 
         holder.dateView.setText(listData.get(position).getDateString());
-        holder.titleView.setText("Title: " + listData.get(position).getTitle());
+        holder.titleView.setText(listData.get(position).getTitle());
         holder.amountView.setText("$" + listData.get(position).getAmount());
         return convertView;
     }

@@ -31,14 +31,16 @@
             android:id="@+id/button5"
             android:onClick="btnSave"
             android:layout_alignTop="@+id/btn_delete"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textSize="18dp"
+            android:background="#50ff50" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
             android:id="@+id/textView3"
-            android:textSize="23dp"
+            android:textSize="20dp"
             android:layout_alignBottom="@+id/editText_title"
             android:layout_alignParentStart="true"
             android:textColor="#000000" />
@@ -48,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Amount"
             android:id="@+id/textView4"
-            android:textSize="23dp"
+            android:textSize="20dp"
             android:layout_below="@+id/textView3"
             android:layout_alignParentStart="true"
             android:layout_marginTop="38dp"
@@ -59,7 +61,7 @@
             android:layout_height="wrap_content"
             android:text="Date"
             android:id="@+id/textView5"
-            android:textSize="23dp"
+            android:textSize="20dp"
             android:layout_marginTop="38dp"
             android:layout_below="@+id/textView4"
             android:layout_alignParentStart="true"
@@ -72,7 +74,8 @@
             android:text=""
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:width="150dp" />
+            android:width="150dp"
+            android:textSize="20dp" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -81,7 +84,8 @@
             android:width="150dp"
             android:inputType="numberDecimal|numberSigned"
             android:layout_alignBottom="@+id/textView4"
-            android:layout_alignStart="@+id/editText_title" />
+            android:layout_alignStart="@+id/editText_title"
+            android:textSize="20dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -90,7 +94,8 @@
             android:onClick="btnOpenDateDialog"
             android:layout_alignBottom="@+id/textView5"
             android:layout_alignEnd="@+id/editText_amount"
-            android:layout_alignStart="@+id/editText_amount" />
+            android:layout_alignStart="@+id/editText_amount"
+            android:textSize="20dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -99,7 +104,9 @@
             android:id="@+id/btnDiscard"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:onClick="btnDiscard"/>
+            android:onClick="btnDiscard"
+            android:textSize="18dp"
+            android:background="#cdcdcd" />
 
         <Button
             android:layout_width="wrap_content"
@@ -108,14 +115,16 @@
             android:id="@+id/btn_delete"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:onClick="btnDelete"/>
+            android:onClick="btnDelete"
+            android:textSize="18dp"
+            android:background="#ff8484" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Notes"
             android:id="@+id/textView2"
-            android:textSize="23dp"
+            android:textSize="20dp"
             android:textColor="#000000"
             android:layout_marginTop="38dp"
             android:layout_below="@+id/textView5"
@@ -127,7 +136,8 @@
             android:id="@+id/editText_notes"
             android:layout_alignBottom="@+id/textView2"
             android:layout_alignStart="@+id/btn_date"
-            android:layout_alignEnd="@+id/btn_date" />
+            android:layout_alignEnd="@+id/btn_date"
+            android:textSize="20dp" />
 
     </RelativeLayout>
 
