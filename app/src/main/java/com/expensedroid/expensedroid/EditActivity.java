@@ -54,11 +54,13 @@ public class EditActivity extends AppCompatActivity {
             Button btn_date = (Button) findViewById(R.id.btn_date);
             btn_date.setText(String.valueOf(trans.getDateString()));
 
+            EditText editText_notes = (EditText) findViewById(R.id.editText_notes);
+            editText_notes.setText(trans.getNotes());
 
             database_id = trans.getDatabase_id();
 
-            TextView textview = (TextView) findViewById(R.id.textView2);
-            textview.setText("id is: " + String.valueOf(database_id));
+            //TextView textview = (TextView) findViewById(R.id.textView2);
+            //textview.setText("id is: " + String.valueOf(database_id));
 
 
 
@@ -82,6 +84,9 @@ public class EditActivity extends AppCompatActivity {
         Button btn_date = (Button) findViewById(R.id.btn_date);
         String date_str = btn_date.getText().toString();
 
+        EditText editText_notes = (EditText) findViewById(R.id.editText_notes);
+        String notes = editText_notes.getText().toString();
+
 
         if(title.length() == 0 || amount_str.length() == 0 || date_str.length() == 0){
             Toast.makeText(EditActivity.this, "fill all blank spots", Toast.LENGTH_LONG).show();
@@ -97,13 +102,13 @@ public class EditActivity extends AppCompatActivity {
         DatabaseHelper mydb = new DatabaseHelper(this);
         if(database_id == -1){ // this means database row id has not been set, and we add new item to database
             // title, amount, expenses
-            mydb.insertTransaction(new Transaction(title, amount , DatabaseHelper.parseDate(dateStr)));
+            mydb.insertTransaction(new Transaction(title, amount , DatabaseHelper.parseDate(dateStr), notes));
 
             Toast.makeText(EditActivity.this, "Added new item to database", Toast.LENGTH_LONG).show();
         }else{ // we have an database_id. we need to update that row on database
-            mydb.updateTransaction(database_id, title, amount, dateStr);
+            mydb.updateTransaction(database_id, title, amount, dateStr, notes);
 
-            Toast.makeText(EditActivity.this, "Updated item", Toast.LENGTH_LONG).show();
+            //Toast.makeText(EditActivity.this, "Updated item", Toast.LENGTH_LONG).show();
         }
 
 

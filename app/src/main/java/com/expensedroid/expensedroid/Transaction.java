@@ -15,6 +15,7 @@ public class Transaction implements Serializable { // we need serializable so we
     private String title;
     private double amount;
     private Date date;
+    private String notes;
     private int database_id; // this is row ID in the database for this transaction
 
     public int getDatabase_id() {
@@ -25,10 +26,11 @@ public class Transaction implements Serializable { // we need serializable so we
         this.database_id = database_id;
     }
 
-    public Transaction(String title, double amount, Date date) {
+    public Transaction(String title, double amount, Date date, String notes) {
         this.title = title;
         this.amount = amount;
         this.date = date;
+        this.notes = notes;
     }
 
     public String getTitle() {
@@ -59,6 +61,14 @@ public class Transaction implements Serializable { // we need serializable so we
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     @Override

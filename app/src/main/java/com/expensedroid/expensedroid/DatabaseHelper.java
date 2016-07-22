@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(
                 "create table " + TABLE_NAME +
-                        " (id integer primary key, title TEXT,amount REAL,date DATETIME)"
+                        " (id integer primary key, title TEXT,amount REAL,date DATETIME, notes TEXT)"
         );
     }
 
@@ -47,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("title", trans.getTitle());
         contentValues.put("amount", trans.getAmount());
         contentValues.put("date", trans.getDateString());
+        contentValues.put("notes", trans.getNotes());
         db.insert(TABLE_NAME, null, contentValues);
         return true;
     }
@@ -63,12 +64,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateTransaction(Integer id, String title, double amount, String dateStr){
+    public boolean updateTransaction(Integer id, String title, double amount, String dateStr, String notes){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", title);
         contentValues.put("amount", amount);
         contentValues.put("date", dateStr);
+        contentValues.put("notes", notes);
         db.update(TABLE_NAME, contentValues, "id = ? ", new String[] {Integer.toString(id)});
         return true;
     }
@@ -133,10 +135,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String title = res.getString(res.getColumnIndex("title"));
             double amount = res.getDouble(res.getColumnIndex("amount"));
             String dateStr = res.getString(res.getColumnIndex("date"));
+            String notes = res.getString(res.getColumnIndex("notes"));
             Date date = parseDate(dateStr);
 
             System.out.println("Results from DB: " + title + " " + amount + " " + dateStr);
-            Transaction trans = new Transaction(title, amount, date);
+            Transaction trans = new Transaction(title, amount, date, notes);
             trans.setDatabase_id(id);
 
             array.add(trans);
