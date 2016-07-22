@@ -15,22 +15,25 @@ Planned features to add:
 Personal notes:
 
 TODO:
-* fix style of "dialog_filter_date.xml"
-* refactor settings keys like "menu_filter_date_checkbox"
+* Fix dollar sign for negative amounts. It should be -$1 not $-1
+* Fix style of "dialog_filter_date.xml"
+* Refactor settings keys like "menu_filter_date_checkbox"
+* Add help menu
 
 TODO (less important):
-* fix datebase upgrade
+* Fix datebase upgrade
+* Add a reset database menu item
 
 
 Features to skip for now:
-* category selection
-* multiple accounts
+* Category selection
+* Multiple accounts
 
 
 Database basic fields:
 
 id, title, amount, date, notes
 
-fields to add later:
+Fields to add later:
 
 category
