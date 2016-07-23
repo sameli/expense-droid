@@ -24,11 +24,15 @@
         </menu>
     </item>
 
+    <item
+        android:id="@+id/menu_id_add_account"
+        android:orderInCategory="102"
+        android:title="Add Account"/>
+
     <!--
     <item
         android:id="@+id/menu_id_exit"
         android:orderInCategory="102"
-        android:title="Exit"
-        android:onClick="onMenuExit"/>
+        android:title="Exit"/>
         -->
 </menu>

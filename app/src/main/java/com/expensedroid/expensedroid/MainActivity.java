@@ -205,6 +205,12 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
                 //isMenuItemChecked_put(item, "menu_filter_amount_checkbox");
                 //checkIfAllFilterItemsChecked();
                 //invalidateOptionsMenu();
+
+            case R.id.menu_id_add_account:
+            // open window to add new account
+
+            //case R.id.menu_id_exit:
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -271,4 +277,5 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
         finish();
         startActivity(getIntent());
     }
+
 }
