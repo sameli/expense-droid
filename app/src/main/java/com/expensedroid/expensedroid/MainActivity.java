@@ -21,15 +21,17 @@ import java.util.ArrayList;
 /**
  * Created by S. Ameli on 01/07/16.
  */
-public class MainActivity extends AppCompatActivity implements DialogFilterListener {
+public class MainActivity extends AppCompatActivity implements DialogListener {
 
     protected ArrayList<Transaction> data;
     DatabaseHelper mydb;
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
+    public static final int DATABASE_VERSION = 3;
     private boolean filterActivated = false;
 
     private DialogFilterDate dialogFilterDate;
     private DialogFilterAmount dialogFilterAmount;
+    private DialogAddAccount dialogAddAccount;
 
 
     @Override
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
 
         dialogFilterDate = new DialogFilterDate();
         dialogFilterAmount = new DialogFilterAmount();
+        dialogAddAccount = new DialogAddAccount();
 
 
         printMsg(">>>>>>>MainActivity onCreate ------");
@@ -57,14 +60,22 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
         */
 
 
-        mydb = new DatabaseHelper(this);
+        mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
+
+
+        if(mydb.numberOfRowsInAccounts() == 0){
+            int acct_id = (int) mydb.insertAccount("Default Acct");
+            if(acct_id != -1) {
+                SettingsIO.saveData(this, acct_id, "selected_acct_id");
+            }
+        }
 
         /*
-        int numberOfRows = mydb.numberOfRows();
+        int numberOfRowsInTransactions = mydb.numberOfRowsInTransactions();
 
         for(int i = 0;i<3;i++) {
-            mydb.insertTransaction(new Transaction("transaction# " + numberOfRows, 500 + i, 100+i));
-            numberOfRows++;
+            mydb.insertTransaction(new Transaction("transaction# " + numberOfRowsInTransactions, 500 + i, 100+i));
+            numberOfRowsInTransactions++;
         }
         */
 
@@ -205,11 +216,14 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
                 //isMenuItemChecked_put(item, "menu_filter_amount_checkbox");
                 //checkIfAllFilterItemsChecked();
                 //invalidateOptionsMenu();
-
+                return true;
             case R.id.menu_id_add_account:
-            // open window to add new account
-
+            // open dialog to add new account
+                FragmentManager fm = getSupportFragmentManager();
+                dialogAddAccount.show(fm, "Add account dialog");
+                return true;
             //case R.id.menu_id_exit:
+                //return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -270,6 +284,20 @@ public class MainActivity extends AppCompatActivity implements DialogFilterListe
 
         refreshActivity();
         printMsg(">>>> onApplyFilterAmountBtn: " + selectedEquality + ", " + selectedAmount);
+
+    }
+
+    @Override
+    public void onApplyCreateAccountBtn(String accountName) {
+        printMsg(">>>> onApplyFilterAmountBtn: " + accountName);
+        SettingsIO.saveData(this, accountName, "startup_account_to_view");
+        long acct_id = mydb.insertAccount(accountName);
+        if(acct_id != -1) {
+            SettingsIO.saveData(this, acct_id, "selected_acct_id");
+            refreshActivity();
+        }else{
+            Toast.makeText(this, "Error: Creating new account failed", Toast.LENGTH_LONG).show();
+        }
 
     }
 

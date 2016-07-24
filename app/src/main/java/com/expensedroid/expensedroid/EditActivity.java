@@ -1,22 +1,16 @@
 package com.expensedroid.expensedroid;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Date;
 
 /**
  * Created by S. Ameli on 03/07/16.
@@ -57,7 +51,7 @@ public class EditActivity extends AppCompatActivity {
             EditText editText_notes = (EditText) findViewById(R.id.editText_notes);
             editText_notes.setText(trans.getNotes());
 
-            database_id = trans.getDatabase_id();
+            database_id = trans.getTransaction_id();
 
             //TextView textview = (TextView) findViewById(R.id.textView2);
             //textview.setText("id is: " + String.valueOf(database_id));
@@ -89,7 +83,7 @@ public class EditActivity extends AppCompatActivity {
 
 
         if(title.length() == 0 || amount_str.length() == 0 || date_str.length() == 0){
-            Toast.makeText(EditActivity.this, "fill all blank spots", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditActivity.this, "Fill all required fields", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -98,13 +92,22 @@ public class EditActivity extends AppCompatActivity {
         String dateStr = ((Button) findViewById(R.id.btn_date)).getText().toString();
         //Date date = DatabaseHelper.parseDate(dateStr);
 
+        int selected_acct_id = SettingsIO.readData(this, 1, "selected_acct_id");
 
-        DatabaseHelper mydb = new DatabaseHelper(this);
+        DatabaseHelper mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
         if(database_id == -1){ // this means database row id has not been set, and we add new item to database
-            // title, amount, expenses
-            mydb.insertTransaction(new Transaction(title, amount , DatabaseHelper.parseDate(dateStr), notes));
 
-            Toast.makeText(EditActivity.this, "Added new item to database", Toast.LENGTH_LONG).show();
+            Transaction tmpTransaction = new Transaction(title, amount , DatabaseHelper.parseDate(dateStr), notes);
+            tmpTransaction.setAccount_id(selected_acct_id);
+
+            long result = mydb.insertTransaction(tmpTransaction);
+            String msg = "";
+            if(result != -1)
+                msg = "Added new item to database";
+            else
+                msg = "Error: item was NOT added to the database";
+
+            Toast.makeText(EditActivity.this, msg, Toast.LENGTH_LONG).show();
         }else{ // we have an database_id. we need to update that row on database
             mydb.updateTransaction(database_id, title, amount, dateStr, notes);
 
@@ -135,7 +138,7 @@ public class EditActivity extends AppCompatActivity {
 
     public void btnDelete(View view) {
         if(database_id != -1){
-            DatabaseHelper mydb = new DatabaseHelper(this);
+            DatabaseHelper mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
             mydb.deleteTransaction(database_id);
             Toast.makeText(EditActivity.this, "Deleted item", Toast.LENGTH_LONG).show();
             gotoMainActivity();

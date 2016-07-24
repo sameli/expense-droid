@@ -19,48 +19,82 @@ import java.util.Date;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "mydatabase.db";
-    public static final String TABLE_NAME = "tr";
+    public static final String TABLE_NAME_ACCOUNTS= "accts";
+    public static final String TABLE_NAME_TRANSACTIONS = "trs";
+    public static final String TABLE_NAME_V1= "tr"; // table for v1 of database
+
     public static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
-    public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+    public DatabaseHelper(Context context, int dbVersion) {
+        super(context, DATABASE_NAME, null, dbVersion);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(
-                "create table " + TABLE_NAME +
-                        " (id integer primary key, title TEXT,amount REAL,date DATETIME, notes TEXT)"
+                "CREATE TABLE " + TABLE_NAME_ACCOUNTS +
+                        " (acct_id INTEGER PRIMARY KEY, acct_name TEXT NOT NULL);"
+        );
+
+        sqLiteDatabase.execSQL(
+                "CREATE TABLE " + TABLE_NAME_TRANSACTIONS +
+                        " (id INTEGER PRIMARY KEY, title TEXT,amount REAL,date DATETIME, notes TEXT, " +
+                        "acct_id INTEGER NOT NULL, " +
+                        "FOREIGN KEY (acct_id) REFERENCES accts(acct_id) ON UPDATE CASCADE ON DELETE CASCADE)"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_ACCOUNTS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TRANSACTIONS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_V1);
         onCreate(sqLiteDatabase);
     }
 
-    public boolean insertTransaction(Transaction trans){
+    public long insertAccount(String acctName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("acct_name", acctName);
+        return db.insert(TABLE_NAME_ACCOUNTS, null, contentValues);
+    }
+
+    public long insertTransaction(Transaction trans){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", trans.getTitle());
         contentValues.put("amount", trans.getAmount());
         contentValues.put("date", trans.getDateString());
         contentValues.put("notes", trans.getNotes());
-        db.insert(TABLE_NAME, null, contentValues);
-        return true;
+        contentValues.put("acct_id", trans.getAccount_id());
+        return db.insert(TABLE_NAME_TRANSACTIONS, null, contentValues);
     }
 
-    public Cursor getData(int id){
+    public Cursor getData(int transaction_id){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from " + TABLE_NAME + " where id="+id+"", null );
+        Cursor res =  db.rawQuery( "select * from " + TABLE_NAME_TRANSACTIONS + " where id="+transaction_id+"", null );
         return res;
     }
 
-    public int numberOfRows(){
+    public int numberOfRowsInAccounts(){
         SQLiteDatabase db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME_ACCOUNTS);
+        return numRows;
+    }
+
+    public int numberOfRowsInTransactions(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME_TRANSACTIONS);
         return numRows;
     }
 
@@ -71,13 +105,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("amount", amount);
         contentValues.put("date", dateStr);
         contentValues.put("notes", notes);
-        db.update(TABLE_NAME, contentValues, "id = ? ", new String[] {Integer.toString(id)});
+        db.update(TABLE_NAME_TRANSACTIONS, contentValues, "id = ? ", new String[] {Integer.toString(id)});
         return true;
     }
 
     public Integer deleteTransaction(Integer id){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "id = ? ", new String[] {Integer.toString(id)});
+        return db.delete(TABLE_NAME_TRANSACTIONS, "id = ? ", new String[] {Integer.toString(id)});
     }
 
     public ArrayList<Transaction> getAllTransactions(Context context){
@@ -127,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         System.out.println(">>> filtersSql: " + filtersSql);
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "select * from " + TABLE_NAME + " " + filtersSql, null );
+        Cursor res = db.rawQuery( "select * from " + TABLE_NAME_TRANSACTIONS + " " + filtersSql, null );
         res.moveToFirst();
         while(res.isAfterLast() == false) {
 
@@ -140,7 +174,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             System.out.println("Results from DB: " + title + " " + amount + " " + dateStr);
             Transaction trans = new Transaction(title, amount, date, notes);
-            trans.setDatabase_id(id);
+            trans.setTransaction_id(id);
 
             array.add(trans);
             res.moveToNext();

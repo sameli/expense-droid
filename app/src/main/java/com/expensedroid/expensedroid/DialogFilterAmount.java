@@ -82,7 +82,7 @@ public class DialogFilterAmount extends DialogFragment {
                 if(amountStr == null || amountStr.isEmpty()) {
                     Toast.makeText(v.getContext(), "Amount field is empty", Toast.LENGTH_LONG).show();
                 }else {
-                    DialogFilterListener activity = (DialogFilterListener) getActivity();
+                    DialogListener activity = (DialogListener) getActivity();
                     try {
                         selectedAmount = Integer.parseInt(editText.getText().toString());
                         activity.onApplyFilterAmountBtn(selectedEquality, selectedAmount);

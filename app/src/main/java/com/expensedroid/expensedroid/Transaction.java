@@ -1,7 +1,5 @@
 package com.expensedroid.expensedroid;
 
-import android.text.Html;
-
 import java.io.Serializable;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -16,14 +14,15 @@ public class Transaction implements Serializable { // we need serializable so we
     private double amount;
     private Date date;
     private String notes;
-    private int database_id; // this is row ID in the database for this transaction
+    private int transaction_id; // this is row ID in the database for this transaction
+    private int account_id; // the account id that this transaction belongs to
 
-    public int getDatabase_id() {
-        return database_id;
+    public int getTransaction_id() {
+        return transaction_id;
     }
 
-    public void setDatabase_id(int database_id) {
-        this.database_id = database_id;
+    public void setTransaction_id(int transaction_id) {
+        this.transaction_id = transaction_id;
     }
 
     public Transaction(String title, double amount, Date date, String notes) {
@@ -69,6 +68,14 @@ public class Transaction implements Serializable { // we need serializable so we
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public int getAccount_id() {
+        return account_id;
+    }
+
+    public void setAccount_id(int account_id) {
+        this.account_id = account_id;
     }
 
     @Override

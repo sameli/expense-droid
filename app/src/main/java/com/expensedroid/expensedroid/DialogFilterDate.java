@@ -77,7 +77,7 @@ public class DialogFilterDate extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                DialogFilterListener activity = (DialogFilterListener) getActivity();
+                DialogListener activity = (DialogListener) getActivity();
                 try{
                     activity.onApplyFilterDateBtn(selectedEquality, getDatePickerDate());
 

@@ -20,6 +20,9 @@ public class SettingsIO {
         }else if(data instanceof Integer){
             return (T) (Integer) settings.getInt(key, (Integer)data);
 
+        }else if(data instanceof Long){
+            return (T) (Long) settings.getLong(key, (Long)data);
+
         }else if(data instanceof Boolean){
             return (T) (Boolean) settings.getBoolean(key, (Boolean)data);
         }
@@ -42,6 +45,11 @@ public class SettingsIO {
         } else if (data instanceof Integer) {
             //System.out.println("saveData: data is Integer");
             editor.putInt(key, (Integer) data);
+            editor.commit();
+
+        }else if (data instanceof Long) {
+            //System.out.println("saveData: data is Long");
+            editor.putLong(key, (Long) data);
             editor.commit();
 
         } else if (data instanceof Boolean) {
