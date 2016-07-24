@@ -12,50 +12,79 @@
 
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:id="@+id/layout_top">
 
+        <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account:"
+                android:textIsSelectable="false"
+                android:textSize="20dp"
+                android:textColor="#000000" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Default"
+                android:id="@+id/textView_account"
+                android:textIsSelectable="false"
+                android:textSize="20dp"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Account: Default,"
-            android:id="@+id/textView_account"
-            android:textIsSelectable="false"
-            android:textSize="20dp"
-            android:textColor="#000000" />
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total:"
-            android:id="@+id/textView_total"
-            android:layout_marginLeft="20dp"
-            android:textIsSelectable="false"
-            android:textSize="20dp"
-            android:textColor="#000000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total:"
+                android:id="@+id/textView_total"
+                android:textIsSelectable="false"
+                android:textSize="20dp"
+                android:textColor="#000000" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="$10"
-            android:id="@+id/textView_amount_total"
-            android:textSize="20dp"
-            android:textColor="#01069f"
-            android:layout_marginLeft="50dp"
-            android:layout_alignTop="@+id/textView_total"
-            android:layout_alignParentEnd="true"
-            android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$10"
+                android:id="@+id/textView_amount_total"
+                android:textSize="20dp"
+                android:textColor="#01069f"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignTop="@+id/textView_total"
+                android:layout_alignParentEnd="true"
+                android:textStyle="bold"/>
+            </LinearLayout>
+
 
     </LinearLayout>
 

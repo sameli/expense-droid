@@ -32,6 +32,18 @@ public class EditActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(Color.parseColor("#FF303F9F"));
 
+
+        final Button btnDate = (Button) findViewById(R.id.btn_date);
+        btnDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    btnDate.performClick();
+                }
+            }
+
+        });
+
         Intent intent = getIntent();
 
         if(intent.getExtras() != null){
@@ -132,6 +144,7 @@ public class EditActivity extends AppCompatActivity {
     public void btnOpenDateDialog(View view) {
         DatePickerFrag newFragment = new DatePickerFrag();
         newFragment.set_id_btn_to_modify(R.id.btn_date);
+        newFragment.set_id_next_element_focus(R.id.editText_notes);
         newFragment.show(getFragmentManager(),"Date Picker");
     }
 

@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     DatabaseHelper mydb;
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
     public static final int DATABASE_VERSION = 3;
+    int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
+    Map<Integer, AccountItem> map_MenuID_accountItem;
     private boolean filterActivated = false;
 
     private DialogFilterDate dialogFilterDate;
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         if(selected_acct_id != -1) {
             String acct_name = mydb.getAccountName(selected_acct_id);
             TextView accountTextview = (TextView)findViewById(R.id.textView_account);
-            accountTextview.setText("Account: " + acct_name);
+            accountTextview.setText(acct_name);
 
             //textView_account
         }
@@ -136,9 +138,6 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         menuItem.setTitle(styledMenuTitle);
     }
 
-    int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
-    Map<Integer, AccountItem> map_MenuID_accountItem;
-
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
@@ -153,10 +152,11 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         for(AccountItem item : listOfAccts){
             map_MenuID_accountItem.put(baseAcctMenuStartID, item);
             menu.add(Menu.NONE, baseAcctMenuStartID, Menu.NONE, item.acct_id + "- " + item.acct_name);
-            MenuItem themeMenu = menu.findItem(baseAcctMenuStartID);
-            themeMenu.setCheckable(true);
+            MenuItem menuItem = menu.findItem(baseAcctMenuStartID);
+            menuItem.setCheckable(true);
+
             if(selected_acct_id == item.acct_id) {
-                themeMenu.setChecked(true);
+                menuItem.setChecked(true);
             }
             baseAcctMenuStartID++;
 
@@ -379,6 +379,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         int acct_id = mydb.insertAccount(accountName);
         if(acct_id != -1) {
             SettingsIO.saveData(this, acct_id, "selected_acct_id");
+            Toast.makeText(this, "New account created", Toast.LENGTH_LONG).show();
             refreshActivity();
         }else{
             Toast.makeText(this, "Error: Creating new account failed", Toast.LENGTH_LONG).show();
