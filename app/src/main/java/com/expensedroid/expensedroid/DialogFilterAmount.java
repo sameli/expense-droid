@@ -69,7 +69,22 @@ public class DialogFilterAmount extends DialogFragment {
         spinner.setAdapter(adapter);
 
 
+        String previous_selectedEquality = SettingsIO.readData(getContext(), "=", "menu_filter_amount_checkbox_selectedequality");
+        System.out.println(">>> previous_selectedEquality: " + previous_selectedEquality);
+        int spinnerPos = 0;
+        if(previous_selectedEquality.equals("="))
+            spinnerPos = 0;
+        else if(previous_selectedEquality.equals("<"))
+            spinnerPos = 1;
+        else if(previous_selectedEquality.equals(">"))
+            spinnerPos = 2;
+        spinner.setSelection(spinnerPos);
+
+
         final EditText editText = (EditText) rootView.findViewById(R.id.editText_filter_dialog_amount);
+
+        int previous_filterAmount = SettingsIO.readData(getContext(), 0, "menu_filter_amount_checkbox_selectedamount");
+        editText.setText(String.valueOf(previous_filterAmount));
 
 
         Button applyFilterButton = (Button) rootView.findViewById(R.id.dialog_filter_amount_btn_applyfilter);
