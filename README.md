@@ -3,13 +3,13 @@ Expense Droid app:
 Description: An Android app to manage financial transactions.
 
 Current features;
+* Multiple accounts
 * Add/Delete/Update transactions
 * Apply Date/Amount filter which persist after reopening the app
 
 Planned features to add:
 * Export/Import data
 * Category selection for transactions
-* Multiple accounts
 * Filter search for title
 
 Personal notes:
@@ -28,8 +28,6 @@ TODO (less important):
 
 Features to skip for now:
 * Category selection
-* Multiple accounts
-
 
 Database basic fields:
 

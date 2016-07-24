@@ -1,8 +1,10 @@
 package com.expensedroid.expensedroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -10,6 +12,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,6 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by S. Ameli on 01/07/16.
@@ -98,6 +104,15 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             }
         });
 
+        int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
+        if(selected_acct_id != -1) {
+            String acct_name = mydb.getAccountName(selected_acct_id);
+            TextView accountTextview = (TextView)findViewById(R.id.textView_account);
+            accountTextview.setText("Account: " + acct_name);
+
+            //textView_account
+        }
+
 
         TextView amountTotal = (TextView)findViewById(R.id.textView_amount_total);
         double sum = calcTotal(data);
@@ -121,11 +136,45 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         menuItem.setTitle(styledMenuTitle);
     }
 
+    int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
+    Map<Integer, AccountItem> map_MenuID_accountItem;
+
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
-        //menu.add("Connected").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        List<AccountItem> listOfAccts = mydb.getAccounts();
+
+        map_MenuID_accountItem = new HashMap<Integer, AccountItem>();
+        int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
+
+
+        for(AccountItem item : listOfAccts){
+            map_MenuID_accountItem.put(baseAcctMenuStartID, item);
+            menu.add(Menu.NONE, baseAcctMenuStartID, Menu.NONE, item.acct_id + "- " + item.acct_name);
+            MenuItem themeMenu = menu.findItem(baseAcctMenuStartID);
+            themeMenu.setCheckable(true);
+            if(selected_acct_id == item.acct_id) {
+                themeMenu.setChecked(true);
+            }
+            baseAcctMenuStartID++;
+
+        }
+
+
+
+        /*
+        menu.addSubMenu(Menu.NONE, 3004, Menu.NONE,"Menu1");
+        SubMenu themeMenu = menu.findItem(3004).getSubMenu();
+        themeMenu.clear();
+        themeMenu.add(Menu.NONE, 3005, Menu.NONE,"Menu1");
+        themeMenu.add(Menu.NONE, 3006, Menu.NONE,"Menu2");
+        */
+
+        //mydb.get
+
+
         //TextView filterItem = (TextView) menu.findItem(R.id.menu_id_filter).getActionView();
         //filterItem.setTextColor(Color.RED);
 
@@ -176,6 +225,16 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
+        int itemID = item.getItemId();
+
+        if(map_MenuID_accountItem.containsKey(itemID)){
+
+            AccountItem accountItem = map_MenuID_accountItem.get(itemID);
+            SettingsIO.saveData(this, accountItem.acct_id, "selected_acct_id");
+            refreshActivity();
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.menu_id_add:
                 Intent editIntent = new Intent(this, EditActivity.class);
@@ -224,6 +283,32 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                 return true;
             //case R.id.menu_id_exit:
                 //return true;
+            case R.id.menu_id_delete_current_account:
+                // open dialog, ask for confirmation to delete the current account
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Current Account")
+                        .setMessage("Are you sure?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                int selected_acct_id = SettingsIO.readData(MainActivity.this, -1, "selected_acct_id");
+                                printMsg(">> selected_acct_id: " + selected_acct_id);
+                                if(selected_acct_id != -1) {
+                                    mydb.deleteAccount(selected_acct_id);
+                                    Toast.makeText(MainActivity.this, "Account deleted", Toast.LENGTH_LONG).show();
+                                    if(mydb.numberOfRowsInAccounts() > 0) {
+                                        List<AccountItem> acctItems = mydb.getAccounts();
+                                        int first_accountID = acctItems.get(0).acct_id;
+                                        SettingsIO.saveData(MainActivity.this, first_accountID, "selected_acct_id");
+                                    }
+                                    refreshActivity();
+                                }else{
+                                    Toast.makeText(MainActivity.this, "Error: Account ID not valid", Toast.LENGTH_LONG).show();
+                                }
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -291,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     public void onApplyCreateAccountBtn(String accountName) {
         printMsg(">>>> onApplyFilterAmountBtn: " + accountName);
         SettingsIO.saveData(this, accountName, "startup_account_to_view");
-        long acct_id = mydb.insertAccount(accountName);
+        int acct_id = mydb.insertAccount(accountName);
         if(acct_id != -1) {
             SettingsIO.saveData(this, acct_id, "selected_acct_id");
             refreshActivity();

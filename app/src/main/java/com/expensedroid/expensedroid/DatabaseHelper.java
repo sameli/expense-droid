@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by S. Ameli on 02/07/16.
@@ -62,14 +63,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public long insertAccount(String acctName){
+    public int insertAccount(String acctName){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("acct_name", acctName);
-        return db.insert(TABLE_NAME_ACCOUNTS, null, contentValues);
+        return (int)db.insert(TABLE_NAME_ACCOUNTS, null, contentValues);
     }
 
-    public long insertTransaction(Transaction trans){
+    public int insertTransaction(Transaction trans){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", trans.getTitle());
@@ -77,7 +78,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("date", trans.getDateString());
         contentValues.put("notes", trans.getNotes());
         contentValues.put("acct_id", trans.getAccount_id());
-        return db.insert(TABLE_NAME_TRANSACTIONS, null, contentValues);
+        return (int)db.insert(TABLE_NAME_TRANSACTIONS, null, contentValues);
+    }
+
+    public String getAccountName(int acct_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + TABLE_NAME_ACCOUNTS + " where acct_id="+acct_id+"", null );
+        res.moveToFirst();
+        String acct_name = res.getString(res.getColumnIndex("acct_name"));
+        return acct_name;
+    }
+
+    public List<AccountItem> getAccounts(){
+        List<AccountItem> listOfAccts = new ArrayList<AccountItem>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + TABLE_NAME_ACCOUNTS, null );
+        res.moveToFirst();
+        while(res.isAfterLast() == false) {
+            int acct_id = res.getInt(res.getColumnIndex("acct_id"));
+            String acct_name = res.getString(res.getColumnIndex("acct_name"));
+            AccountItem actItem = new AccountItem();
+            actItem.acct_id = acct_id;
+            actItem.acct_name = acct_name;
+
+            listOfAccts.add(actItem);
+            res.moveToNext();
+        }
+
+        return listOfAccts;
+    }
+
+    public boolean deleteAccount(int acct_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        try
+        {
+            db.delete(TABLE_NAME_ACCOUNTS, "acct_id = ?", new String[] { String.valueOf(acct_id) });
+            return true;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Cursor getData(int transaction_id){
@@ -116,13 +158,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<Transaction> getAllTransactions(Context context){
 
-        ArrayList<Transaction> array = new ArrayList<Transaction>();
+        ArrayList<Transaction> listOfTransactions = new ArrayList<Transaction>();
 
 
         // load filters
         Boolean isDateFilterActive = SettingsIO.readData(context, false, "menu_filter_date_checkbox");
 
-        String dateFilterSQL = "";//"where date(date) = '2016-07-30'";
+        String dateFilterSQL = "";
         if(isDateFilterActive){
 
             //where date(dateofbirth)>date('1980-12-01')
@@ -150,37 +192,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String filtersSql = "";
         if(isDateFilterActive && !isAmountFilterActive){
-            filtersSql = "where " + dateFilterSQL;
+            filtersSql = "AND " + dateFilterSQL;
         }else if(!isDateFilterActive && isAmountFilterActive){
-            filtersSql = "where " + amountFilterSQL;
+            filtersSql = "AND " + amountFilterSQL;
         }else if (isDateFilterActive && isDateFilterActive){
-            filtersSql = "where " + dateFilterSQL + " and " + amountFilterSQL;
+            filtersSql = "AND " + dateFilterSQL + " AND " + amountFilterSQL;
         }
+
+        int selected_acct_id = SettingsIO.readData(context, -1, "selected_acct_id");
+        String accountSql = "WHERE acct_id = " + selected_acct_id;
 
 
         System.out.println(">>> filtersSql: " + filtersSql);
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "select * from " + TABLE_NAME_TRANSACTIONS + " " + filtersSql, null );
+        Cursor res = db.rawQuery( "select * from " + TABLE_NAME_TRANSACTIONS + " " + accountSql + " " + filtersSql, null );
         res.moveToFirst();
         while(res.isAfterLast() == false) {
-
             int id = res.getInt(res.getColumnIndex("id"));
             String title = res.getString(res.getColumnIndex("title"));
             double amount = res.getDouble(res.getColumnIndex("amount"));
             String dateStr = res.getString(res.getColumnIndex("date"));
             String notes = res.getString(res.getColumnIndex("notes"));
+            int acct_id = res.getInt(res.getColumnIndex("acct_id"));
             Date date = parseDate(dateStr);
 
             System.out.println("Results from DB: " + title + " " + amount + " " + dateStr);
             Transaction trans = new Transaction(title, amount, date, notes);
             trans.setTransaction_id(id);
+            trans.setAccount_id(acct_id);
 
-            array.add(trans);
+            listOfTransactions.add(trans);
             res.moveToNext();
         }
 
-        return array;
+        return listOfTransactions;
     }
 
     public static Date parseDate(String dateStr){

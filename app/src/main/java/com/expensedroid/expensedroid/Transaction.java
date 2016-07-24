@@ -15,7 +15,7 @@ public class Transaction implements Serializable { // we need serializable so we
     private Date date;
     private String notes;
     private int transaction_id; // this is row ID in the database for this transaction
-    private int account_id; // the account id that this transaction belongs to
+    private long account_id; // the account id that this transaction belongs to
 
     public int getTransaction_id() {
         return transaction_id;
@@ -70,11 +70,11 @@ public class Transaction implements Serializable { // we need serializable so we
         this.notes = notes;
     }
 
-    public int getAccount_id() {
+    public long getAccount_id() {
         return account_id;
     }
 
-    public void setAccount_id(int account_id) {
+    public void setAccount_id(long account_id) {
         this.account_id = account_id;
     }
 

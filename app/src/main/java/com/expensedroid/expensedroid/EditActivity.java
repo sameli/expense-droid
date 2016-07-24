@@ -92,7 +92,11 @@ public class EditActivity extends AppCompatActivity {
         String dateStr = ((Button) findViewById(R.id.btn_date)).getText().toString();
         //Date date = DatabaseHelper.parseDate(dateStr);
 
-        int selected_acct_id = SettingsIO.readData(this, 1, "selected_acct_id");
+        int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
+        if(selected_acct_id == -1){
+            Toast.makeText(EditActivity.this, "Error: Account has not been selected", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         DatabaseHelper mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
         if(database_id == -1){ // this means database row id has not been set, and we add new item to database
@@ -100,7 +104,7 @@ public class EditActivity extends AppCompatActivity {
             Transaction tmpTransaction = new Transaction(title, amount , DatabaseHelper.parseDate(dateStr), notes);
             tmpTransaction.setAccount_id(selected_acct_id);
 
-            long result = mydb.insertTransaction(tmpTransaction);
+            int result = mydb.insertTransaction(tmpTransaction);
             String msg = "";
             if(result != -1)
                 msg = "Added new item to database";
