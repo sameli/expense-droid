@@ -26,47 +26,39 @@ import java.util.Map;
 
 /**
  * Created by S. Ameli on 01/07/16.
+ *
+ * This is the main class of Expense Droid
  */
 public class MainActivity extends AppCompatActivity implements DialogListener {
 
-    protected ArrayList<Transaction> data;
     DatabaseHelper mydb;
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
     public static final int DATABASE_VERSION = 3;
     int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
-    Map<Integer, AccountItem> map_MenuID_accountItem;
-    private boolean filterActivated = false;
+    Map<Integer, AccountItem> map_MenuID_accountItem; // this variable is used to map generated menu ID with the accounts
+    private boolean filterActivated = false; // if true, then the color of "filter" menu item will be green
 
+    // these are dialog instances for filters and adding new account:
     private DialogFilterDate dialogFilterDate;
     private DialogFilterAmount dialogFilterAmount;
     private DialogAddAccount dialogAddAccount;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        View view1 = (View) findViewById(R.id.mainview1);
-        //view1.setBackgroundColor(Color.argb(100,0,200,0));
-        //view1.setBackgroundColor(Color.argb(255, 204, 255, 204));
-
         dialogFilterDate = new DialogFilterDate();
         dialogFilterAmount = new DialogFilterAmount();
         dialogAddAccount = new DialogAddAccount();
 
+        initialize();
+    }
 
-        printMsg(">>>>>>>MainActivity onCreate ------");
-
-
-        //data = new ArrayList<>();
-        /*
-        for(int i = 0;i<30;i++) {
-            data.add(new Transaction("transaction# " + i, 500 + i, 100+i));
-        }
-        */
-
+    /*
+     * This method loads the database , sets up the listview for transactions and shows the total amount for current account
+     */
+    private void initialize(){
 
         mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
 
@@ -78,24 +70,12 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             }
         }
 
-        /*
-        int numberOfRowsInTransactions = mydb.numberOfRowsInTransactions();
-
-        for(int i = 0;i<3;i++) {
-            mydb.insertTransaction(new Transaction("transaction# " + numberOfRowsInTransactions, 500 + i, 100+i));
-            numberOfRowsInTransactions++;
-        }
-        */
-
-
-        data = mydb.getAllTransactions(this);
-
+        final ArrayList<Transaction> data  = mydb.getAllTransactions(this);
 
         //ArrayAdapter<Transaction> transArrayAdapter = new ArrayAdapter<Transaction>(this, android.R.layout.simple_list_item_1, data);
         ListView listview = (ListView) findViewById(R.id.listView);
         //listview.setAdapter(transArrayAdapter);
         listview.setAdapter(new CustomListViewAdapter(this, data));
-
 
         // adding events to ListView
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -111,16 +91,15 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             String acct_name = mydb.getAccountName(selected_acct_id);
             TextView accountTextview = (TextView)findViewById(R.id.textView_account);
             accountTextview.setText(acct_name);
-
-            //textView_account
         }
 
-
-        showTotal();
-
+        showTotal(data);
     }
 
-    private void showTotal(){
+    /*
+     * This method and sets the label for total amount of shown transactions
+     */
+    private void showTotal(ArrayList<Transaction> data){
         TextView amountTotal = (TextView)findViewById(R.id.textView_amount_total);
         double sum = calcTotal(data);
 
@@ -131,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         amountTotal.setTextColor(color);
     }
 
+    /*
+     * This method calculates the total sum of the given data
+     */
     private double calcTotal(ArrayList<Transaction> data){
         double sum = 0;
         for(int i =0;i<data.size();i++){
@@ -139,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         return sum;
     }
 
+    /*
+     * This method changes the color of the given menu item
+     */
     private void changeFilterMenuColor(Menu menu, int color){
         MenuItem menuItem = menu.findItem(R.id.menu_id_filter);
         CharSequence menuTitle = menuItem.getTitle();
@@ -147,6 +132,9 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         menuItem.setTitle(styledMenuTitle);
     }
 
+    /*
+     * This method is called when the program creates the menu
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
