@@ -15,7 +15,6 @@ Planned features to add:
 Personal notes:
 
 TODO:
-* Fix dollar sign for negative amounts. It should be -$1 not $-1
 * Fix style of "dialog_filter_date.xml"
 * Refactor settings keys like "menu_filter_date_checkbox"
 * Add help menu
