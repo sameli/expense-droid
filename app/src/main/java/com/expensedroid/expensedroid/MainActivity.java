@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
         View view1 = (View) findViewById(R.id.mainview1);
         //view1.setBackgroundColor(Color.argb(100,0,200,0));
-        view1.setBackgroundColor(Color.argb(255, 204, 255, 204));
+        //view1.setBackgroundColor(Color.argb(255, 204, 255, 204));
 
         dialogFilterDate = new DialogFilterDate();
         dialogFilterAmount = new DialogFilterAmount();
@@ -116,10 +116,19 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         }
 
 
+        showTotal();
+
+    }
+
+    private void showTotal(){
         TextView amountTotal = (TextView)findViewById(R.id.textView_amount_total);
         double sum = calcTotal(data);
-        amountTotal.setText("$" + String.format("%.2f", sum));
 
+        String sign = (sum >= 0) ? "" : "-";
+        double num = Math.abs(sum);
+        amountTotal.setText(sign + "$" + String.format("%.2f", num));
+        int color = (sum > 0) ? Color.parseColor("#008000") : Color.parseColor("#cc0000"); // first color is green, second is red
+        amountTotal.setTextColor(color);
     }
 
     private double calcTotal(ArrayList<Transaction> data){

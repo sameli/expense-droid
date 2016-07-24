@@ -1,6 +1,7 @@
 package com.expensedroid.expensedroid;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +53,17 @@ public class CustomListViewAdapter extends BaseAdapter{
 
         holder.dateView.setText(listData.get(position).getDateString());
         holder.titleView.setText(listData.get(position).getTitle());
-        holder.amountView.setText("$" + listData.get(position).getAmount());
+        showAmount(holder.amountView, listData.get(position).getAmount());
         return convertView;
+    }
+
+    private void showAmount(TextView textView_amount, double amount){
+
+        String sign = (amount >= 0) ? "" : "-";
+        double num = Math.abs(amount);
+        textView_amount.setText(sign + "$" + String.format("%.2f", num));
+        int color = (amount > 0) ? Color.parseColor("#008000") : Color.parseColor("#cc0000"); // first color is green, second is red
+        textView_amount.setTextColor(color);
     }
 
     static class ViewHolder {

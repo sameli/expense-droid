@@ -142,10 +142,10 @@ public class EditActivity extends AppCompatActivity {
 
     // this is set from the xml
     public void btnOpenDateDialog(View view) {
-        DatePickerFrag newFragment = new DatePickerFrag();
-        newFragment.set_id_btn_to_modify(R.id.btn_date);
-        newFragment.set_id_next_element_focus(R.id.editText_notes);
-        newFragment.show(getFragmentManager(),"Date Picker");
+        DatePickerFrag datePickerFrag = new DatePickerFrag();
+        datePickerFrag.set_id_btn_to_modify(R.id.btn_date);
+        datePickerFrag.set_id_next_element_focus(R.id.editText_notes);
+        datePickerFrag.show(getFragmentManager(),"Date Picker");
     }
 
     public void btnDiscard(View view) {

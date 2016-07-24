@@ -30,9 +30,14 @@
         android:title="Add New Account"/>
 
     <item
-        android:id="@+id/menu_id_delete_current_account"
+        android:id="@+id/menu_id_rename_account"
         android:orderInCategory="104"
-        android:title="Delete Current Account"/>
+        android:title="Rename Account"/>
+
+    <item
+        android:id="@+id/menu_id_delete_current_account"
+        android:orderInCategory="105"
+        android:title="Delete Account"/>
 
     <!--
     <item
