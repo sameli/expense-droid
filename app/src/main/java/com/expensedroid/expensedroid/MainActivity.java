@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
     DatabaseHelper mydb;
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
+    private final String DEFAULT_ACCOUNT_NAME = "Default Acct";
     private final int MENU_ACCOUNTS_ID = 103;
     public static final int DATABASE_VERSION = 3;
     int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
@@ -69,9 +70,11 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
 
         if(mydb.numberOfRowsInAccounts() == 0){
-            int acct_id = (int) mydb.insertAccount("Default Acct");
+            int acct_id = (int) mydb.insertAccount(DEFAULT_ACCOUNT_NAME);
             if(acct_id != -1) {
                 SettingsIO.saveData(this, acct_id, "selected_acct_id");
+                Toast.makeText(MainActivity.this, "New account created: "+ DEFAULT_ACCOUNT_NAME, Toast.LENGTH_LONG).show();
+
             }
         }
 

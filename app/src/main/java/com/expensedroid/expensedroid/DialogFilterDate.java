@@ -148,7 +148,8 @@ public class DialogFilterDate extends DialogFragment {
      */
     private void setDatePickerDate(View view){
         String previous_selectedDate = SettingsIO.readData(getContext(), "", "menu_filter_date_checkbox_selecteddate");
-        if(previous_selectedDate != null || previous_selectedDate != ""){
+        System.out.println(">>>> previous_selectedDate: " + previous_selectedDate);
+        if(previous_selectedDate != null & previous_selectedDate != "" & previous_selectedDate.isEmpty() == false){
 
             Date date = DatabaseHelper.parseDate(previous_selectedDate);
             DatePicker datePicker = (DatePicker) view.findViewById(R.id.filter_date_datePicker);
