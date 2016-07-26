@@ -140,6 +140,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
+    public boolean updateAccounts(Integer acct_id, String acct_name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("acct_name", acct_name);
+        db.update(TABLE_NAME_ACCOUNTS, contentValues, "acct_id = ? ", new String[] {Integer.toString(acct_id)});
+        return true;
+    }
+
     public boolean updateTransaction(Integer id, String title, double amount, String dateStr, String notes){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

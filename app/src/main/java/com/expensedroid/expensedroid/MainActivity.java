@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     private DialogFilterDate dialogFilterDate;
     private DialogFilterAmount dialogFilterAmount;
     private DialogAddAccount dialogAddAccount;
+    private DialogRenameAccount dialogRenameAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         dialogFilterDate = new DialogFilterDate();
         dialogFilterAmount = new DialogFilterAmount();
         dialogAddAccount = new DialogAddAccount();
+        dialogRenameAccount = new DialogRenameAccount();
 
         initialize();
     }
@@ -321,6 +323,8 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
             case R.id.menu_id_rename_account:
             // open dialog and rename account
+                FragmentManager fm1 = getSupportFragmentManager();
+                dialogRenameAccount.show(fm1, "Rename account dialog");
                 return true;
 
             default:
@@ -381,14 +385,13 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         Toast.makeText(this, "Amount filter applied", Toast.LENGTH_LONG).show();
 
         refreshActivity();
-        printMsg(">>>> onApplyFilterAmountBtn: " + selectedEquality + ", " + selectedAmount);
+        //printMsg(">>>> onApplyFilterAmountBtn: " + selectedEquality + ", " + selectedAmount);
 
     }
 
     @Override
     public void onApplyCreateAccountBtn(String accountName) {
-        printMsg(">>>> onApplyFilterAmountBtn: " + accountName);
-        SettingsIO.saveData(this, accountName, "startup_account_to_view");
+        //printMsg(">>>> onApplyFilterAmountBtn: " + accountName);
         int acct_id = mydb.insertAccount(accountName);
         if(acct_id != -1) {
             SettingsIO.saveData(this, acct_id, "selected_acct_id");
@@ -396,6 +399,21 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             refreshActivity();
         }else{
             Toast.makeText(this, "Error: Creating new account failed", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @Override
+    public void onApplyRenameAccountBtn(String accountName) {
+
+        // We rename the current shown account. We can get the id of current account from settings:
+        int acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
+        if(acct_id != -1) {
+            mydb.updateAccounts(acct_id, accountName);
+            Toast.makeText(this, "Account renamed to " + accountName, Toast.LENGTH_LONG).show();
+            refreshActivity();
+        }else{
+            Toast.makeText(this, "Error: Renaming account failed", Toast.LENGTH_LONG).show();
         }
 
     }

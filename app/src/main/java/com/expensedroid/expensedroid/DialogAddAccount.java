@@ -48,7 +48,7 @@ public class DialogAddAccount extends DialogFragment{
                     } else{
                         DialogListener activity = (DialogListener) getActivity();
                         activity.onApplyCreateAccountBtn(accountNameStr);
-
+                        editText.setText("");
                         dismiss();
                     }
                 }
