@@ -12,6 +12,9 @@ Planned features to add:
 * Category selection for transactions
 * Filter search for title
 
+Technical specifications:
+* Database consists of two tables that are related.
+
 Personal notes:
 
 TODO:

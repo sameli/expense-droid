@@ -3,16 +3,17 @@ package com.expensedroid.expensedroid;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     /*
      * This method changes the color of the given menu item
      */
-    private void changeFilterMenuColor(Menu menu, int color){
+    private void changeMenuColor(Menu menu, int color){
         MenuItem menuItem = menu.findItem(R.id.menu_id_filter);
         CharSequence menuTitle = menuItem.getTitle();
         SpannableString styledMenuTitle = new SpannableString(menuTitle);
@@ -150,16 +151,20 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             map_MenuID_accountItem.put(baseAcctMenuStartID, item);
             menu.add(Menu.NONE, baseAcctMenuStartID, Menu.NONE, item.acct_id + "- " + item.acct_name);
             MenuItem menuItem = menu.findItem(baseAcctMenuStartID);
-            menuItem.setCheckable(true);
+            //menuItem.setCheckable(true);
+
+            SpannableString spanStr = new SpannableString(item.acct_name);
 
             if(selected_acct_id == item.acct_id) {
-                menuItem.setChecked(true);
+                //spanStr.setSpan(new ForegroundColorSpan(Color.RED), 0, spanStr.length(), 0);
+                spanStr.setSpan(new StyleSpan(Typeface.BOLD), 0, spanStr.length(), 0);
+
             }
+
+            menuItem.setTitle(spanStr);
             baseAcctMenuStartID++;
 
         }
-
-
 
         /*
         menu.addSubMenu(Menu.NONE, 3004, Menu.NONE,"Menu1");
@@ -178,9 +183,9 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
         checkIfAllFilterItemsChecked();
         if(filterActivated) {
-            changeFilterMenuColor(menu, Color.GREEN);
+            changeMenuColor(menu, Color.GREEN);
         }else{
-            changeFilterMenuColor(menu, Color.WHITE);
+            changeMenuColor(menu, Color.WHITE);
         }
 
         boolean isChecked_filter_date = SettingsIO.readData(this, false, "menu_filter_date_checkbox");// readSettings_booleanItem("menu_filter_date_checkbox", false);
@@ -385,8 +390,10 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     }
 
     private void refreshActivity(){
-        finish();
-        startActivity(getIntent());
+        initialize();
+        invalidateOptionsMenu();
+        //finish();
+        //startActivity(getIntent());
     }
 
 }
