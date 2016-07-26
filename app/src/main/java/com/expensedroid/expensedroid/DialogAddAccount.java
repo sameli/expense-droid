@@ -14,6 +14,8 @@ import android.widget.Toast;
  */
 public class DialogAddAccount extends DialogFragment{
 
+        private final int MAXIMUM_ACCOUNT_NAME_LENGTH = 20;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             setStyle(DialogFragment.STYLE_NO_TITLE, 0);
@@ -41,7 +43,9 @@ public class DialogAddAccount extends DialogFragment{
                     String accountNameStr = editText.getText().toString();
                     if(accountNameStr == null || accountNameStr.isEmpty()) {
                         Toast.makeText(v.getContext(), "Account name field is empty", Toast.LENGTH_LONG).show();
-                    }else {
+                    }else if(accountNameStr.length() >= MAXIMUM_ACCOUNT_NAME_LENGTH){
+                        Toast.makeText(v.getContext(), "Account name must be less than "+MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_LONG).show();
+                    } else{
                         DialogListener activity = (DialogListener) getActivity();
                         activity.onApplyCreateAccountBtn(accountNameStr);
 

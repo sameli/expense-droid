@@ -14,6 +14,7 @@ import android.text.style.StyleSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
     DatabaseHelper mydb;
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000";
+    private final int MENU_ACCOUNTS_ID = 103;
     public static final int DATABASE_VERSION = 3;
     int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
     Map<Integer, AccountItem> map_MenuID_accountItem; // this variable is used to map generated menu ID with the accounts
@@ -146,11 +148,14 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         map_MenuID_accountItem = new HashMap<Integer, AccountItem>();
         int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
 
+        //SubMenu accounts_menu = menu.findItem(R.id.menu_id_accounts).getSubMenu();
+        menu.addSubMenu(Menu.NONE, MENU_ACCOUNTS_ID, Menu.NONE,"Accounts");
+        SubMenu accounts_submenu = menu.findItem(MENU_ACCOUNTS_ID).getSubMenu();
 
         for(AccountItem item : listOfAccts){
             map_MenuID_accountItem.put(baseAcctMenuStartID, item);
-            menu.add(Menu.NONE, baseAcctMenuStartID, Menu.NONE, item.acct_id + "- " + item.acct_name);
-            MenuItem menuItem = menu.findItem(baseAcctMenuStartID);
+            accounts_submenu.add(Menu.NONE, baseAcctMenuStartID, Menu.NONE, item.acct_id + "- " + item.acct_name);
+            MenuItem menuItem = accounts_submenu.findItem(baseAcctMenuStartID);
             //menuItem.setCheckable(true);
 
             SpannableString spanStr = new SpannableString(item.acct_name);
@@ -166,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
         }
 
+
         /*
         menu.addSubMenu(Menu.NONE, 3004, Menu.NONE,"Menu1");
         SubMenu themeMenu = menu.findItem(3004).getSubMenu();
@@ -173,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         themeMenu.add(Menu.NONE, 3005, Menu.NONE,"Menu1");
         themeMenu.add(Menu.NONE, 3006, Menu.NONE,"Menu2");
         */
+
 
         //mydb.get
 
@@ -310,6 +317,10 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                                 }
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
+                return true;
+
+            case R.id.menu_id_rename_account:
+            // open dialog and rename account
                 return true;
 
             default:

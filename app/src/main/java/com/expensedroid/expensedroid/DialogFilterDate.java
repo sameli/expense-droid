@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by S. Ameli on 11/07/16.
  */
@@ -72,6 +75,22 @@ public class DialogFilterDate extends DialogFragment {
 
 
 
+        String previous_selectedEquality = SettingsIO.readData(getContext(), "=", "menu_filter_date_checkbox_selectedequality");
+        System.out.println(">>> previous_selectedEquality: " + previous_selectedEquality);
+        int spinnerPos = 0;
+        if(previous_selectedEquality.equals(EQUAL_STR))
+            spinnerPos = 0;
+        else if(previous_selectedEquality.equals(BEFORE_STR))
+            spinnerPos = 1;
+        else if(previous_selectedEquality.equals(AFTER_STR))
+            spinnerPos = 2;
+        spinner.setSelection(spinnerPos);
+
+
+        setDatePickerDate(rootView);
+
+
+
         Button applyFilterButton = (Button) rootView.findViewById(R.id.btn_filter_date_applyfilter);
         applyFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,10 +137,33 @@ public class DialogFilterDate extends DialogFragment {
         String dayStr = String.format("%02d", day);
 
         str = year + "-" + monthStr + "-" + dayStr;
-        System.out.println(">>>> str: " + str);
+        //System.out.println(">>>> str: " + str);
 
 
         return str;
+    }
+
+    /*
+     * This method is used to load previously selected date from settings and load it in the datePicker object
+     */
+    private void setDatePickerDate(View view){
+        String previous_selectedDate = SettingsIO.readData(getContext(), "", "menu_filter_date_checkbox_selecteddate");
+        if(previous_selectedDate != null || previous_selectedDate != ""){
+
+            Date date = DatabaseHelper.parseDate(previous_selectedDate);
+            DatePicker datePicker = (DatePicker) view.findViewById(R.id.filter_date_datePicker);
+
+            if(datePicker != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+            }else{
+                System.out.println(">>>> setDatePickerDate: datePicker is null");
+            }
+
+        }
+
+
     }
 
     public static String getSmallOperatorStr(String str){

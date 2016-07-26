@@ -72,11 +72,11 @@ public class DialogFilterAmount extends DialogFragment {
         String previous_selectedEquality = SettingsIO.readData(getContext(), "=", "menu_filter_amount_checkbox_selectedequality");
         System.out.println(">>> previous_selectedEquality: " + previous_selectedEquality);
         int spinnerPos = 0;
-        if(previous_selectedEquality.equals("="))
+        if(previous_selectedEquality.equals(EQUAL_STR))
             spinnerPos = 0;
-        else if(previous_selectedEquality.equals("<"))
+        else if(previous_selectedEquality.equals(BEFORE_STR))
             spinnerPos = 1;
-        else if(previous_selectedEquality.equals(">"))
+        else if(previous_selectedEquality.equals(AFTER_STR))
             spinnerPos = 2;
         spinner.setSelection(spinnerPos);
 
