@@ -12,8 +12,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -114,6 +117,46 @@ public class DialogFilterAmount extends DialogFragment {
                     }
                     dismiss();
                 }
+            }
+        });
+
+
+        final RadioButton radioBtn1 = (RadioButton) rootView.findViewById(R.id.dialog_filter_amount_radioButton_1);
+        final RadioButton radioBtn2 = (RadioButton) rootView.findViewById(R.id.dialog_filter_amount_radioButton_2);
+
+        radioBtn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioBtn1.setChecked(true);
+                radioBtn2.setChecked(false);
+            }
+        });
+
+        radioBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioBtn1.setChecked(false);
+                radioBtn2.setChecked(true);
+            }
+        });
+
+        final TextView textViewMsg = (TextView) rootView.findViewById(R.id.textView_amount_msg1);
+
+        textViewMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioBtn1.setChecked(true);
+                radioBtn2.setChecked(false);
+            }
+        });
+
+        final TextView textViewMsg2 = (TextView) rootView.findViewById(R.id.textView_amount_msg2);
+
+        textViewMsg2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioBtn1.setChecked(false);
+                radioBtn2.setChecked(true);
             }
         });
 

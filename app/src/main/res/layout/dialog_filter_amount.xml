@@ -9,11 +9,17 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp">
 
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_filter_amount_radioButton_1"
+            android:checked="true" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Filter items that are  "
-            android:id="@+id/textView_amount_msg"
+            android:id="@+id/textView_amount_msg1"
             android:textSize="18dp"
             android:textColor="#000000"/>
 
@@ -27,11 +33,56 @@
             android:layout_height="wrap_content"
             android:id="@+id/editText_filter_dialog_amount"
             android:width="150dp"
-            android:inputType="numberDecimal"
+            android:inputType="numberDecimal|numberSigned"
             android:layout_alignBottom="@+id/textView4"
             android:layout_alignStart="@+id/editText_title"
             android:textStyle="bold" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_filter_amount_radioButton_2"
+            android:checked="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Or between: "
+            android:id="@+id/textView_amount_msg2"
+            android:textSize="18dp"
+            android:textColor="#000000"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_filter_amount_from_edittext"
+            android:layout_weight="1"
+            android:inputType="numberDecimal|numberSigned"
+            android:textStyle="bold"
+            android:width="30dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=","
+            android:id="@+id/textView7" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_filter_amount_to_edittext"
+            android:layout_weight="1"
+            android:inputType="numberDecimal|numberSigned"
+            android:textStyle="bold"
+            android:width="30dp"/>
     </LinearLayout>
 
     <LinearLayout
