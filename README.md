@@ -20,7 +20,6 @@ Personal notes:
 
 TODO:
 * select account in edit activity
-* Add an alert dialog for "delete" button action on the edit activity
 * Fix style of toast from dialogs
 * Fix style of "dialog_filter_date.xml"
 * Refactor settings keys like "menu_filter_date_checkbox"

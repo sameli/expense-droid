@@ -1,7 +1,9 @@
 package com.expensedroid.expensedroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +13,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * Created by S. Ameli on 03/07/16.
@@ -143,12 +147,23 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void btnDelete(View view) {
-        if(database_id != -1){
-            DatabaseHelper mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
-            mydb.deleteTransaction(database_id);
-            Toast.makeText(EditActivity.this, "Deleted item", Toast.LENGTH_LONG).show();
-            gotoMainActivity();
 
-        }
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Current Transaction")
+                .setMessage("Are you sure?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        if(database_id != -1){
+                            DatabaseHelper mydb = new DatabaseHelper(EditActivity.this, MainActivity.DATABASE_VERSION);
+                            mydb.deleteTransaction(database_id);
+                            Toast.makeText(EditActivity.this, "Deleted item", Toast.LENGTH_LONG).show();
+                            gotoMainActivity();
+                        }
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+
+
     }
 }
