@@ -153,17 +153,24 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         map_MenuID_accountItem = new HashMap<Integer, AccountItem>();
         int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
 
+        int numberOfAccounts = mydb.numberOfRowsInAccounts();
+
         //SubMenu accounts_menu = menu.findItem(R.id.menu_id_accounts).getSubMenu();
-        menu.addSubMenu(Menu.NONE, MENU_ACCOUNTS_ID, Menu.NONE,"Accounts");
+        menu.addSubMenu(Menu.NONE, MENU_ACCOUNTS_ID, Menu.NONE,"Accounts [" + numberOfAccounts +"]");
         SubMenu accounts_submenu = menu.findItem(MENU_ACCOUNTS_ID).getSubMenu();
 
         for(AccountItem item : listOfAccts){
             map_MenuID_accountItem.put(baseAcctMenuStartID, item);
+
+            // we add a submenu item here, the title will be renamed by spanStr
             accounts_submenu.add(Menu.NONE, baseAcctMenuStartID, Menu.NONE, item.acct_id + "- " + item.acct_name);
             MenuItem menuItem = accounts_submenu.findItem(baseAcctMenuStartID);
             //menuItem.setCheckable(true);
 
-            SpannableString spanStr = new SpannableString(item.acct_name);
+
+            int numberOfTransactions = mydb.numberOfRowsInTransactions(item.acct_id);
+
+            SpannableString spanStr = new SpannableString(item.acct_name + " [" + numberOfTransactions +"]");
 
             if(selected_acct_id == item.acct_id) {
                 //spanStr.setSpan(new ForegroundColorSpan(Color.RED), 0, spanStr.length(), 0);
@@ -310,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                                 printMsg(">> selected_acct_id: " + selected_acct_id);
                                 if(selected_acct_id != -1) {
                                     mydb.deleteAccount(selected_acct_id);
-                                    Toast.makeText(MainActivity.this, "Account deleted", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MainActivity.this, "Account deleted", Toast.LENGTH_SHORT).show();
                                     if(mydb.numberOfRowsInAccounts() > 0) {
                                         List<AccountItem> acctItems = mydb.getAccounts();
                                         int first_accountID = acctItems.get(0).acct_id;

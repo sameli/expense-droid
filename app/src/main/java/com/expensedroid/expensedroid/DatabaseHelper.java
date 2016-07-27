@@ -140,6 +140,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
+    /*
+     * If an argument is given to numberOfRowsInTransactions, then this method counts only those rows that belong to the given acct_id
+     */
+    public int numberOfRowsInTransactions(int acct_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME_TRANSACTIONS, "acct_id = ?", new String[] {Integer.toString(acct_id)});
+        return numRows;
+    }
+
     public boolean updateAccounts(Integer acct_id, String acct_name){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

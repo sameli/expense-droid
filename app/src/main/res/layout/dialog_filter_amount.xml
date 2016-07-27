@@ -12,11 +12,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Filters items that are  "
+            android:text="Filter items that are  "
             android:id="@+id/textView_amount_msg"
             android:textSize="18dp"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+            android:textColor="#000000"/>
 
         <Spinner
             android:layout_width="46dp"
@@ -41,13 +40,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
+        android:layout_marginLeft="5dp"
         android:weightSum="1">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:id="@+id/dialog_filter_amount_btn_cancel" />
+            android:id="@+id/dialog_filter_amount_btn_cancel"
+            android:theme="@style/AppTheme.ButtonGray" />
 
         <Space
             android:layout_width="wrap_content"
@@ -58,7 +59,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Apply filter"
-            android:id="@+id/dialog_filter_amount_btn_applyfilter" />
+            android:id="@+id/dialog_filter_amount_btn_applyfilter"
+            android:theme="@style/AppTheme.ButtonGreen"/>
     </LinearLayout>
 
 </LinearLayout>

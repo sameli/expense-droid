@@ -8,7 +8,21 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="textAllCaps">false</item> <!-- to change All caps of menu items in action bar, also this fixes the color of menus -->
         <item name="actionMenuTextAppearance">@style/customActionBar</item> <!-- to change font size of menu -->
+    </style>
 
+    <style name="AppTheme.ButtonRed" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/Red</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="AppTheme.ButtonGreen" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/Green</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="AppTheme.ButtonGray" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/Gray</item>
+        <item name="android:textColor">@color/White</item>
     </style>
 
     <style name="customActionBar" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Menu">

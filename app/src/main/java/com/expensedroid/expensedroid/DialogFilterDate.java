@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,8 +32,9 @@ public class DialogFilterDate extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-        View rootView = inflater.inflate(R.layout.dialog_filter_date, container, false);
+        //setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_filter_date, container, false);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         //getDialog().setTitle("Filter Date");
 

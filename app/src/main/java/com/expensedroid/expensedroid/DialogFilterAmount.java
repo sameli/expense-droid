@@ -1,10 +1,14 @@
 package com.expensedroid.expensedroid;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,9 +30,9 @@ public class DialogFilterAmount extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-        View rootView = inflater.inflate(R.layout.dialog_filter_amount, container, false);
-        //getDialog().setTitle("Filter amount");
+        //setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_filter_amount, container, false);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         Button dismissButton = (Button) rootView.findViewById(R.id.dialog_filter_amount_btn_cancel);
         dismissButton.setOnClickListener(new View.OnClickListener() {
@@ -83,9 +87,12 @@ public class DialogFilterAmount extends DialogFragment {
 
         final EditText editText = (EditText) rootView.findViewById(R.id.editText_filter_dialog_amount);
 
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+
         int previous_filterAmount = SettingsIO.readData(getContext(), 0, "menu_filter_amount_checkbox_selectedamount");
         editText.setText(String.valueOf(previous_filterAmount));
-
+        editText.setSelection(editText.getText().length());
 
         Button applyFilterButton = (Button) rootView.findViewById(R.id.dialog_filter_amount_btn_applyfilter);
         applyFilterButton.setOnClickListener(new View.OnClickListener() {

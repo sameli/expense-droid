@@ -82,7 +82,7 @@ public class EditActivity extends AppCompatActivity {
 
     public void btnSave(View view) {
         EditText editText_title = (EditText) findViewById(R.id.editText_title);
-        String title = editText_title.getText().toString();
+        String title = editText_title.getText().toString().trim();
 
         EditText editText_amount = (EditText) findViewById(R.id.editText_amount);
         String amount_str = editText_amount.getText().toString();
@@ -154,6 +154,8 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void btnDelete(View view) {
+
+
         if(database_id != -1){
             DatabaseHelper mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
             mydb.deleteTransaction(database_id);

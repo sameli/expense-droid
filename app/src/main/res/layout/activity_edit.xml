@@ -33,7 +33,7 @@
             android:layout_alignTop="@+id/btn_delete"
             android:layout_alignParentEnd="true"
             android:textSize="18dp"
-            android:background="#50ff50" />
+            android:theme="@style/AppTheme.ButtonGreen" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
             android:layout_alignParentStart="true"
             android:onClick="btnDiscard"
             android:textSize="18dp"
-            android:background="#cdcdcd" />
+            android:theme="@style/AppTheme.ButtonGray" />
 
         <Button
             android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
             android:layout_centerHorizontal="true"
             android:onClick="btnDelete"
             android:textSize="18dp"
-            android:background="#ff8484" />
+            android:theme="@style/AppTheme.ButtonRed"/>
 
         <TextView
             android:layout_width="wrap_content"
