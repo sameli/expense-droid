@@ -1,6 +1,5 @@
 package com.expensedroid.expensedroid;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -8,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -23,7 +20,7 @@ import android.widget.Toast;
  * Created by S. Ameli on 21/07/16.
  */
 public class DialogFilterAmount extends DialogFragment {
-    private String selectedEquality; // Equals, Before or After
+    private String selectedOperator; // Equals, Before or After
     private int selectedAmount = 0;
 
     private static final String EQUAL_STR = "=";
@@ -55,7 +52,7 @@ public class DialogFilterAmount extends DialogFragment {
 
                 String str = (String) spinner.getItemAtPosition(i);
                 //System.out.println(">>>> onItemSelected: " + i + ", str: " + str);
-                selectedEquality = str;
+                selectedOperator = str;
             }
 
             @Override
@@ -76,14 +73,14 @@ public class DialogFilterAmount extends DialogFragment {
         spinner.setAdapter(adapter);
 
 
-        String previous_selectedEquality = SettingsIO.readData(getContext(), "=", "menu_filter_amount_checkbox_selectedequality");
-        System.out.println(">>> previous_selectedEquality: " + previous_selectedEquality);
+        String previous_selectedOperator = SettingsIO.readData(getContext(), "=", "menu_filter_amount_checkbox_selected_operator");
+        System.out.println(">>> previous_selectedOperator: " + previous_selectedOperator);
         int spinnerPos = 0;
-        if(previous_selectedEquality.equals(EQUAL_STR))
+        if(previous_selectedOperator.equals(EQUAL_STR))
             spinnerPos = 0;
-        else if(previous_selectedEquality.equals(BEFORE_STR))
+        else if(previous_selectedOperator.equals(BEFORE_STR))
             spinnerPos = 1;
-        else if(previous_selectedEquality.equals(AFTER_STR))
+        else if(previous_selectedOperator.equals(AFTER_STR))
             spinnerPos = 2;
         spinner.setSelection(spinnerPos);
 
@@ -110,7 +107,7 @@ public class DialogFilterAmount extends DialogFragment {
                     DialogListener activity = (DialogListener) getActivity();
                     try {
                         selectedAmount = Integer.parseInt(editText.getText().toString());
-                        activity.onApplyFilterAmountBtn(selectedEquality, selectedAmount);
+                        activity.onApplyFilterAmountBtn(selectedOperator, selectedAmount);
 
                     } catch (Exception e) {
                         System.out.println(e);

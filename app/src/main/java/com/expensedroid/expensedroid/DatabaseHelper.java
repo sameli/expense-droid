@@ -185,13 +185,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(isDateFilterActive){
 
             //where date(dateofbirth)>date('1980-12-01')
-            String selectedEquality = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selectedequality");
-            String operatorSign = DialogFilterDate.getSmallOperatorStr(selectedEquality);
+            String selectedOperator = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selected_operator");
+            String operatorSign = DialogFilterDate.getSmallOperatorStr(selectedOperator);
 
             String selectedDate = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selecteddate");
 
             dateFilterSQL = "date(date) " + operatorSign + " date('" + selectedDate + "')";
-            System.out.println(">>> dateFilterSQL: " + dateFilterSQL);
+            //System.out.println("dateFilterSQL: " + dateFilterSQL);
         }
 
         Boolean isAmountFilterActive = SettingsIO.readData(context, false, "menu_filter_amount_checkbox");
@@ -199,12 +199,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String amountFilterSQL = "";
         if(isAmountFilterActive){
 
-            String selectedEquality = SettingsIO.readData(context, "", "menu_filter_amount_checkbox_selectedequality");
+            String selectedOperator = SettingsIO.readData(context, "", "menu_filter_amount_checkbox_selected_operator");
 
             int selectedAmount = SettingsIO.readData(context, 0, "menu_filter_amount_checkbox_selectedamount");
 
-            amountFilterSQL = "amount " + selectedEquality + " " + selectedAmount;
-            System.out.println(">>> amountFilterSQL: " + amountFilterSQL);
+            amountFilterSQL = "amount " + selectedOperator + " " + selectedAmount;
+            //System.out.println("amountFilterSQL: " + amountFilterSQL);
         }
 
         String filtersSql = "";
@@ -220,7 +220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String accountSql = "WHERE acct_id = " + selected_acct_id;
 
 
-        System.out.println(">>> filtersSql: " + filtersSql);
+        //System.out.println("filtersSql: " + filtersSql);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery( "select * from " + TABLE_NAME_TRANSACTIONS + " " + accountSql + " " + filtersSql, null );
@@ -234,7 +234,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int acct_id = res.getInt(res.getColumnIndex("acct_id"));
             Date date = parseDate(dateStr);
 
-            System.out.println("Results from DB: " + title + " " + amount + " " + dateStr);
+            //System.out.println("Results from DB: " + title + " " + amount + " " + dateStr);
             Transaction trans = new Transaction(title, amount, date, notes);
             trans.setTransaction_id(id);
             trans.setAccount_id(acct_id);

@@ -20,7 +20,7 @@ import java.util.Date;
  */
 public class DialogFilterDate extends DialogFragment {
 
-    private String selectedEquality; // Equals, Before or After
+    private String selectedOperator; // Equals, Before or After
     private String selectedDate; // 2016-12-30
 
     private static final String EQUAL_STR = "Equal";
@@ -56,7 +56,7 @@ public class DialogFilterDate extends DialogFragment {
 
                 String str = (String) spinner.getItemAtPosition(i);
                 //System.out.println(">>>> onItemSelected: " + i + ", str: " + str);
-                selectedEquality = str;
+                selectedOperator = str;
             }
 
             @Override
@@ -77,14 +77,14 @@ public class DialogFilterDate extends DialogFragment {
 
 
 
-        String previous_selectedEquality = SettingsIO.readData(getContext(), "=", "menu_filter_date_checkbox_selectedequality");
-        System.out.println(">>> previous_selectedEquality: " + previous_selectedEquality);
+        String previous_selectedOperator = SettingsIO.readData(getContext(), "=", "menu_filter_date_checkbox_selected_operator");
+        //System.out.println(">>> previous_selected_operator: " + previous_selectedOperator);
         int spinnerPos = 0;
-        if(previous_selectedEquality.equals(EQUAL_STR))
+        if(previous_selectedOperator.equals(EQUAL_STR))
             spinnerPos = 0;
-        else if(previous_selectedEquality.equals(BEFORE_STR))
+        else if(previous_selectedOperator.equals(BEFORE_STR))
             spinnerPos = 1;
-        else if(previous_selectedEquality.equals(AFTER_STR))
+        else if(previous_selectedOperator.equals(AFTER_STR))
             spinnerPos = 2;
         spinner.setSelection(spinnerPos);
 
@@ -100,7 +100,7 @@ public class DialogFilterDate extends DialogFragment {
 
                 DialogListener activity = (DialogListener) getActivity();
                 try{
-                    activity.onApplyFilterDateBtn(selectedEquality, getDatePickerDate());
+                    activity.onApplyFilterDateBtn(selectedOperator, getDatePickerDate());
 
                 }catch(Exception e){
                     System.out.println(e);
