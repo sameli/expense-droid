@@ -118,61 +118,6 @@ public class DialogFilterAmount extends DialogFragment {
         });
 
 
-        final RadioButton radioBtn1 = (RadioButton) rootView.findViewById(R.id.dialog_filter_amount_radioButton_1);
-        final RadioButton radioBtn2 = (RadioButton) rootView.findViewById(R.id.dialog_filter_amount_radioButton_2);
-
-        radioBtn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                radioBtn1.setChecked(true);
-                radioBtn2.setChecked(false);
-            }
-        });
-
-        radioBtn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                radioBtn1.setChecked(false);
-                radioBtn2.setChecked(true);
-            }
-        });
-
-        final TextView textViewMsg = (TextView) rootView.findViewById(R.id.textView_amount_msg1);
-
-        textViewMsg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                radioBtn1.setChecked(true);
-                radioBtn2.setChecked(false);
-            }
-        });
-
-        final TextView textViewMsg2 = (TextView) rootView.findViewById(R.id.textView_amount_msg2);
-
-        textViewMsg2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                radioBtn1.setChecked(false);
-                radioBtn2.setChecked(true);
-            }
-        });
-
-
-
-        /*
-        Button btn_show_date = (Button) rootView.findViewById(R.id.btn_filter_date_showdatefrag);
-        btn_show_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerFrag newFragment = new DatePickerFrag();
-                newFragment.set_id_btn_to_modify(R.id.btn_filter_date_showdatefrag);
-                //FragmentManager fm = getSupportFragmentManager();
-                //newFragment.show(rootView.getfr,"Date Picker");
-            }
-        });
-*/
-
-
         return rootView;
     }
 
