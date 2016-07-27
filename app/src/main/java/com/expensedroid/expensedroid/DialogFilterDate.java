@@ -32,7 +32,6 @@ public class DialogFilterDate extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //setStyle(DialogFragment.STYLE_NO_TITLE, 0);
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_filter_date, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -48,14 +47,11 @@ public class DialogFilterDate extends DialogFragment {
 
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.filter_date_spinner);
 
-        // Spinner click listener
-        // spinner.setOnItemSelectedListener(new setonitemclicklistener
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String str = (String) spinner.getItemAtPosition(i);
-                //System.out.println(">>>> onItemSelected: " + i + ", str: " + str);
                 selectedOperator = str;
             }
 
@@ -65,20 +61,14 @@ public class DialogFilterDate extends DialogFragment {
             }
         });
 
-
         String[] items = new String[] { EQUAL_STR, BEFORE_STR, AFTER_STR};
-
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, items);
 
         ArrayAdapter adapter = new ArrayAdapter<CharSequence>(getContext(), R.layout.custom_spinner_layout, items);
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
 
         spinner.setAdapter(adapter);
 
-
-
         String previous_selectedOperator = SettingsIO.readData(getContext(), "=", "menu_filter_date_checkbox_selected_operator");
-        //System.out.println(">>> previous_selected_operator: " + previous_selectedOperator);
         int spinnerPos = 0;
         if(previous_selectedOperator.equals(EQUAL_STR))
             spinnerPos = 0;
@@ -88,10 +78,7 @@ public class DialogFilterDate extends DialogFragment {
             spinnerPos = 2;
         spinner.setSelection(spinnerPos);
 
-
         setDatePickerDate(rootView);
-
-
 
         Button applyFilterButton = (Button) rootView.findViewById(R.id.btn_filter_date_applyfilter);
         applyFilterButton.setOnClickListener(new View.OnClickListener() {
@@ -109,21 +96,6 @@ public class DialogFilterDate extends DialogFragment {
             }
         });
 
-
-        /*
-        Button btn_show_date = (Button) rootView.findViewById(R.id.btn_filter_date_showdatefrag);
-        btn_show_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerFrag newFragment = new DatePickerFrag();
-                newFragment.set_id_btn_to_modify(R.id.btn_filter_date_showdatefrag);
-                //FragmentManager fm = getSupportFragmentManager();
-                //newFragment.show(rootView.getfr,"Date Picker");
-            }
-        });
-*/
-
-
         return rootView;
     }
 
@@ -139,8 +111,6 @@ public class DialogFilterDate extends DialogFragment {
         String dayStr = String.format("%02d", day);
 
         str = year + "-" + monthStr + "-" + dayStr;
-        //System.out.println(">>>> str: " + str);
-
 
         return str;
     }
@@ -166,7 +136,6 @@ public class DialogFilterDate extends DialogFragment {
 
         }
 
-
     }
 
     public static String getSmallOperatorStr(String str){
@@ -182,28 +151,5 @@ public class DialogFilterDate extends DialogFragment {
         }
         return operatorStr;
     }
-
-    /*
-
-    public DialogFilterDate() {
-
-        //super(context);
-        //fragmentManager = this.getOwnerActivity().getFragmentManager()
-
-
-        //setting custom layout to dialog
-        setContentView(R.layout.dialog_filter_date);
-        setTitle("Custom Dialog");
-
-
-
-
-
-
-
-        //show();
-    }
-    */
-
 
 }

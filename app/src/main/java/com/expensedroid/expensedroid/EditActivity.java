@@ -65,14 +65,8 @@ public class EditActivity extends AppCompatActivity {
 
             database_id = trans.getTransaction_id();
 
-            //TextView textview = (TextView) findViewById(R.id.textView2);
-            //textview.setText("id is: " + String.valueOf(database_id));
-
-
-
         }else{
             getSupportActionBar().setTitle("Add new item");
-            //System.out.println("Intent extra is empty, this is from add btn on main page");
             database_id = -1;
             Button btnDelete = (Button) findViewById(R.id.btn_delete);
             btnDelete.setVisibility(View.INVISIBLE);
@@ -100,9 +94,7 @@ public class EditActivity extends AppCompatActivity {
         }
 
         double amount = Double.parseDouble(amount_str);
-        //int expenses = Integer.parseInt(expenses_str); // replace with date parse from string
         String dateStr = ((Button) findViewById(R.id.btn_date)).getText().toString();
-        //Date date = DatabaseHelper.parseDate(dateStr);
 
         int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
         if(selected_acct_id == -1){
@@ -126,8 +118,6 @@ public class EditActivity extends AppCompatActivity {
             Toast.makeText(EditActivity.this, msg, Toast.LENGTH_LONG).show();
         }else{ // we have an database_id. we need to update that row on database
             mydb.updateTransaction(database_id, title, amount, dateStr, notes);
-
-            //Toast.makeText(EditActivity.this, "Updated item", Toast.LENGTH_LONG).show();
         }
 
 
@@ -137,10 +127,9 @@ public class EditActivity extends AppCompatActivity {
 
     private void gotoMainActivity(){
         Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent); // this will switch to DetailActivity
+        startActivity(mainIntent);
     }
 
-    // this is set from the xml
     public void btnOpenDateDialog(View view) {
         DatePickerFrag datePickerFrag = new DatePickerFrag();
         datePickerFrag.set_id_btn_to_modify(R.id.btn_date);
@@ -154,8 +143,6 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void btnDelete(View view) {
-
-
         if(database_id != -1){
             DatabaseHelper mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
             mydb.deleteTransaction(database_id);
