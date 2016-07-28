@@ -93,7 +93,7 @@ public class EditActivity extends AppCompatActivity {
 
 
         if(title.length() == 0 || amount_str.length() == 0 || date_str.length() == 0){
-            Toast.makeText(EditActivity.this, "Fill all required fields", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditActivity.this, "Fill all required fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -102,11 +102,11 @@ public class EditActivity extends AppCompatActivity {
 
         int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
         if(selected_acct_id == -1){
-            Toast.makeText(EditActivity.this, "Error: Account has not been selected", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditActivity.this, "Error: Account has not been selected", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        DatabaseHelper mydb = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
+        DatabaseHelper mydb = new DatabaseHelper(this);
         if(database_id == -1){ // this means database row id has not been set, and we add new item to database
 
             Transaction tmpTransaction = new Transaction(title, amount , DatabaseHelper.parseDate(dateStr), notes);
@@ -119,7 +119,7 @@ public class EditActivity extends AppCompatActivity {
             else
                 msg = "Error: item was NOT added to the database";
 
-            Toast.makeText(EditActivity.this, msg, Toast.LENGTH_LONG).show();
+            Toast.makeText(EditActivity.this, msg, Toast.LENGTH_SHORT).show();
         }else{ // we have an database_id. we need to update that row on database
             mydb.updateTransaction(database_id, title, amount, dateStr, notes);
         }
@@ -156,9 +156,9 @@ public class EditActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if(database_id != -1){
-                            DatabaseHelper mydb = new DatabaseHelper(EditActivity.this, MainActivity.DATABASE_VERSION);
+                            DatabaseHelper mydb = new DatabaseHelper(EditActivity.this);
                             mydb.deleteTransaction(database_id);
-                            Toast.makeText(EditActivity.this, "Deleted item", Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditActivity.this, "Deleted item", Toast.LENGTH_SHORT).show();
                             gotoMainActivity();
                         }
                     }})

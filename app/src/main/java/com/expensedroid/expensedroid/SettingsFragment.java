@@ -1,5 +1,6 @@
 package com.expensedroid.expensedroid;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -7,6 +8,7 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by S. Ameli on 27/07/16.
@@ -19,9 +21,15 @@ public class SettingsFragment extends PreferenceFragment {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
-        Preference reset = (Preference) findPreference("pref_key_license");
+        addLicenseListener();
+        addResetDatabaseListener();
 
-        reset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+    }
+
+    private void addLicenseListener(){
+        Preference preference = (Preference) findPreference("pref_key_license");
+
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
         {
             public boolean onPreferenceClick(Preference pref)
             {
@@ -30,7 +38,7 @@ public class SettingsFragment extends PreferenceFragment {
                         "\t\tLicense:\n" +
                         "\t\tGNU General Public License 3\n" +
                         "\t\thttps://www.gnu.org/licenses/gpl.html\n"+
-                        "\t\tCopyright 2016 S. Ameli";
+                        "\t\t© 2016 S. Ameli";
 
                 TextView msg = new TextView(getActivity());
                 msg.setText(str);
@@ -41,11 +49,40 @@ public class SettingsFragment extends PreferenceFragment {
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                       // resetSettings(SettingsFragment.this.getActivity());
+                        dialog.cancel();
                     }
                 });
                 builder.create().show();
-                //resetSettings(SettingsFragment.this.getActivity());
+
+                return true;
+            }
+        });
+    }
+
+
+    private void addResetDatabaseListener(){
+
+        Preference preference = (Preference) findPreference("pref_key_reset_database");
+
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+        {
+            public boolean onPreferenceClick(Preference pref)
+            {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Reset Database");
+                builder.setMessage("Are you sure you want to reset the database?"
+                        + " All your transactions and accounts within this app will be lost.");
+                builder.setPositiveButton("Reset", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseHelper mydb = new DatabaseHelper(getActivity());
+                        mydb.resetDatabase();
+
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.create().show();
 
 
                 return true;

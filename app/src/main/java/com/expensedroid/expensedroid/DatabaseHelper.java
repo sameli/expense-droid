@@ -19,16 +19,17 @@ import java.util.List;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "mydatabase.db";
-    public static final String TABLE_NAME_ACCOUNTS= "accts";
-    public static final String TABLE_NAME_TRANSACTIONS = "trs";
-    public static final String TABLE_NAME_V1= "tr"; // table for v1 of database
+    public static final String DATABASE_NAME = "database.db";
+    public static final int DATABASE_VERSION = 3; // current version of the database schema
+    private final String TABLE_NAME_ACCOUNTS= "accts";
+    private final String TABLE_NAME_TRANSACTIONS = "trs";
+    private final String TABLE_NAME_V1= "tr"; // table for v1 of database
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
-    public DatabaseHelper(Context context, int dbVersion) {
-        super(context, DATABASE_NAME, null, dbVersion);
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -56,11 +57,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_ACCOUNTS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TRANSACTIONS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_V1);
         onCreate(sqLiteDatabase);
+    }
+
+    public void resetDatabase(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        onUpgrade(db, 1, DATABASE_VERSION);
     }
 
     public int insertAccount(String acctName){
@@ -184,7 +190,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String dateFilterSQL = "";
         if(isDateFilterActive){
 
-            //where date(dateofbirth)>date('1980-12-01')
             String selectedOperator = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selected_operator");
             String operatorSign = DialogFilterDate.getSmallOperatorStr(selectedOperator);
 

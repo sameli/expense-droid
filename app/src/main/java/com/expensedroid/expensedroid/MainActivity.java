@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000"; // Message id to transfer data from main to edit activity
     private final String DEFAULT_ACCOUNT_NAME = "Default Acct"; // default account name to be created for first time use
     private final int MENU_ACCOUNTS_ID = 103;
-    public static final int DATABASE_VERSION = 3; // current version of the database schema
     int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
 
     private DatabaseHelper databaseHelper;
@@ -69,14 +68,14 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         dialogAddAccount = new DialogAddAccount();
         dialogRenameAccount = new DialogRenameAccount();
 
-        databaseHelper = new DatabaseHelper(this, MainActivity.DATABASE_VERSION);
+        databaseHelper = new DatabaseHelper(this);
 
 
         if(databaseHelper.numberOfRowsInAccounts() == 0){
             int acct_id = (int) databaseHelper.insertAccount(DEFAULT_ACCOUNT_NAME);
             if(acct_id != -1) {
                 SettingsIO.saveData(this, acct_id, "selected_acct_id");
-                Toast.makeText(MainActivity.this, "New account created: "+ DEFAULT_ACCOUNT_NAME, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "New account created: "+ DEFAULT_ACCOUNT_NAME, Toast.LENGTH_SHORT).show();
 
             }
         }
@@ -299,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                                     }
                                     refreshActivity();
                                 }else{
-                                    Toast.makeText(MainActivity.this, "Error: Account ID not valid", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MainActivity.this, "Error: Account ID not valid", Toast.LENGTH_SHORT).show();
                                 }
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
@@ -365,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         SettingsIO.saveData(this, true, "menu_filter_date_checkbox");
         SettingsIO.saveData(this, selectedOperator, "menu_filter_date_checkbox_selected_operator");
         SettingsIO.saveData(this, selectedDate, "menu_filter_date_checkbox_selecteddate");
-        Toast.makeText(this, "Date filter applied", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Date filter applied", Toast.LENGTH_SHORT).show();
 
         refreshActivity();
         //printMsg("onApplyFilterDateBtn: " + selectedOperator + ", " + selectedDate);
@@ -380,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         SettingsIO.saveData(this, true, "menu_filter_amount_checkbox");
         SettingsIO.saveData(this, selectedOperator, "menu_filter_amount_checkbox_selected_operator");
         SettingsIO.saveData(this, selectedAmount, "menu_filter_amount_checkbox_selectedamount");
-        Toast.makeText(this, "Amount filter applied", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Amount filter applied", Toast.LENGTH_SHORT).show();
 
         refreshActivity();
         //printMsg("onApplyFilterAmountBtn: " + selectedOperator + ", " + selectedAmount);
@@ -395,10 +394,10 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         int acct_id = databaseHelper.insertAccount(accountName);
         if(acct_id != -1) {
             SettingsIO.saveData(this, acct_id, "selected_acct_id");
-            Toast.makeText(this, "New account created", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "New account created", Toast.LENGTH_SHORT).show();
             refreshActivity();
         }else{
-            Toast.makeText(this, "Error: Creating new account failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error: Creating new account failed", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -413,10 +412,10 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         int acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
         if(acct_id != -1) {
             databaseHelper.updateAccounts(acct_id, accountName);
-            Toast.makeText(this, "Account renamed to " + accountName, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Account renamed to " + accountName, Toast.LENGTH_SHORT).show();
             refreshActivity();
         }else{
-            Toast.makeText(this, "Error: Renaming account failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error: Renaming account failed", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -424,9 +423,20 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     /*
      * This method refreshes the Main activity and also the menu items. This is called whenever we need to update menu or listview on the main activity
      */
-    private void refreshActivity(){
+    public void refreshActivity(){
         initialize();
         invalidateOptionsMenu();
     }
+
+    /*
+     * This method is called when the main activity is resumed.
+     * It calls the refreshActivity to reload new data. This is necessary when the user resets the database from the settings activity
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshActivity();
+    }
+
 
 }

@@ -3,6 +3,9 @@
     <PreferenceCategory
         android:key="pref_key_storage_settings">
         <Preference
+            android:key="pref_key_reset_database"
+            android:title="Reset Database"/>
+        <Preference
             android:key="pref_key_app_version"
             android:summary="@string/app_version"
             android:title="App version" />

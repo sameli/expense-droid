@@ -45,9 +45,9 @@ public class DialogAddAccount extends DialogFragment{
 
                     String accountNameStr = editText.getText().toString().trim();
                     if(accountNameStr == null || accountNameStr.isEmpty()) {
-                        Toast.makeText(v.getContext(), "Account name field is empty", Toast.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(), "Account name field is empty", Toast.LENGTH_SHORT).show();
                     }else if(accountNameStr.length() >= MAXIMUM_ACCOUNT_NAME_LENGTH){
-                        Toast.makeText(v.getContext(), "Account name must be less than "+MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(), "Account name must be less than "+MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_SHORT).show();
                     } else{
                         DialogListener activity = (DialogListener) getActivity();
                         activity.onApplyCreateAccountBtn(accountNameStr.trim());
