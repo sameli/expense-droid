@@ -39,6 +39,11 @@
         android:orderInCategory="106"
         android:title="Delete Account"/>
 
+    <item
+        android:id="@+id/menu_id_settings"
+        android:orderInCategory="107"
+        android:title="Settings"/>
+
     <!--
     <item
         android:id="@+id/menu_id_exit"

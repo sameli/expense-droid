@@ -311,6 +311,11 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                 dialogRenameAccount.show(fm1, "Rename account dialog");
                 return true;
 
+            case R.id.menu_id_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
