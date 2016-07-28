@@ -4,9 +4,10 @@
         android:key="pref_key_storage_settings">
         <Preference
             android:key="pref_key_app_version"
-            android:summary="1"
+            android:summary="@string/app_version"
             android:title="App version" />
         <Preference
-            android:title="Licence and Credits" />
+            android:key="pref_key_license"
+            android:title="License" />
     </PreferenceCategory>
 </PreferenceScreen>

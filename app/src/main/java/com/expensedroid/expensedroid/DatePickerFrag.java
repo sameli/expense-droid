@@ -48,7 +48,7 @@ public class DatePickerFrag extends DialogFragment implements DatePickerDialog.O
     // this implements the interface method from DatePickerDialog.OnDateSetListener
     public void onDateSet(DatePicker view, int year, int month, int day) {
         if(id_btn_to_modify != -1) {
-            TextView btn_date = (TextView) getActivity().findViewById(id_btn_to_modify);//R.id.btn_date);
+            TextView btn_date = (TextView) getActivity().findViewById(id_btn_to_modify);
             String monthStr = String.format("%02d", (month+1));
             String dayStr = String.format("%02d", day);
             String stringOfDate = year + "-" + monthStr + "-" + dayStr;
