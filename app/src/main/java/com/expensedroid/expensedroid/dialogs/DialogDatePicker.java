@@ -1,4 +1,4 @@
-package com.expensedroid.expensedroid;
+package com.expensedroid.expensedroid.dialogs;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -14,20 +14,22 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.expensedroid.expensedroid.DatabaseHelper;
+
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by S. Ameli on 05/07/16.
  */
-public class DatePickerFrag extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class DialogDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private int id_btn_to_modify;
     private int id_next_element_focus; // we need this so when the date dialog closes, the focus goes on this element
     private Date date = null;
     private DatePickerDialog datePickerDialog;
 
-    public DatePickerFrag(){
+    public DialogDatePicker(){
         id_btn_to_modify = -1;
     }
 

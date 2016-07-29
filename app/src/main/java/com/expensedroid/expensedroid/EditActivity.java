@@ -14,9 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.expensedroid.expensedroid.dialogs.DialogDatePicker;
+
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by S. Ameli on 03/07/16.
@@ -143,13 +144,13 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void btnOpenDateDialog(View view) {
-        DatePickerFrag datePickerFrag = new DatePickerFrag();
+        DialogDatePicker dialogDatePicker = new DialogDatePicker();
         if(database_id != 0 && date != null){
-            datePickerFrag.setDate(date);
+            dialogDatePicker.setDate(date);
         }
-        datePickerFrag.set_id_btn_to_modify(R.id.btn_date);
-        datePickerFrag.set_id_next_element_focus(R.id.editText_notes);
-        datePickerFrag.show(getFragmentManager(),"Date Picker");
+        dialogDatePicker.set_id_btn_to_modify(R.id.btn_date);
+        dialogDatePicker.set_id_next_element_focus(R.id.editText_notes);
+        dialogDatePicker.show(getFragmentManager(),"Date Picker");
     }
 
     public void btnDiscard(View view) {
