@@ -215,6 +215,22 @@ public class DialogFilterDate extends DialogFragment {
     private void setDatePickerDate(View view){
         setDatePickerDate(view,"menu_filter_date_checkbox_selecteddate", R.id.filter_date_datePicker_start);
         setDatePickerDate(view,"menu_filter_date_checkbox_selecteddate_end", R.id.filter_date_datePicker_end);
+        setEndDateOneDayAfter(view);
+    }
+
+    private void setEndDateOneDayAfter(View view){
+
+        DatePicker datePickerStart = (DatePicker) view.findViewById(R.id.filter_date_datePicker_start);
+        DatePicker datePickerEnd = (DatePicker) view.findViewById(R.id.filter_date_datePicker_end);
+
+        if(isStartDateBeforeDateEnd(datePickerStart, datePickerEnd) == false){
+            Date dateStart = getDateOfDatePicker(datePickerStart);
+            Date dateStartPlusOneDay = new Date(dateStart.getTime() + (1000 * 60 * 60 * 24)); // add one day to dateStart
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dateStartPlusOneDay);
+            int month = cal.get(Calendar.MONTH);
+            datePickerEnd.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        }
     }
 
     /*
