@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             if(operatorStr.equals(DialogFilterDate.BETWEEN_STR)){
                 String dateEndStr = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selecteddate_end");
 
-                item_filter_date.setTitle(dateEndStr + " < " + "Date" + " < " + dateStr);
+                item_filter_date.setTitle(dateStr + " < " + "Date" + " < " + dateEndStr);
             }else{
                 item_filter_date.setTitle("Date " + operatorStr + " " + dateStr);
             }
