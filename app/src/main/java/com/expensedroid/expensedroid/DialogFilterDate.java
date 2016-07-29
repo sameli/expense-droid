@@ -141,6 +141,7 @@ public class DialogFilterDate extends DialogFragment {
                                         Toast.makeText(getActivity(), "Start date must be before End date", Toast.LENGTH_SHORT).show();
                                     }
                                 }else { // operator is either equals to, before or after:
+                                    reloadStartDate();
                                     activity.onApplyFilterDateBtn(selectedOperator, selectedDateStart, "");
                                     dismiss();
                                 }
@@ -159,6 +160,11 @@ public class DialogFilterDate extends DialogFragment {
 
         // Create the AlertDialog object and return it
         return alertDialog;
+    }
+
+    private void reloadStartDate(){
+        DatePicker datePickerStart = (DatePicker) this.getDialog().findViewById(R.id.filter_date_datePicker_start);
+        selectedDateStart = datePickerToString(datePickerStart);
     }
 
     private boolean reloadSelectedDates(){
