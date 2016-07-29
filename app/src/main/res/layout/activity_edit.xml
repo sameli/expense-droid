@@ -14,80 +14,95 @@
         android:background="?attr/colorPrimary">
     </android.support.v7.widget.Toolbar>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="com.expensedroid.expensedroid.EditActivity">
+        android:id="@+id/scrollView"
+        android:fillViewport="true"
+        android:layout_margin="5dp">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:id="@+id/btnSave"
-            android:onClick="btnSave"
-            android:layout_alignTop="@+id/btn_delete"
-            android:layout_alignParentEnd="true"
-            android:textSize="18dp"
-            android:theme="@style/AppTheme.ButtonGreen" />
+    <GridLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title *"
-            android:id="@+id/textView3"
-            android:textSize="20dp"
-            android:layout_alignBottom="@+id/editText_title"
-            android:layout_alignParentStart="true"
-            android:textColor="#000000" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="horizontal"
+        android:rowCount="6"
+        android:columnCount="2"
+
+        android:verticalSpacing="10dp"
+        android:gravity="center"
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Amount *"
-            android:id="@+id/textView4"
+            android:text="Title * "
+            android:id="@+id/title"
             android:textSize="20dp"
-            android:layout_below="@+id/textView3"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="38dp"
-            android:textColor="#000000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date *"
-            android:id="@+id/textView5"
-            android:textSize="20dp"
-            android:layout_marginTop="38dp"
-            android:layout_below="@+id/textView4"
-            android:layout_alignParentStart="true"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/editText_title"
             android:text=""
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
             android:singleLine="true"
-            android:width="150dp"
-            android:textSize="20dp" />
+            android:width="250dp"
+            android:textSize="20dp"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount * "
+            android:id="@+id/amount"
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/editText_amount"
             android:nextFocusDown="@+id/btn_date"
-            android:width="150dp"
+            android:width="250dp"
             android:inputType="numberDecimal|numberSigned"
-            android:layout_alignBottom="@+id/textView4"
-            android:layout_alignStart="@+id/editText_title"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_column="1"
+            android:layout_row="1"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date * "
+            android:id="@+id/date"
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:layout_column="0"
+            android:layout_row="2"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -96,43 +111,26 @@
             android:onClick="btnOpenDateDialog"
             android:nextFocusDown="@+id/editText_notes"
             android:focusableInTouchMode="true"
-            android:layout_alignBottom="@+id/textView5"
-            android:layout_alignEnd="@+id/editText_amount"
-            android:layout_alignStart="@+id/editText_amount"
-            android:textSize="20dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Discard"
-            android:id="@+id/btnDiscard"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:onClick="btnDiscard"
-            android:textSize="18dp"
-            android:theme="@style/AppTheme.ButtonGray" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete"
-            android:id="@+id/btn_delete"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="btnDelete"
-            android:textSize="18dp"
-            android:theme="@style/AppTheme.ButtonRed"/>
+            android:width="250dp"
+            android:textSize="20dp"
+            android:layout_column="1"
+            android:layout_row="2"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notes"
-            android:id="@+id/textView2"
+            android:text="Notes "
+            android:id="@+id/notes"
             android:textSize="20dp"
             android:textColor="#000000"
-            android:layout_marginTop="38dp"
-            android:layout_below="@+id/textView5"
-            android:layout_alignParentStart="true" />
+            android:layout_column="0"
+            android:layout_row="3"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -140,11 +138,71 @@
             android:id="@+id/editText_notes"
             android:nextFocusDown="@+id/btnSave"
             android:singleLine="true"
-            android:layout_alignBottom="@+id/textView2"
-            android:layout_alignStart="@+id/btn_date"
-            android:layout_alignEnd="@+id/btn_date"
-            android:textSize="20dp" />
+            android:width="250dp"
+            android:textSize="20dp"
+            android:layout_column="1"
+            android:layout_row="3"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
-    </RelativeLayout>
+
+
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_column="0"
+            android:layout_row="5"
+            android:layout_columnSpan="2"
+            android:weightSum="1">
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Discard"
+            android:id="@+id/btnDiscard"
+            android:onClick="btnDiscard"
+            android:textSize="18dp"
+            android:theme="@style/AppTheme.ButtonGray"
+            />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:id="@+id/btn_delete"
+            android:onClick="btnDelete"
+            android:textSize="18dp"
+            android:theme="@style/AppTheme.ButtonRed"/>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/btnSave"
+            android:onClick="btnSave"
+            android:textSize="18dp"
+            android:theme="@style/AppTheme.ButtonGreen" />
+
+        </LinearLayout>
+
+
+    </GridLayout>
+    </ScrollView>
 
 </LinearLayout>

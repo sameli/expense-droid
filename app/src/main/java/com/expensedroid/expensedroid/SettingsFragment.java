@@ -78,6 +78,7 @@ public class SettingsFragment extends PreferenceFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         DatabaseHelper mydb = new DatabaseHelper(getActivity());
                         mydb.resetDatabase();
+                        Toast.makeText(getActivity(), "Database has been reset", Toast.LENGTH_SHORT).show();
 
                     }
                 });

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by S. Ameli on 05/07/16.
@@ -20,9 +21,15 @@ public class DatePickerFrag extends DialogFragment implements DatePickerDialog.O
 
     private int id_btn_to_modify;
     private int id_next_element_focus; // we need this so when the date dialog closes, the focus goes on this element
+    private Date date = null;
+    private DatePickerDialog datePickerDialog;
 
     public DatePickerFrag(){
         id_btn_to_modify = -1;
+    }
+
+    public void setDate(Date date){
+        this.date = date;
     }
 
     public void set_id_btn_to_modify(int id){
@@ -37,11 +44,14 @@ public class DatePickerFrag extends DialogFragment implements DatePickerDialog.O
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
         final Calendar cal = Calendar.getInstance();
+        if(date != null){
+            cal.setTime(date);
+        }
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        return datePickerDialog;
     }
 
 
@@ -53,6 +63,8 @@ public class DatePickerFrag extends DialogFragment implements DatePickerDialog.O
             String dayStr = String.format("%02d", day);
             String stringOfDate = year + "-" + monthStr + "-" + dayStr;
             btn_date.setText(stringOfDate);
+            this.date = DatabaseHelper.parseDate(stringOfDate);
+            datePickerDialog.updateDate(year, month, day); // updateDate method doesn't seem to update the datepicker date after it has been selected then reopened for second time
 
             EditText editText = (EditText) getActivity().findViewById(id_next_element_focus);
             editText.requestFocus();

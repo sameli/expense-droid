@@ -234,6 +234,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int id = res.getInt(res.getColumnIndex("id"));
             String title = res.getString(res.getColumnIndex("title"));
             double amount = res.getDouble(res.getColumnIndex("amount"));
+
             String dateStr = res.getString(res.getColumnIndex("date"));
             String notes = res.getString(res.getColumnIndex("notes"));
             int acct_id = res.getInt(res.getColumnIndex("acct_id"));

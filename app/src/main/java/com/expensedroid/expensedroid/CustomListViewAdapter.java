@@ -2,12 +2,14 @@ package com.expensedroid.expensedroid;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -17,10 +19,12 @@ import java.util.ArrayList;
 public class CustomListViewAdapter extends BaseAdapter{
     private ArrayList<Transaction> listData;
     private LayoutInflater layoutInflater;
+    private Context context;
 
     public CustomListViewAdapter(Context aContext, ArrayList<Transaction> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
+        this.context = aContext;
     }
 
     @Override
@@ -61,8 +65,15 @@ public class CustomListViewAdapter extends BaseAdapter{
 
         String sign = (amount >= 0) ? "" : "-";
         double num = Math.abs(amount);
-        textView_amount.setText(sign + "$" + String.format("%.2f", num));
-        int color = (amount > 0) ? Color.parseColor("#008000") : Color.parseColor("#cc0000"); // first color is green, second is red
+        //DecimalFormat formatter = new DecimalFormat("#,###.00");
+        DecimalFormat formatter = new DecimalFormat("#,##0.00");
+        textView_amount.setText(sign + "$" + formatter.format(num));
+        int color = ContextCompat.getColor(context, R.color.Black);
+        if(amount > 0){
+            color = ContextCompat.getColor(context, R.color.Green);
+        }else if(amount < 0){
+            color = ContextCompat.getColor(context, R.color.Red);
+        }
         textView_amount.setTextColor(color);
     }
 

@@ -28,7 +28,7 @@
             android:id="@+id/editText_filter_dialog_amount"
             android:width="150dp"
             android:inputType="numberDecimal|numberSigned"
-            android:layout_alignBottom="@+id/textView4"
+            android:layout_alignBottom="@+id/amount"
             android:layout_alignStart="@+id/editText_title"
             android:textStyle="bold" />
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +22,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
         databaseHelper = new DatabaseHelper(this);
 
-
         if(databaseHelper.numberOfRowsInAccounts() == 0){
             int acct_id = (int) databaseHelper.insertAccount(DEFAULT_ACCOUNT_NAME);
             if(acct_id != -1) {
@@ -113,9 +115,15 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
         String sign = (sum >= 0) ? "" : "-";
         double num = Math.abs(sum);
-        amountTotal.setText(sign + "$" + String.format("%.2f", num));
-        int color = (sum > 0) ? Color.parseColor("#008000") : Color.parseColor("#cc0000"); // first color is green, second is red
-        amountTotal.setTextColor(color);
+        DecimalFormat formatter = new DecimalFormat("#,##0.00");
+        amountTotal.setText(sign + "$" + formatter.format(num));
+
+        int color = ContextCompat.getColor(this, R.color.Black);
+        if(sum > 0){
+            color = ContextCompat.getColor(this, R.color.Green);
+        }else if(sum < 0){
+            color = ContextCompat.getColor(this, R.color.Red);
+        }        amountTotal.setTextColor(color);
     }
 
     /*

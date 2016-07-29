@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +24,7 @@ import java.util.List;
 public class EditActivity extends AppCompatActivity {
 
     private int database_id = -1;
+    private Date date = null; // we need this date object so when we are in edit mode, we need to get a hold of date so we can send it to the datepicker
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class EditActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(Color.parseColor("#FF303F9F"));
+
 
 
         final Button btnDate = (Button) findViewById(R.id.btn_date);
@@ -51,6 +55,8 @@ public class EditActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if(intent.getExtras() != null){
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
             getSupportActionBar().setTitle("Edit");
 
             Transaction trans = (Transaction) intent.getExtras().getSerializable(MainActivity.INTENT_EDIT_MSG_ID);
@@ -59,10 +65,12 @@ public class EditActivity extends AppCompatActivity {
             editText_title.setText(trans.getTitle());
 
             EditText editText_amount = (EditText) findViewById(R.id.editText_amount);
-            editText_amount.setText(String.valueOf(trans.getAmount()));
+            DecimalFormat formatter = new DecimalFormat("#.00");
+            editText_amount.setText(formatter.format(trans.getAmount()));
 
             Button btn_date = (Button) findViewById(R.id.btn_date);
             btn_date.setText(String.valueOf(trans.getDateString()));
+            date = trans.getDate(); // we store date object so we can send it to datepicker when user clicks on the date button
 
             EditText editText_notes = (EditText) findViewById(R.id.editText_notes);
             editText_notes.setText(trans.getNotes());
@@ -136,6 +144,9 @@ public class EditActivity extends AppCompatActivity {
 
     public void btnOpenDateDialog(View view) {
         DatePickerFrag datePickerFrag = new DatePickerFrag();
+        if(database_id != 0 && date != null){
+            datePickerFrag.setDate(date);
+        }
         datePickerFrag.set_id_btn_to_modify(R.id.btn_date);
         datePickerFrag.set_id_next_element_focus(R.id.editText_notes);
         datePickerFrag.show(getFragmentManager(),"Date Picker");
