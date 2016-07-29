@@ -31,8 +31,6 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content">
 
@@ -40,38 +38,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:id="@+id/filter_date_datePicker" />
+        android:id="@+id/filter_date_datePicker"
+        style="@android:style/Widget.DatePicker"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <DatePicker
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:weightSum="1">
+            android:id="@+id/filter_date_datePicker_end"
+            style="@android:style/Widget.DatePicker"/>
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Cancel"
-                android:id="@+id/btn_filter_date_cancel"
-                android:theme="@style/AppTheme.ButtonGray" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Apply Filter"
-                android:id="@+id/btn_filter_date_applyfilter"
-                android:theme="@style/AppTheme.ButtonGreen"/>
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

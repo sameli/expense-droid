@@ -1,9 +1,12 @@
 package com.expensedroid.expensedroid;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.inputmethod.InputMethodManager;
@@ -42,6 +45,7 @@ public class DatePickerFrag extends DialogFragment implements DatePickerDialog.O
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+        //.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         final Calendar cal = Calendar.getInstance();
         if(date != null){
@@ -50,7 +54,7 @@ public class DatePickerFrag extends DialogFragment implements DatePickerDialog.O
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Panel, this, year, month, day);
         return datePickerDialog;
     }
 

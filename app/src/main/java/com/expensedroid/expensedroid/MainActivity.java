@@ -213,7 +213,13 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             String selectedOperator = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selected_operator");
             String operatorStr = DialogFilterDate.getSmallOperatorStr(selectedOperator);
 
-            item_filter_date.setTitle("Date " + operatorStr + " " + dateStr);
+            if(operatorStr.equals(DialogFilterDate.BETWEEN_STR)){
+                String dateEndStr = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selecteddate_end");
+
+                item_filter_date.setTitle(dateEndStr + " < " + "Date" + " < " + dateStr);
+            }else{
+                item_filter_date.setTitle("Date " + operatorStr + " " + dateStr);
+            }
         }else {
             item_filter_date.setTitle("Date");
         }
@@ -367,14 +373,16 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
      * This method implements a method from the DialogListener interface. This is called from DialogFilterDate class
      */
     @Override
-    public void onApplyFilterDateBtn(String selectedOperator, String selectedDate) {
+    public void onApplyFilterDateBtn(String selectedOperator, String selectedDate, String selectedDateEnd) {
 
         SettingsIO.saveData(this, true, "menu_filter_date_checkbox");
         SettingsIO.saveData(this, selectedOperator, "menu_filter_date_checkbox_selected_operator");
         SettingsIO.saveData(this, selectedDate, "menu_filter_date_checkbox_selecteddate");
+        SettingsIO.saveData(this, selectedDateEnd, "menu_filter_date_checkbox_selecteddate_end");
+
         Toast.makeText(this, "Date filter applied", Toast.LENGTH_SHORT).show();
 
-        refreshActivity();
+        refreshActivity(); // once we refresh the activity, the database will call getAllTransactions and that method loads the filters
         //printMsg("onApplyFilterDateBtn: " + selectedOperator + ", " + selectedDate);
     }
 
@@ -390,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         Toast.makeText(this, "Amount filter applied", Toast.LENGTH_SHORT).show();
 
         refreshActivity();
-        //printMsg("onApplyFilterAmountBtn: " + selectedOperator + ", " + selectedAmount);
+        printMsg("onApplyFilterAmountBtn: " + selectedOperator + ", " + selectedAmount);
     }
 
     /*

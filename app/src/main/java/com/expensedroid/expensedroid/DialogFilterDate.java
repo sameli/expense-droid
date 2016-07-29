@@ -1,5 +1,9 @@
 package com.expensedroid.expensedroid;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -10,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -22,30 +28,28 @@ public class DialogFilterDate extends DialogFragment {
 
     private String selectedOperator; // Equals, Before or After
     private String selectedDate; // 2016-12-30
+    private String selectedDateEnd;
 
     private static final String EQUAL_STR = "Equal";
     private static final String BEFORE_STR = "Before";
     private static final String AFTER_STR = "After";
+    public static final String BETWEEN_STR = "Between"; // This is also used in DatabaseHelper class
+    private int position_BETWEEN_in_spinner = 3; // position of "Between" element in the spinner (default is 3)
+
 
 
     // private FragmentManager fragmentManager;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_filter_date, container, false);
-        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        //getDialog().setTitle("Filter Date");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_filter_date, null);
 
-        Button dismissButton = (Button) rootView.findViewById(R.id.btn_filter_date_cancel);
-        dismissButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.filter_date_datePicker_end);
+        datePicker.setVisibility(View.INVISIBLE);
 
-        final Spinner spinner = (Spinner) rootView.findViewById(R.id.filter_date_spinner);
+        final Spinner spinner = (Spinner) view.findViewById(R.id.filter_date_spinner);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -53,6 +57,11 @@ public class DialogFilterDate extends DialogFragment {
 
                 String str = (String) spinner.getItemAtPosition(i);
                 selectedOperator = str;
+                if(i == position_BETWEEN_in_spinner){
+                    datePicker.setVisibility(View.VISIBLE);
+                }else{
+                    datePicker.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -61,14 +70,17 @@ public class DialogFilterDate extends DialogFragment {
             }
         });
 
-        String[] items = new String[] { EQUAL_STR, BEFORE_STR, AFTER_STR};
+        String[] items = new String[] { EQUAL_STR, BEFORE_STR, AFTER_STR, BETWEEN_STR};
 
         ArrayAdapter adapter = new ArrayAdapter<CharSequence>(getContext(), R.layout.custom_spinner_layout, items);
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
 
         spinner.setAdapter(adapter);
 
-        String previous_selectedOperator = SettingsIO.readData(getContext(), "=", "menu_filter_date_checkbox_selected_operator");
+
+
+
+        String previous_selectedOperator = SettingsIO.readData(getContext(), EQUAL_STR, "menu_filter_date_checkbox_selected_operator");
         int spinnerPos = 0;
         if(previous_selectedOperator.equals(EQUAL_STR))
             spinnerPos = 0;
@@ -76,33 +88,50 @@ public class DialogFilterDate extends DialogFragment {
             spinnerPos = 1;
         else if(previous_selectedOperator.equals(AFTER_STR))
             spinnerPos = 2;
+        else if(previous_selectedOperator.equals(BETWEEN_STR)) {
+            spinnerPos = 3;
+            position_BETWEEN_in_spinner = spinnerPos;
+            datePicker.setVisibility(View.VISIBLE);
+
+        }
         spinner.setSelection(spinnerPos);
 
-        setDatePickerDate(rootView);
 
-        Button applyFilterButton = (Button) rootView.findViewById(R.id.btn_filter_date_applyfilter);
-        applyFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        setDatePickerDate(view);
 
-                DialogListener activity = (DialogListener) getActivity();
-                try{
-                    activity.onApplyFilterDateBtn(selectedOperator, getDatePickerDate());
+        builder
+                .setView(view)
+                .setPositiveButton("Filter", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 
-                }catch(Exception e){
-                    System.out.println(e);
-                }
-                dismiss();
-            }
-        });
+                        DialogListener activity = (DialogListener) getActivity();
+                        try{
+                            reloadSelectedDates();
+                            activity.onApplyFilterDateBtn(selectedOperator, selectedDate, selectedDateEnd);
 
-        return rootView;
+                        }catch(Exception e){
+                            System.out.println(e);
+                        }
+                        dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dismiss();
+                    }
+                });
+        // Create the AlertDialog object and return it
+        return builder.create();
     }
 
+    private void reloadSelectedDates(){
+        selectedDate = getDatePickerDate(R.id.filter_date_datePicker);
+        selectedDateEnd = getDatePickerDate(R.id.filter_date_datePicker_end);
+    }
 
-    private String getDatePickerDate(){
+    private String getDatePickerDate(int elementID){
         String str = "";
-        DatePicker datePicker = (DatePicker) this.getDialog().findViewById(R.id.filter_date_datePicker);
+        DatePicker datePicker = (DatePicker) this.getDialog().findViewById(elementID);
 
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
@@ -115,23 +144,28 @@ public class DialogFilterDate extends DialogFragment {
         return str;
     }
 
+    private void setDatePickerDate(View view){
+        setDatePickerDate(view,"menu_filter_date_checkbox_selecteddate", R.id.filter_date_datePicker);
+        setDatePickerDate(view,"menu_filter_date_checkbox_selecteddate_end", R.id.filter_date_datePicker_end);
+    }
+
     /*
      * This method is used to load previously selected date from settings and load it in the datePicker object
      */
-    private void setDatePickerDate(View view){
-        String previous_selectedDate = SettingsIO.readData(getContext(), "", "menu_filter_date_checkbox_selecteddate");
-        System.out.println(">>>> previous_selectedDate: " + previous_selectedDate);
+    private void setDatePickerDate(View view, String settingsKey, int elementID){
+        String previous_selectedDate = SettingsIO.readData(getContext(), "", settingsKey);
+        //System.out.println("previous_selectedDate: " + previous_selectedDate);
         if(previous_selectedDate != null & previous_selectedDate != "" & previous_selectedDate.isEmpty() == false){
 
             Date date = DatabaseHelper.parseDate(previous_selectedDate);
-            DatePicker datePicker = (DatePicker) view.findViewById(R.id.filter_date_datePicker);
+            DatePicker datePicker = (DatePicker) view.findViewById(elementID);
 
             if(datePicker != null) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
                 datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
             }else{
-                System.out.println(">>>> setDatePickerDate: datePicker is null");
+                System.out.println("setDatePickerDate: datePicker is null");
             }
 
         }
@@ -148,8 +182,11 @@ public class DialogFilterDate extends DialogFragment {
             operatorStr = "<";
         }else if(str.equals(AFTER_STR)){
             operatorStr = ">";
+        }else if(str.equals(BETWEEN_STR)){
+            operatorStr = BETWEEN_STR;
         }
         return operatorStr;
     }
+
 
 }

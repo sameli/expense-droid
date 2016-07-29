@@ -194,8 +194,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String operatorSign = DialogFilterDate.getSmallOperatorStr(selectedOperator);
 
             String selectedDate = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selecteddate");
-
             dateFilterSQL = "date(date) " + operatorSign + " date('" + selectedDate + "')";
+
+            if(operatorSign.equals(DialogFilterDate.BETWEEN_STR)){
+                String selectedDateEnd = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selecteddate_end");
+                dateFilterSQL += " AND date('" + selectedDateEnd + "')";
+            }
+            // select * from trs where date(date) BETWEEN date("2016-07-25") AND date("2016-07-28");
             //System.out.println("dateFilterSQL: " + dateFilterSQL);
         }
 
