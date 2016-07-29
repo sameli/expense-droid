@@ -1,9 +1,7 @@
-package com.expensedroid.expensedroid;
+package com.expensedroid.expensedroid.dialogs;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.expensedroid.expensedroid.R;
 
 /**
  * Created by S. Ameli on 25/07/16.

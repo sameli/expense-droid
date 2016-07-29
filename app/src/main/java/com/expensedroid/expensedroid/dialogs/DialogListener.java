@@ -1,4 +1,4 @@
-package com.expensedroid.expensedroid;
+package com.expensedroid.expensedroid.dialogs;
 
 /**
  * Created by S. Ameli on 12/07/16.

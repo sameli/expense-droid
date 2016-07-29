@@ -1,4 +1,4 @@
-package com.expensedroid.expensedroid;
+package com.expensedroid.expensedroid.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,6 +14,10 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.expensedroid.expensedroid.DatabaseHelper;
+import com.expensedroid.expensedroid.R;
+import com.expensedroid.expensedroid.SettingsIO;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -181,6 +185,9 @@ public class DialogFilterDate extends DialogFragment {
         }
     }
 
+    /*
+     * This method converts the date of the given DatePicker to string
+     */
     private String datePickerToString(DatePicker datePicker){
         String str = "";
 
@@ -195,6 +202,9 @@ public class DialogFilterDate extends DialogFragment {
         return str;
     }
 
+    /*
+     * This method checks if the given start DatePicker is before end date
+     */
     private boolean isStartDateBeforeDateEnd(DatePicker datePickerStart, DatePicker datePickerEnd){
         if(getDateOfDatePicker(datePickerStart).compareTo(getDateOfDatePicker(datePickerEnd)) < 0){
             return true; // dateStart is before dateEnd
@@ -202,6 +212,9 @@ public class DialogFilterDate extends DialogFragment {
         return false; // this is when two dates are equal or dateStart is after dateEnd
     }
 
+    /*
+     * This method accepts a DatePicker object and returns its date
+     */
     private Date getDateOfDatePicker(DatePicker datePicker){
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
@@ -212,13 +225,19 @@ public class DialogFilterDate extends DialogFragment {
         return cal.getTime();
     }
 
+    /*
+     * This method read the settings file and loads the previously selected start and end dates
+     */
     private void setDatePickerDate(View view){
         setDatePickerDate(view,"menu_filter_date_checkbox_selecteddate", R.id.filter_date_datePicker_start);
         setDatePickerDate(view,"menu_filter_date_checkbox_selecteddate_end", R.id.filter_date_datePicker_end);
-        setEndDateOneDayAfter(view);
+        setEndDateOneDayAfterStartDate(view);
     }
 
-    private void setEndDateOneDayAfter(View view){
+    /*
+     * This method sets the end date one day after start date in case the end date is equal to or before start date
+     */
+    private void setEndDateOneDayAfterStartDate(View view){
 
         DatePicker datePickerStart = (DatePicker) view.findViewById(R.id.filter_date_datePicker_start);
         DatePicker datePickerEnd = (DatePicker) view.findViewById(R.id.filter_date_datePicker_end);
