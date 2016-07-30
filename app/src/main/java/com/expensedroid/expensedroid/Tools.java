@@ -35,6 +35,7 @@ public class Tools {
     public static final String PREFERENCE_SELECTED_ACCOUNT_ID = "selected_acct_id";
 
     public static final String SETTINGS_TITLE = "settings";
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
 
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000"; // Message id to transfer data from main to edit activity
 

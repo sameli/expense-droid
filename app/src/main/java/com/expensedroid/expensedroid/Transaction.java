@@ -53,7 +53,7 @@ public class Transaction implements Serializable { // we need serializable so we
     }
 
     public String getDateString(){
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd"); //("yyyy-MM-dd HH:mm:ss");
+        Format formatter = new SimpleDateFormat(Tools.DATE_FORMAT); //("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(date);
         return dateString;
     }
