@@ -5,7 +5,7 @@
         <Preference
             android:key="pref_key_reset_database"
             android:title="Reset Database"
-            android:summary="Resetting the Database will remove all accounts and transactions within this app"/>
+            android:summary="Resetting all accounts and transactions within this app"/>
         <Preference
             android:key="pref_key_reset_settings"
             android:title="Reset Settings"
@@ -13,7 +13,7 @@
         <Preference
             android:key="pref_key_generate_random_data"
             android:title="Generate Random data"
-            android:summary="Populate the database with random Accounts and Transactions for demo purposes. All the previous data will be lost."/>
+            android:summary="Populate the database with random Accounts and Transactions for demo purposes. All the previous data will be lost"/>
         <Preference
             android:key="pref_key_app_version"
             android:summary="@string/app_version"
