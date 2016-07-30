@@ -21,6 +21,8 @@ import com.expensedroid.expensedroid.Tools;
 
 /**
  * Created by S. Ameli on 23/07/16.
+ *
+ * This class shows a dialog so the user can add a new account.
  */
 public class DialogAddAccount extends DialogFragment{
 

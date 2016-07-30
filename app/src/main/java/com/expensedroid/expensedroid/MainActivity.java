@@ -30,14 +30,17 @@ import com.expensedroid.expensedroid.dialogs.DialogRenameAccount;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by S. Ameli on 01/07/16.
  *
- * This is the main class of Expense Droid.
+ * This is the main class of Expense Droid. The app starts from here.
  * This class initializes the database and GUI elements.
  */
 public class MainActivity extends AppCompatActivity implements DialogListener {

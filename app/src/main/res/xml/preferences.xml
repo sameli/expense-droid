@@ -11,6 +11,10 @@
             android:title="Reset Settings"
             android:summary="Resetting all the settings such as selected filter date and amount"/>
         <Preference
+            android:key="pref_key_generate_random_data"
+            android:title="Generate Random data"
+            android:summary="Populate the database with random Accounts and Transactions for demo purposes. All the previous data will be lost."/>
+        <Preference
             android:key="pref_key_app_version"
             android:summary="@string/app_version"
             android:title="App version" />

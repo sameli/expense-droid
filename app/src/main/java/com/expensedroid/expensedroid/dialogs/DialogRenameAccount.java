@@ -20,6 +20,8 @@ import com.expensedroid.expensedroid.R;
 
 /**
  * Created by S. Ameli on 25/07/16.
+ *
+ * This class shows a dialog which allows the user to rename account
  */
 public class DialogRenameAccount extends DialogFragment{
 

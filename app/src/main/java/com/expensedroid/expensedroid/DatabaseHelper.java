@@ -16,7 +16,8 @@ import java.util.List;
 
 /**
  * Created by S. Ameli on 02/07/16.
- * This class has methods to create, read, update and delete database.
+ *
+ * This class has methods to create, read, update and delete a database.
  * We have two tables:
  * 1- Accounts table: we store account information in this table.
  * 2- Transactions table: we store transaction information in this table. Many transactions can be linked to one account.

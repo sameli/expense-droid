@@ -23,6 +23,7 @@ import java.util.Date;
 
 /**
  * Created by S. Ameli on 03/07/16.
+ *
  * This class is used to edit a transaction
  */
 public class EditActivity extends AppCompatActivity {

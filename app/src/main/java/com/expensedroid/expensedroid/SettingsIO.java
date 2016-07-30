@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 /**
  * Created by S. Ameli on 08/07/16.
+ *
  * This class is used to read and write to settings file.
  * We don't need to specify type when writing date to settings.
  * Note: For reading data, we have to make sure to set the type of "default value" to the same type that we are requesting.

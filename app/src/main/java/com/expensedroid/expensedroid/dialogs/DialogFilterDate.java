@@ -25,6 +25,9 @@ import java.util.Date;
 
 /**
  * Created by S. Ameli on 11/07/16.
+ *
+ * This class shows a dialog so the user can apply a filter based on the selected date.
+ * This filter will persist for the life of application unless it is manually disabled by the user (from the menu)
  */
 public class DialogFilterDate extends DialogFragment {
 

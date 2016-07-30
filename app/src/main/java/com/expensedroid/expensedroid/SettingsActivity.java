@@ -15,6 +15,8 @@ import android.view.MenuItem;
 
 /**
  * Created by S. Ameli on 27/07/16.
+ *
+ * This class defines activity for the settings panel
  */
 public class SettingsActivity extends AppCompatActivity {
     @Override
@@ -30,10 +32,6 @@ public class SettingsActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
-
-
-
-
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

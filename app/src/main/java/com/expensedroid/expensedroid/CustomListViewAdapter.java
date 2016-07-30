@@ -14,8 +14,9 @@ import java.util.ArrayList;
 
 /**
  * Created by S. Ameli on 09/07/16.
+ *
+ * This class defines a custom ListView for the main activity. List of transactions will be viewed using this class
  */
-
 public class CustomListViewAdapter extends BaseAdapter{
     private ArrayList<Transaction> listData;
     private LayoutInflater layoutInflater;
@@ -65,7 +66,6 @@ public class CustomListViewAdapter extends BaseAdapter{
 
         String sign = (amount >= 0) ? "" : "-";
         double num = Math.abs(amount);
-        //DecimalFormat formatter = new DecimalFormat("#,###.00");
         DecimalFormat formatter = new DecimalFormat("#,##0.00");
         textView_amount.setText(sign + "$" + formatter.format(num));
         int color = ContextCompat.getColor(context, R.color.Black);

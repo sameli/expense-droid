@@ -21,6 +21,8 @@ import java.util.Date;
 
 /**
  * Created by S. Ameli on 05/07/16.
+ *
+ * This class defines a custom DatePicker which is used in EditActivity class
  */
 public class DialogDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -47,7 +49,6 @@ public class DialogDatePicker extends DialogFragment implements DatePickerDialog
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        //.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         final Calendar cal = Calendar.getInstance();
         if(date != null){

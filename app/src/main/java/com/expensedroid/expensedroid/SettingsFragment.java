@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 /**
  * Created by S. Ameli on 27/07/16.
+ *
+ * This class defines fragment for the settings panel
  */
 public class SettingsFragment extends PreferenceFragment {
     @Override
@@ -23,6 +25,7 @@ public class SettingsFragment extends PreferenceFragment {
         addLicenseListener();
         addResetDatabaseListener();
         addResetSettingsListener();
+        addGenerateRandomDataListener();
 
     }
 
@@ -130,4 +133,42 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
     }
+
+    private void addGenerateRandomDataListener(){
+
+        Preference preference = (Preference) findPreference(Tools.PREFERENCE_GENERATE_RANDOM_DATA);
+
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+        {
+            public boolean onPreferenceClick(Preference pref)
+            {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Generate Random Data");
+                builder.setMessage("Are you sure you want to generate random data? All previous data will be lost.");
+                builder.setPositiveButton("Generate", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Tools.generateRandomData(getActivity());
+
+                        int selected_acct_id = SettingsIO.readData(getActivity(), -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
+
+                        // set the account to load to 1
+                        if(selected_acct_id != -1) {
+                            SettingsIO.saveData(getActivity(), 1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
+                        }
+                        Toast.makeText(getActivity(), "Database has been populated with random data", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.create().show();
+
+
+                return true;
+            }
+        });
+    }
+
 }

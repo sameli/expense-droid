@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * Created by S. Ameli on 03/07/16.
+ *
  * This class defines a structure for Transactions
  */
 public class Transaction implements Serializable { // we need serializable so we can send the entire object to other activities

@@ -24,6 +24,9 @@ import com.expensedroid.expensedroid.Tools;
 
 /**
  * Created by S. Ameli on 21/07/16.
+ *
+ * This class shows a dialog so the user can apply a filter based on the selected amount.
+ * This filter will persist for the life of application unless it is manually disabled by the user (from the menu)
  */
 public class DialogFilterAmount extends DialogFragment {
     private String selectedOperator; // Equals, Before or After
@@ -164,6 +167,8 @@ public class DialogFilterAmount extends DialogFragment {
                                     } else {
                                         Toast.makeText(getActivity(), "First amount must be smaller than the second amount", Toast.LENGTH_LONG).show();
                                     }
+                                }else{
+                                    Toast.makeText(getActivity(), "Field is empty", Toast.LENGTH_SHORT).show();
                                 }
                             }else { // operator is either equals to, before or after:
                                 if(amount1 != null) {
