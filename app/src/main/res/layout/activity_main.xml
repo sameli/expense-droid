@@ -10,7 +10,6 @@
     android:id="@+id/mainview1"
     tools:context="com.expensedroid.expensedroid.MainActivity">
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

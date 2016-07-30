@@ -3,6 +3,7 @@ package com.expensedroid.expensedroid;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,7 +39,9 @@ public class EditActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(Color.parseColor("#FF303F9F"));
+        if(Build.VERSION.SDK_INT >= 21) {
+            window.setStatusBarColor(Color.parseColor("#FF303F9F"));
+        }
 
 
 
@@ -60,7 +63,7 @@ public class EditActivity extends AppCompatActivity {
 
             getSupportActionBar().setTitle("Edit");
 
-            Transaction trans = (Transaction) intent.getExtras().getSerializable(MainActivity.INTENT_EDIT_MSG_ID);
+            Transaction trans = (Transaction) intent.getExtras().getSerializable(Tools.INTENT_EDIT_MSG_ID);
 
             EditText editText_title = (EditText) findViewById(R.id.editText_title);
             editText_title.setText(trans.getTitle());
@@ -109,7 +112,7 @@ public class EditActivity extends AppCompatActivity {
         double amount = Double.parseDouble(amount_str);
         String dateStr = ((Button) findViewById(R.id.btn_date)).getText().toString();
 
-        int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
+        int selected_acct_id = SettingsIO.readData(this, -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
         if(selected_acct_id == -1){
             Toast.makeText(EditActivity.this, "Error: Account has not been selected", Toast.LENGTH_SHORT).show();
             return;

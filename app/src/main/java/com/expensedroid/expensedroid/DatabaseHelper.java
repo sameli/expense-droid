@@ -7,8 +7,6 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.expensedroid.expensedroid.dialogs.DialogFilterDate;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -187,36 +185,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         // load filters
-        Boolean isDateFilterActive = SettingsIO.readData(context, false, "menu_filter_date_checkbox");
+        Boolean isDateFilterActive = SettingsIO.readData(context, false, Tools.SETTING_MENU_FILTER_DATE_CHECKBOX);
 
         String dateFilterSQL = "";
         if(isDateFilterActive){
 
-            String selectedOperator = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selected_operator");
-            String operatorSign = DialogFilterDate.getSmallOperatorStr(selectedOperator);
+            String selectedOperator = SettingsIO.readData(context, "", Tools.SETTING_MENU_FILTER_DATE_SELECTED_OPERATOR);
+            String operatorSign = Tools.getSmallOperatorStr(selectedOperator);
 
-            String selectedDate = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selecteddate");
+            String selectedDate = SettingsIO.readData(context, "", Tools.SETTING_MENU_FILTER_DATE_VALUE_1);
             dateFilterSQL = "date(date) " + operatorSign + " date('" + selectedDate + "')";
 
-            if(operatorSign.equals(DialogFilterDate.BETWEEN_STR)){
-                String selectedDateEnd = SettingsIO.readData(context, "", "menu_filter_date_checkbox_selecteddate_end");
+            if(operatorSign.equals(Tools.BETWEEN_STR)){
+                String selectedDateEnd = SettingsIO.readData(context, "", Tools.SETTING_MENU_FILTER_DATE_VALUE_2);
                 dateFilterSQL += " AND date('" + selectedDateEnd + "')";
             }
             // select * from trs where date(date) BETWEEN date("2016-07-25") AND date("2016-07-28");
             //System.out.println("dateFilterSQL: " + dateFilterSQL);
         }
 
-        Boolean isAmountFilterActive = SettingsIO.readData(context, false, "menu_filter_amount_checkbox");
+        Boolean isAmountFilterActive = SettingsIO.readData(context, false, Tools.SETTING_MENU_FILTER_AMOUNT_CHECKBOX);
 
         String amountFilterSQL = "";
         if(isAmountFilterActive){
 
-            String selectedOperator = SettingsIO.readData(context, "", "menu_filter_amount_checkbox_selected_operator");
+            String selectedOperator = SettingsIO.readData(context, "", Tools.SETTING_MENU_FILTER_AMOUNT_SELECTED_OPERATOR);
+            String operatorSign = Tools.getSmallOperatorStr(selectedOperator);
 
-            int selectedAmount = SettingsIO.readData(context, 0, "menu_filter_amount_checkbox_selectedamount");
+            int selectedAmount = SettingsIO.readData(context, 0, Tools.SETTING_MENU_FILTER_AMOUNT_VALUE_1);
 
-            amountFilterSQL = "amount " + selectedOperator + " " + selectedAmount;
-            //System.out.println("amountFilterSQL: " + amountFilterSQL);
+            amountFilterSQL = "amount " + operatorSign + " " + selectedAmount;
+
+            if(selectedOperator.equals(Tools.BETWEEN_STR)){
+                int selectedAmountEnd = SettingsIO.readData(context, 0, Tools.SETTING_MENU_FILTER_AMOUNT_VALUE_2);
+                amountFilterSQL += " AND " + selectedAmountEnd;
+            }
+            System.out.println("amountFilterSQL: " + amountFilterSQL);
         }
 
         String filtersSql = "";
@@ -228,7 +232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             filtersSql = "AND " + dateFilterSQL + " AND " + amountFilterSQL;
         }
 
-        int selected_acct_id = SettingsIO.readData(context, -1, "selected_acct_id");
+        int selected_acct_id = SettingsIO.readData(context, -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
         String accountSql = "WHERE acct_id = " + selected_acct_id;
 
 

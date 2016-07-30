@@ -8,11 +8,8 @@ import android.content.SharedPreferences;
  */
 public class SettingsIO {
 
-    public static final String SETTINGS_TITLE = "settings";
-
-
     public static <T> T readData(Context context, T data, String key){
-        SharedPreferences settings = context.getSharedPreferences(SETTINGS_TITLE, 0);
+        SharedPreferences settings = context.getSharedPreferences(Tools.SETTINGS_TITLE, 0);
 
         if(data instanceof String){
             return (T) (String) settings.getString(key, (String)data);
@@ -31,7 +28,7 @@ public class SettingsIO {
     when passing data to this method, preferably declare type
      */
     public static <T> Boolean saveData(Context context, T data, String key) {
-        SharedPreferences settings = context.getSharedPreferences(SETTINGS_TITLE, 0);
+        SharedPreferences settings = context.getSharedPreferences(Tools.SETTINGS_TITLE, 0);
         SharedPreferences.Editor editor = settings.edit();
 
         if (data instanceof String) {

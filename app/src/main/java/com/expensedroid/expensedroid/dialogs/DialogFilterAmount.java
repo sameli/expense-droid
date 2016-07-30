@@ -2,14 +2,17 @@ package com.expensedroid.expensedroid.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -17,20 +20,18 @@ import android.widget.Toast;
 
 import com.expensedroid.expensedroid.R;
 import com.expensedroid.expensedroid.SettingsIO;
+import com.expensedroid.expensedroid.Tools;
 
 /**
  * Created by S. Ameli on 21/07/16.
  */
 public class DialogFilterAmount extends DialogFragment {
     private String selectedOperator; // Equals, Before or After
-    private int selectedAmount = 0;
-    private int selectedAmoutEnd = 0;
+    private int selectedAmountStart = 0;
+    private int selectedAmountEnd = 0;
 
-    private static final String EQUAL_STR = "equal to";
-    private static final String BEFORE_STR = "smaller than";
-    private static final String AFTER_STR = "larger than";
-    private static final String BETWEEN_STR = "between";
     private int position_BETWEEN_in_spinner = 3;
+    private boolean isAlertDialogReady;
 
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class DialogFilterAmount extends DialogFragment {
 
 
 
-        String[] items = new String[] { EQUAL_STR, BEFORE_STR, AFTER_STR, BETWEEN_STR};
+        String[] items = new String[] { Tools.EQUAL_STR, Tools.SMALLER_THAN_STR, Tools.LARGER_THAN_STR, Tools.BETWEEN_STR};
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, items);
 
@@ -85,16 +86,16 @@ public class DialogFilterAmount extends DialogFragment {
 
 
 
-        String previous_selectedOperator = SettingsIO.readData(getContext(), "=", "menu_filter_amount_checkbox_selected_operator");
-        System.out.println(">>> previous_selectedOperator: " + previous_selectedOperator);
+        String previous_selectedOperator = SettingsIO.readData(getContext(), Tools.EQUAL_STR, Tools.SETTING_MENU_FILTER_AMOUNT_SELECTED_OPERATOR);
+        //System.out.println(">>> previous_selectedOperator: " + previous_selectedOperator);
         int spinnerPos = 0;
-        if(previous_selectedOperator.equals(EQUAL_STR))
+        if(previous_selectedOperator.equals(Tools.EQUAL_STR))
             spinnerPos = 0;
-        else if(previous_selectedOperator.equals(BEFORE_STR))
+        else if(previous_selectedOperator.equals(Tools.SMALLER_THAN_STR))
             spinnerPos = 1;
-        else if(previous_selectedOperator.equals(AFTER_STR))
+        else if(previous_selectedOperator.equals(Tools.LARGER_THAN_STR))
             spinnerPos = 2;
-        else if(previous_selectedOperator.equals(BETWEEN_STR)) {
+        else if(previous_selectedOperator.equals(Tools.BETWEEN_STR)) {
             spinnerPos = 3;
             position_BETWEEN_in_spinner = spinnerPos;
 
@@ -103,16 +104,21 @@ public class DialogFilterAmount extends DialogFragment {
         spinner.setSelection(spinnerPos);
 
 
-        final EditText editText = (EditText) view.findViewById(R.id.editText_filter_dialog_amount);
+        final EditText editTextStart = (EditText) view.findViewById(R.id.editText_filter_dialog_amount);
         final EditText editTextEnd = (EditText) view.findViewById(R.id.editText_filter_dialog_amount_end);
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        Integer previous_filterAmount = SettingsIO.readData(getContext(), 0, Tools.SETTING_MENU_FILTER_AMOUNT_VALUE_1);
+        if(previous_filterAmount != 0) {
+            editTextStart.setText(String.valueOf(previous_filterAmount));
+            editTextStart.setSelection(editTextStart.getText().length());
+        }
 
+        Integer previous_filterAmountEnd = SettingsIO.readData(getContext(), 0, Tools.SETTING_MENU_FILTER_AMOUNT_VALUE_2);
+        if(previous_filterAmountEnd != 0) {
+            editTextEnd.setText(String.valueOf(previous_filterAmountEnd));
+        }
 
-        int previous_filterAmount = SettingsIO.readData(getContext(), 0, "menu_filter_amount_checkbox_selectedamount");
-        editText.setText(String.valueOf(previous_filterAmount));
-        editText.setSelection(editText.getText().length());
-
+        showKeyboard();
 
         final View v = view;
 
@@ -120,34 +126,85 @@ public class DialogFilterAmount extends DialogFragment {
                 .setView(view)
                 .setPositiveButton("Filter", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-                        //if(selectedOperator.equals())
-
-                        String amountStr = editText.getText().toString();
-                        //String amountStrEnd = editTextEnd.getText().toString();
-                        if(amountStr == null || amountStr.isEmpty()) {
-                            Toast.makeText(v.getContext(), "Amount field is empty", Toast.LENGTH_SHORT).show();
-                        }else {
-                            DialogListener activity = (DialogListener) getActivity();
-                            try {
-                                //reloadSelectedDates();
-                                selectedAmount = Integer.parseInt(editText.getText().toString());
-                                activity.onApplyFilterAmountBtn(selectedOperator, selectedAmount);
-
-                            } catch (Exception e) {
-                                System.out.println(e);
-                            }
-                            dismiss();
-                        }
+                        // The listener is overwritten by alertDialog.setOnShowListener
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        hideKeyboard(v);
                         dismiss();
                     }
                 });
-        // Create the AlertDialog object and return it
-        return builder.create();
+
+
+        final AlertDialog alertDialog = builder.create();
+
+        this.isAlertDialogReady = false;
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (isAlertDialogReady == false) {
+                    Button button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DialogListener activity = (DialogListener) getActivity();
+
+                            Integer amount1 = getNumberFromEditText(v, editTextStart);
+                            Integer amount2 = getNumberFromEditText(v, editTextEnd);
+
+
+                            if(selectedOperator.equals(Tools.BETWEEN_STR)) {
+                                if(amount1 != null && amount2 != null) {
+
+                                    if (amount1 < amount2) {
+                                        activity.onApplyFilterAmountBtn(selectedOperator, amount1, amount2);
+                                        hideKeyboard(v);
+                                        dismiss();
+                                    } else {
+                                        Toast.makeText(getActivity(), "First amount must be smaller than the second amount", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }else { // operator is either equals to, before or after:
+                                if(amount1 != null) {
+                                    activity.onApplyFilterAmountBtn(selectedOperator, amount1, 0);
+                                    hideKeyboard(v);
+                                    dismiss();
+                                }else{
+                                    Toast.makeText(getActivity(), "Field is empty", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        }
+                    });
+                    isAlertDialogReady = true;
+                }
+            }
+        });
+
+        return alertDialog;
+    }
+
+    private Integer getNumberFromEditText(View view, EditText editText){
+
+        try {
+            Integer number = Integer.parseInt(editText.getText().toString());
+            return number;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+
+    private void showKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+    private void hideKeyboard(View view){
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(),0);
     }
 
 

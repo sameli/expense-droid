@@ -1,12 +1,11 @@
 package com.expensedroid.expensedroid;
 
-import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +22,12 @@ public class SettingsFragment extends PreferenceFragment {
 
         addLicenseListener();
         addResetDatabaseListener();
+        addResetSettingsListener();
 
     }
 
     private void addLicenseListener(){
-        Preference preference = (Preference) findPreference("pref_key_license");
+        Preference preference = (Preference) findPreference(Tools.PREFERENCE_LICENSE);
 
         preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
         {
@@ -62,7 +62,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void addResetDatabaseListener(){
 
-        Preference preference = (Preference) findPreference("pref_key_reset_database");
+        Preference preference = (Preference) findPreference(Tools.PREFERENCE_RESET_DATABASE);
 
         preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
         {
@@ -79,6 +79,46 @@ public class SettingsFragment extends PreferenceFragment {
                         DatabaseHelper mydb = new DatabaseHelper(getActivity());
                         mydb.resetDatabase();
                         Toast.makeText(getActivity(), "Database has been reset", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.create().show();
+
+
+                return true;
+            }
+        });
+    }
+
+    private void addResetSettingsListener(){
+
+        Preference preference = (Preference) findPreference(Tools.PREFERENCE_RESET_SETTINGS);
+
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+        {
+            public boolean onPreferenceClick(Preference pref)
+            {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Reset Settings");
+                builder.setMessage("Are you sure you want to reset all the settings within this app?");
+                builder.setPositiveButton("Reset", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        int selected_acct_id = SettingsIO.readData(getActivity(), -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
+
+                        DatabaseHelper mydb = new DatabaseHelper(getActivity());
+                        SharedPreferences settings = getActivity().getSharedPreferences(Tools.SETTINGS_TITLE, 0);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.clear();
+                        editor.commit();
+                        Toast.makeText(getActivity(), "All settings has been reset", Toast.LENGTH_SHORT).show();
+
+                        if(selected_acct_id != -1) {
+                            SettingsIO.saveData(getActivity(), selected_acct_id, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
+                        }
 
                     }
                 });

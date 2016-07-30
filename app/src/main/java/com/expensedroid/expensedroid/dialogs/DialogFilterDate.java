@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.expensedroid.expensedroid.DatabaseHelper;
 import com.expensedroid.expensedroid.R;
 import com.expensedroid.expensedroid.SettingsIO;
+import com.expensedroid.expensedroid.Tools;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -31,10 +32,7 @@ public class DialogFilterDate extends DialogFragment {
     private String selectedDateStart; // 2016-12-30
     private String selectedDateEnd;
 
-    private static final String EQUAL_STR = "equal to";
-    private static final String BEFORE_STR = "before";
-    private static final String AFTER_STR = "after";
-    public static final String BETWEEN_STR = "between"; // This is also used in DatabaseHelper class
+
     private int position_BETWEEN_in_spinner = 3; // position of "Between" element in the spinner (default is 3)
 
     private boolean isAlertDialogReady;
@@ -73,7 +71,7 @@ public class DialogFilterDate extends DialogFragment {
             }
         });
 
-        String[] items = new String[] { EQUAL_STR, BEFORE_STR, AFTER_STR, BETWEEN_STR};
+        String[] items = new String[] { Tools.EQUAL_STR, Tools.BEFORE_STR, Tools.AFTER_STR, Tools.BETWEEN_STR};
 
         ArrayAdapter adapter = new ArrayAdapter<CharSequence>(getContext(), R.layout.custom_spinner_layout, items);
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
@@ -81,17 +79,15 @@ public class DialogFilterDate extends DialogFragment {
         spinner.setAdapter(adapter);
 
 
-
-
-        String previous_selectedOperator = SettingsIO.readData(getContext(), EQUAL_STR, "menu_filter_date_checkbox_selected_operator");
+        String previous_selectedOperator = SettingsIO.readData(getContext(), Tools.EQUAL_STR, Tools.SETTING_MENU_FILTER_DATE_SELECTED_OPERATOR);
         int spinnerPos = 0;
-        if(previous_selectedOperator.equals(EQUAL_STR))
+        if(previous_selectedOperator.equals(Tools.EQUAL_STR))
             spinnerPos = 0;
-        else if(previous_selectedOperator.equals(BEFORE_STR))
+        else if(previous_selectedOperator.equals(Tools.BEFORE_STR))
             spinnerPos = 1;
-        else if(previous_selectedOperator.equals(AFTER_STR))
+        else if(previous_selectedOperator.equals(Tools.AFTER_STR))
             spinnerPos = 2;
-        else if(previous_selectedOperator.equals(BETWEEN_STR)) {
+        else if(previous_selectedOperator.equals(Tools.BETWEEN_STR)) {
             spinnerPos = 3;
             position_BETWEEN_in_spinner = spinnerPos;
             layoutGroupEnd.setVisibility(View.VISIBLE);
@@ -136,13 +132,13 @@ public class DialogFilterDate extends DialogFragment {
                         public void onClick(View v) {
                             DialogListener activity = (DialogListener) getActivity();
                             try{
-                                if(selectedOperator.equals(BETWEEN_STR)) {
+                                if(selectedOperator.equals(Tools.BETWEEN_STR)) {
                                     boolean isStartDateBeforeEndDate = reloadSelectedDates(); // check if start date is before end date
                                     if(isStartDateBeforeEndDate){
                                         activity.onApplyFilterDateBtn(selectedOperator, selectedDateStart, selectedDateEnd);
                                         dismiss();
                                     }else{
-                                        Toast.makeText(getActivity(), "Start date must be before End date", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Start date must be before the End date", Toast.LENGTH_LONG).show();
                                     }
                                 }else { // operator is either equals to, before or after:
                                     reloadStartDate();
@@ -162,7 +158,6 @@ public class DialogFilterDate extends DialogFragment {
             }
         });
 
-        // Create the AlertDialog object and return it
         return alertDialog;
     }
 
@@ -229,8 +224,8 @@ public class DialogFilterDate extends DialogFragment {
      * This method read the settings file and loads the previously selected start and end dates
      */
     private void setDatePickerDate(View view){
-        setDatePickerDate(view,"menu_filter_date_checkbox_selecteddate", R.id.filter_date_datePicker_start);
-        setDatePickerDate(view,"menu_filter_date_checkbox_selecteddate_end", R.id.filter_date_datePicker_end);
+        setDatePickerDate(view, Tools.SETTING_MENU_FILTER_DATE_VALUE_1, R.id.filter_date_datePicker_start);
+        setDatePickerDate(view, Tools.SETTING_MENU_FILTER_DATE_VALUE_2, R.id.filter_date_datePicker_end);
         setEndDateOneDayAfterStartDate(view);
     }
 
@@ -275,21 +270,7 @@ public class DialogFilterDate extends DialogFragment {
 
     }
 
-    public static String getSmallOperatorStr(String str){
-        if(str == null) return "";
-        String operatorStr = "";
 
-        if(str.equals(EQUAL_STR)){
-            operatorStr = "=";
-        }else if(str.equals(BEFORE_STR)){
-            operatorStr = "<";
-        }else if(str.equals(AFTER_STR)){
-            operatorStr = ">";
-        }else if(str.equals(BETWEEN_STR)){
-            operatorStr = BETWEEN_STR;
-        }
-        return operatorStr;
-    }
 
 
 }

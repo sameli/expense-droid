@@ -20,7 +20,7 @@
 
         <Spinner
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
             android:id="@+id/filter_amount_spinner" />
 
 
@@ -36,7 +36,7 @@
         android:weightSum="1">
 
         <EditText
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText_filter_dialog_amount"
             android:width="150dp"
@@ -62,7 +62,7 @@
             android:id="@+id/textview_and"/>
 
         <EditText
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText_filter_dialog_amount_end"
             android:width="150dp"

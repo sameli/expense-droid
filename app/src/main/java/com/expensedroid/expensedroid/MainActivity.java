@@ -43,7 +43,6 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements DialogListener {
 
     // Constants:
-    public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000"; // Message id to transfer data from main to edit activity
     private final String DEFAULT_ACCOUNT_NAME = "Default Acct"; // default account name to be created for first time use
     private final int MENU_ACCOUNTS_ID = 103;
     int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         if(databaseHelper.numberOfRowsInAccounts() == 0){
             int acct_id = (int) databaseHelper.insertAccount(DEFAULT_ACCOUNT_NAME);
             if(acct_id != -1) {
-                SettingsIO.saveData(this, acct_id, "selected_acct_id");
+                SettingsIO.saveData(this, acct_id, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
                 Toast.makeText(MainActivity.this, "New account created: "+ DEFAULT_ACCOUNT_NAME, Toast.LENGTH_SHORT).show();
 
             }
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             }
         });
 
-        int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
+        int selected_acct_id = SettingsIO.readData(this, -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
         if(selected_acct_id != -1) {
             String acct_name = databaseHelper.getAccountName(selected_acct_id);
             TextView accountTextview = (TextView)findViewById(R.id.textView_account);
@@ -164,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         List<AccountItem> listOfAccts = databaseHelper.getAccounts();
 
         map_MenuID_accountItem = new HashMap<Integer, AccountItem>();
-        int selected_acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
+        int selected_acct_id = SettingsIO.readData(this, -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
 
         int numberOfAccounts = databaseHelper.numberOfRowsInAccounts();
 
@@ -208,18 +207,18 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             changeMenuColor(menu, Color.WHITE);
         }
 
-        boolean isChecked_filter_date = SettingsIO.readData(this, false, "menu_filter_date_checkbox");
+        boolean isChecked_filter_date = SettingsIO.readData(this, false, Tools.SETTING_MENU_FILTER_DATE_CHECKBOX);
         MenuItem item_filter_date = menu.findItem(R.id.submenu_filter_date);
         item_filter_date.setChecked(isChecked_filter_date);
 
         if(isChecked_filter_date){
             // if filter date is checked, then we read the selected date and selected operator from settings file and update the title of menu:
-            String dateStr = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selecteddate");
-            String selectedOperator = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selected_operator");
-            String operatorStr = DialogFilterDate.getSmallOperatorStr(selectedOperator);
+            String dateStr = SettingsIO.readData(this, "", Tools.SETTING_MENU_FILTER_DATE_VALUE_1);
+            String selectedOperator = SettingsIO.readData(this, "", Tools.SETTING_MENU_FILTER_DATE_SELECTED_OPERATOR);
+            String operatorStr = Tools.getSmallOperatorStr(selectedOperator);
 
-            if(operatorStr.equals(DialogFilterDate.BETWEEN_STR)){
-                String dateEndStr = SettingsIO.readData(this, "", "menu_filter_date_checkbox_selecteddate_end");
+            if(operatorStr.equals(Tools.BETWEEN_STR)){
+                String dateEndStr = SettingsIO.readData(this, "", Tools.SETTING_MENU_FILTER_DATE_VALUE_2);
 
                 item_filter_date.setTitle(dateStr + " < " + "Date" + " < " + dateEndStr);
             }else{
@@ -230,16 +229,23 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         }
 
 
-        boolean isChecked_filter_amount = SettingsIO.readData(this, false, "menu_filter_amount_checkbox");
+        boolean isChecked_filter_amount = SettingsIO.readData(this, false, Tools.SETTING_MENU_FILTER_AMOUNT_CHECKBOX);
         MenuItem item_filter_amount = menu.findItem(R.id.submenu_filter_amount);
         item_filter_amount.setChecked(isChecked_filter_amount);
 
         if(isChecked_filter_amount){
             // if filter date is checked, then we read the selected date and selected operator from settings file and update the title of menu:
-            int selectedamount = SettingsIO.readData(this, 0, "menu_filter_amount_checkbox_selectedamount");
-            String selectedOperator = SettingsIO.readData(this, "", "menu_filter_amount_checkbox_selected_operator");
+            int amount1 = SettingsIO.readData(this, 0, Tools.SETTING_MENU_FILTER_AMOUNT_VALUE_1);
+            String selectedOperator = SettingsIO.readData(this, "", Tools.SETTING_MENU_FILTER_AMOUNT_SELECTED_OPERATOR);
+            String operatorStr = Tools.getSmallOperatorStr(selectedOperator);
 
-            item_filter_amount.setTitle("Amount " + selectedOperator + " " + selectedamount);
+            if(selectedOperator.equals(Tools.BETWEEN_STR)){
+                int amount2 = SettingsIO.readData(this, 0, Tools.SETTING_MENU_FILTER_AMOUNT_VALUE_2);
+
+                item_filter_amount.setTitle(amount1 + " < " + "Amount" + " < " + amount2);
+            }else {
+                item_filter_amount.setTitle("Amount " + operatorStr + " " + amount1);
+            }
         }else {
             item_filter_amount.setTitle("Amount");
         }
@@ -253,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         if(map_MenuID_accountItem.containsKey(itemID)){
 
             AccountItem accountItem = map_MenuID_accountItem.get(itemID);
-            SettingsIO.saveData(this, accountItem.acct_id, "selected_acct_id");
+            SettingsIO.saveData(this, accountItem.acct_id, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
             refreshActivity();
             return true;
         }
@@ -274,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                 }else{
                     // if menu item is checked, then we set the menu date checkbox to false in the settings
                     // then we refresh activity so that the onCreate of MainActivity can removes the filter
-                    SettingsIO.saveData(this, false, "menu_filter_date_checkbox");
+                    SettingsIO.saveData(this, false, Tools.SETTING_MENU_FILTER_DATE_CHECKBOX);
                     refreshActivity();
                 }
 
@@ -284,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                     FragmentManager fm = getSupportFragmentManager();
                     dialogFilterAmount.show(fm, "Amount filter dialog");
                 }else {
-                    SettingsIO.saveData(this, false, "menu_filter_amount_checkbox");
+                    SettingsIO.saveData(this, false, Tools.SETTING_MENU_FILTER_AMOUNT_CHECKBOX);
                     refreshActivity();
                 }
 
@@ -305,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                int selected_acct_id = SettingsIO.readData(MainActivity.this, -1, "selected_acct_id");
+                                int selected_acct_id = SettingsIO.readData(MainActivity.this, -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
                                 //printMsg("selected_acct_id: " + selected_acct_id);
                                 if(selected_acct_id != -1) {
                                     databaseHelper.deleteAccount(selected_acct_id);
@@ -313,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
                                     if(databaseHelper.numberOfRowsInAccounts() > 0) {
                                         List<AccountItem> acctItems = databaseHelper.getAccounts();
                                         int first_accountID = acctItems.get(0).acct_id;
-                                        SettingsIO.saveData(MainActivity.this, first_accountID, "selected_acct_id");
+                                        SettingsIO.saveData(MainActivity.this, first_accountID, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
                                     }
                                     refreshActivity();
                                 }else{
@@ -341,8 +347,8 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
 
     // check if all of the menu items are checked from the settings
     private void checkIfAllFilterItemsChecked(){
-        boolean isChecked_menu_filter_date = SettingsIO.readData(this, false, "menu_filter_date_checkbox");
-        boolean isChecked_menu_filter_amount = SettingsIO.readData(this, false, "menu_filter_amount_checkbox");
+        boolean isChecked_menu_filter_date = SettingsIO.readData(this, false, Tools.SETTING_MENU_FILTER_DATE_CHECKBOX);
+        boolean isChecked_menu_filter_amount = SettingsIO.readData(this, false, Tools.SETTING_MENU_FILTER_AMOUNT_CHECKBOX);
 
         if(isChecked_menu_filter_date || isChecked_menu_filter_amount){
             filterActivated = true;
@@ -356,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
      */
     private void gotoEditActivity(Transaction trans) {
         Intent editIntent = new Intent(this, EditActivity.class);
-        editIntent.putExtra(INTENT_EDIT_MSG_ID, trans);
+        editIntent.putExtra(Tools.INTENT_EDIT_MSG_ID, trans);
         startActivity(editIntent);
     }
 
@@ -378,12 +384,12 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
      * This method implements a method from the DialogListener interface. This is called from DialogFilterDate class
      */
     @Override
-    public void onApplyFilterDateBtn(String selectedOperator, String selectedDate, String selectedDateEnd) {
+    public void onApplyFilterDateBtn(String selectedOperator, String selectedDateStart, String selectedDateEnd) {
 
-        SettingsIO.saveData(this, true, "menu_filter_date_checkbox");
-        SettingsIO.saveData(this, selectedOperator, "menu_filter_date_checkbox_selected_operator");
-        SettingsIO.saveData(this, selectedDate, "menu_filter_date_checkbox_selecteddate");
-        SettingsIO.saveData(this, selectedDateEnd, "menu_filter_date_checkbox_selecteddate_end");
+        SettingsIO.saveData(this, true, Tools.SETTING_MENU_FILTER_DATE_CHECKBOX);
+        SettingsIO.saveData(this, selectedOperator, Tools.SETTING_MENU_FILTER_DATE_SELECTED_OPERATOR);
+        SettingsIO.saveData(this, selectedDateStart, Tools.SETTING_MENU_FILTER_DATE_VALUE_1);
+        SettingsIO.saveData(this, selectedDateEnd, Tools.SETTING_MENU_FILTER_DATE_VALUE_2);
 
         Toast.makeText(this, "Date filter applied", Toast.LENGTH_SHORT).show();
 
@@ -395,15 +401,17 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
      * This method implements a method from the DialogListener interface. This is called from DialogFilterAmount class
      */
     @Override
-    public void onApplyFilterAmountBtn(String selectedOperator, int selectedAmount) {
+    public void onApplyFilterAmountBtn(String selectedOperator, Integer selectedAmountStart, Integer selectedAmountEnd) {
 
-        SettingsIO.saveData(this, true, "menu_filter_amount_checkbox");
-        SettingsIO.saveData(this, selectedOperator, "menu_filter_amount_checkbox_selected_operator");
-        SettingsIO.saveData(this, selectedAmount, "menu_filter_amount_checkbox_selectedamount");
+        SettingsIO.saveData(this, true, Tools.SETTING_MENU_FILTER_AMOUNT_CHECKBOX);
+        SettingsIO.saveData(this, selectedOperator, Tools.SETTING_MENU_FILTER_AMOUNT_SELECTED_OPERATOR);
+        SettingsIO.saveData(this, selectedAmountStart, Tools.SETTING_MENU_FILTER_AMOUNT_VALUE_1);
+        SettingsIO.saveData(this, selectedAmountEnd, Tools.SETTING_MENU_FILTER_AMOUNT_VALUE_2);
+
         Toast.makeText(this, "Amount filter applied", Toast.LENGTH_SHORT).show();
 
         refreshActivity();
-        printMsg("onApplyFilterAmountBtn: " + selectedOperator + ", " + selectedAmount);
+        //printMsg("onApplyFilterAmountBtn: " + selectedOperator + ", " + selectedAmountStart);
     }
 
     /*
@@ -414,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         //printMsg("onApplyFilterAmountBtn: " + accountName);
         int acct_id = databaseHelper.insertAccount(accountName);
         if(acct_id != -1) {
-            SettingsIO.saveData(this, acct_id, "selected_acct_id");
+            SettingsIO.saveData(this, acct_id, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
             Toast.makeText(this, "New account created", Toast.LENGTH_SHORT).show();
             refreshActivity();
         }else{
@@ -430,7 +438,7 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
     public void onApplyRenameAccountBtn(String accountName) {
 
         // We rename the current shown account. We can get the id of current account from settings:
-        int acct_id = SettingsIO.readData(this, -1, "selected_acct_id");
+        int acct_id = SettingsIO.readData(this, -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
         if(acct_id != -1) {
             databaseHelper.updateAccounts(acct_id, accountName);
             Toast.makeText(this, "Account renamed to " + accountName, Toast.LENGTH_SHORT).show();

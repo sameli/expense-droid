@@ -4,7 +4,12 @@
         android:key="pref_key_storage_settings">
         <Preference
             android:key="pref_key_reset_database"
-            android:title="Reset Database"/>
+            android:title="Reset Database"
+            android:summary="Resetting the Database will remove all accounts and transactions within this app"/>
+        <Preference
+            android:key="pref_key_reset_settings"
+            android:title="Reset Settings"
+            android:summary="Resetting all the settings such as selected filter date and amount"/>
         <Preference
             android:key="pref_key_app_version"
             android:summary="@string/app_version"

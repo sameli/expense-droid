@@ -1,5 +1,9 @@
 package com.expensedroid.expensedroid.dialogs;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -7,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,50 +26,78 @@ public class DialogRenameAccount extends DialogFragment{
     private final int MAXIMUM_ACCOUNT_NAME_LENGTH = 20;
     View rootView;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-        rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_rename_account, container, false);
-        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+    private boolean isAlertDialogReady;
 
-        Button cancelButton = (Button) rootView.findViewById(R.id.dialog_rename_account_cancel_btn);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_rename_account, null);
+
+
+        final EditText editText = (EditText) view.findViewById(R.id.dialog_rename_account_edittext);
+        showKeyboard();
+
+        final View v = view;
+
+        builder
+                .setView(view)
+                .setPositiveButton("Rename Account", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // The listener is overwritten by alertDialog.setOnShowListener
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        hideKeyboard(v);
+                        dismiss();
+                    }
+                });
+
+        final AlertDialog alertDialog = builder.create();
+
+        this.isAlertDialogReady = false;
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+            public void onShow(DialogInterface dialog) {
 
+                if (isAlertDialogReady == false) {
+                    Button button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DialogListener activity = (DialogListener) getActivity();
 
-        final EditText editText = (EditText) rootView.findViewById(R.id.dialog_rename_account_edittext);
-        editText.setText("");
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                            String accountNameStr = editText.getText().toString().trim();
+                            if(accountNameStr == null || accountNameStr.isEmpty()) {
+                                Toast.makeText(v.getContext(), "Account name field is empty", Toast.LENGTH_SHORT).show();
+                            }else if(accountNameStr.length() >= MAXIMUM_ACCOUNT_NAME_LENGTH){
+                                Toast.makeText(v.getContext(), "Account name must be less than "+MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_SHORT).show();
+                            } else{
+                                activity.onApplyRenameAccountBtn(accountNameStr);
+                                editText.setText("");
+                                hideKeyboard(v);
+                                dismiss();
+                            }
 
-
-        Button renameButton = (Button) rootView.findViewById(R.id.dialog_rename_account_rename_btn);
-
-        renameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                String accountNameStr = editText.getText().toString().trim();
-                if(accountNameStr == null || accountNameStr.isEmpty()) {
-                    Toast.makeText(v.getContext(), "Account name field is empty", Toast.LENGTH_SHORT).show();
-                }else if(accountNameStr.length() >= MAXIMUM_ACCOUNT_NAME_LENGTH){
-                    Toast.makeText(v.getContext(), "Account name must be less than "+MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_SHORT).show();
-                } else{
-                    DialogListener activity = (DialogListener) getActivity();
-                    activity.onApplyRenameAccountBtn(accountNameStr);
-                    editText.setText("");
-
-                    dismiss();
+                        }
+                    });
+                    isAlertDialogReady = true;
                 }
             }
         });
 
+        return alertDialog;
+    }
 
-        return rootView;
+    private void showKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+    private void hideKeyboard(View view){
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(),0);
     }
 
 }
