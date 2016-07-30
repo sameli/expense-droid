@@ -45,11 +45,6 @@ import java.util.Random;
  */
 public class MainActivity extends AppCompatActivity implements DialogListener {
 
-    // Constants:
-    private final String DEFAULT_ACCOUNT_NAME = "Default Acct"; // default account name to be created for first time use
-    private final int MENU_ACCOUNTS_ID = 103;
-    int baseAcctMenuStartID = 15000; // some random large number to set for the ids of the auto generated menu items for acccounts
-
     private DatabaseHelper databaseHelper;
     private Map<Integer, AccountItem> map_MenuID_accountItem; // this variable is used to map generated menu ID with the accounts
     private boolean filterActivated = false; // if true, then the color of "filter" menu item will be green
@@ -81,10 +76,10 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         databaseHelper = new DatabaseHelper(this);
 
         if(databaseHelper.numberOfRowsInAccounts() == 0){
-            int acct_id = (int) databaseHelper.insertAccount(DEFAULT_ACCOUNT_NAME);
+            int acct_id = (int) databaseHelper.insertAccount(Tools.DEFAULT_ACCOUNT_NAME);
             if(acct_id != -1) {
                 SettingsIO.saveData(this, acct_id, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
-                Toast.makeText(MainActivity.this, "New account created: "+ DEFAULT_ACCOUNT_NAME, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "New account created: "+ Tools.DEFAULT_ACCOUNT_NAME, Toast.LENGTH_SHORT).show();
 
             }
         }
@@ -169,11 +164,12 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
         int selected_acct_id = SettingsIO.readData(this, -1, Tools.PREFERENCE_SELECTED_ACCOUNT_ID);
 
         int numberOfAccounts = databaseHelper.numberOfRowsInAccounts();
-
+        int menuAccountsID = 103;
         //SubMenu accounts_menu = menu.findItem(R.id.menu_id_accounts).getSubMenu();
-        menu.addSubMenu(Menu.NONE, MENU_ACCOUNTS_ID, Menu.NONE,"Accounts [" + numberOfAccounts +"]");
-        SubMenu accounts_submenu = menu.findItem(MENU_ACCOUNTS_ID).getSubMenu();
+        menu.addSubMenu(Menu.NONE, menuAccountsID, Menu.NONE,"Accounts [" + numberOfAccounts +"]");
+        SubMenu accounts_submenu = menu.findItem(menuAccountsID).getSubMenu();
 
+        int baseAcctMenuStartID = 10000; // or any number larger than last menu ID in the menu_main.xml
         for(AccountItem item : listOfAccts){
             map_MenuID_accountItem.put(baseAcctMenuStartID, item);
 
@@ -194,14 +190,6 @@ public class MainActivity extends AppCompatActivity implements DialogListener {
             baseAcctMenuStartID++;
 
         }
-
-        /*
-        menu.addSubMenu(Menu.NONE, 3004, Menu.NONE,"Menu1");
-        SubMenu themeMenu = menu.findItem(3004).getSubMenu();
-        themeMenu.clear();
-        themeMenu.add(Menu.NONE, 3005, Menu.NONE,"Menu1");
-        themeMenu.add(Menu.NONE, 3006, Menu.NONE,"Menu2");
-        */
 
         checkIfAllFilterItemsChecked();
         if(filterActivated) {

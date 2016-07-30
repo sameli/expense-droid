@@ -46,6 +46,8 @@ public class Tools {
     public static final String DATE_FORMAT = "yyyy-MM-dd";
 
     public static final String INTENT_EDIT_MSG_ID = "IDEDIT1000"; // Message id to transfer data from main to edit activity
+    public static final String DEFAULT_ACCOUNT_NAME = "Default Acct"; // default account name to be created for first time use
+
 
     /*
      * This method converts the given string to an operator compatible with sqlite
