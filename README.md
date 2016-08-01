@@ -21,7 +21,7 @@ git clone https://github.com/sameli/expense-droid.git
 * Filter search for title
 * Sort transactions
 
-# TODO
+## TODO
 
 * Modify edit activity so users can move a transaction from one account to another
 * Fix style of action menu bar for android sdk < 21 (The filter menu doesn't turn green on sdk 19)
