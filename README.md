@@ -1,5 +1,5 @@
 ## Description:
-Expense Droid is an easy to use tool to manage financial transactions. It can be used for inventories or personal transactions.
+Expense Droid is an easy to use app to manage financial transactions. It can be used for inventories or personal transactions.
 Some of the features of this app:
 - Support multiple accounts
 - Filter transactions based on date or amount
