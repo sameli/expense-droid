@@ -6,7 +6,7 @@ Some of the features of this app:
 - Simple interface to modify transactions
 
 
-## Instalation
+## Installation
 Available on Google Play: https://play.google.com/store/apps/details?id=com.expensedroid.expensedroid
 
 ## Compile from source
