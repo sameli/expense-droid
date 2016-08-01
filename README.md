@@ -1,4 +1,4 @@
-## Description:
+## Description
 Expense Droid is an easy to use app to manage financial transactions. It can be used for inventories or personal transactions.
 Some of the features of this app:
 - Support multiple accounts
@@ -22,7 +22,7 @@ export ANDROID_HOME=/path/to/your/android/sdk
 ./build/outputs/apk/app-release-unsigned.apk
 ```
 
-## Planned features to add:
+## Planned features to add
 * Export/Import data
 * Category selection for transactions
 * Filter search for title
