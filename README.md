@@ -34,6 +34,3 @@ export ANDROID_HOME=/path/to/your/android/sdk
 * Fix style of action menu bar for android sdk < 21 (The filter menu doesn't turn green on sdk 19)
 * Add help menu
 * Add unit tests
-
-Features to skip for now:
-* Category selection
