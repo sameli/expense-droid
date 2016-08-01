@@ -12,7 +12,12 @@ Available on Google Play: https://play.google.com/store/apps/details?id=com.expe
 ## Compile from source
 ```bash
 git clone https://github.com/sameli/expense-droid.git
-# Then open the "expense-droid" folder in Android Studio.
+cd expense-droid
+# Then open the folder in Android Studio and build the project. Or you can also use command line:
+export ANDROID_HOME=/path/to/your/android/sdk
+./gradlew assembleRelease
+# The generated apk should be in this path:
+./build/outputs/apk/app-release-unsigned.apk
 ```
 
 ## Planned features to add:
