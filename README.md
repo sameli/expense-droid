@@ -1,40 +1,32 @@
-Expense Droid app:
+## Description:
+Expense Droid is an easy to use tool to manage financial transactions. It can be used for inventories or personal transactions.
+Some of the features of this app:
+- Support multiple accounts
+- Filter transactions based on date or amount
+- Simple interface to modify transactions
 
-Description: An Android app to manage financial transactions.
 
-Current features;
-* Multiple accounts
-* Add/Delete/Update transactions
-* Filter transactions based on date or amount
+## Instalation
+Available on Google Play: https://play.google.com/store/apps/details?id=com.expensedroid.expensedroid
 
-Planned features to add:
+## Compile from source
+```bash
+git clone https://github.com/sameli/expense-droid.git
+# Then open the "expense-droid" folder in Android Studio.
+```
+
+## Planned features to add:
 * Export/Import data
 * Category selection for transactions
 * Filter search for title
 * Sort transactions
 
-Technical specifications:
-* Database consists of two tables. One for accounts and another for transactions
+# TODO
 
-Personal notes:
-
-TODO:
-* select account in edit activity
+* Modify edit activity so users can move a transaction from one account to another
 * Fix style of action menu bar for android sdk < 21 (The filter menu doesn't turn green on sdk 19)
 * Add help menu
 * Add unit tests
 
-TODO (less important):
-* Add a reset database menu item
-
-
 Features to skip for now:
 * Category selection
-
-Database basic fields:
-
-id, title, amount, date, notes
-
-Fields to add later:
-
-category
