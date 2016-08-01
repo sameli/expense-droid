@@ -27,6 +27,7 @@ export ANDROID_HOME=/path/to/your/android/sdk
 * Category selection for transactions
 * Filter search for title
 * Sort transactions
+* Photo field for transactions (Add a "take photo" button to the edit activity)
 
 ## TODO
 
