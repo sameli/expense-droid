@@ -10,6 +10,8 @@ Some of the features of this app:
 Available on Google Play: https://play.google.com/store/apps/details?id=com.expensedroid.expensedroid
 
 ## Compile from source
+Note: The script below has been tested on Ubuntu 14.04 and Android SDK tools 25.1.7:
+
 ```bash
 git clone https://github.com/sameli/expense-droid.git
 cd expense-droid
