@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.expensedroid.expensedroid.R;
+import com.expensedroid.expensedroid.Tools;
 
 /**
  * Created by S. Ameli on 25/07/16.
@@ -25,7 +26,6 @@ import com.expensedroid.expensedroid.R;
  */
 public class DialogRenameAccount extends DialogFragment{
 
-    private final int MAXIMUM_ACCOUNT_NAME_LENGTH = 20;
     View rootView;
 
     private boolean isAlertDialogReady;
@@ -73,8 +73,8 @@ public class DialogRenameAccount extends DialogFragment{
                             String accountNameStr = editText.getText().toString().trim();
                             if(accountNameStr == null || accountNameStr.isEmpty()) {
                                 Toast.makeText(v.getContext(), "Account name field is empty", Toast.LENGTH_SHORT).show();
-                            }else if(accountNameStr.length() >= MAXIMUM_ACCOUNT_NAME_LENGTH){
-                                Toast.makeText(v.getContext(), "Account name must be less than "+MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_SHORT).show();
+                            }else if(accountNameStr.length() >= Tools.MAXIMUM_ACCOUNT_NAME_LENGTH){
+                                Toast.makeText(v.getContext(), "Account name must be less than "+Tools.MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_SHORT).show();
                             } else{
                                 activity.onApplyRenameAccountBtn(accountNameStr);
                                 editText.setText("");

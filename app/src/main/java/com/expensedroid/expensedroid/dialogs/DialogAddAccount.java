@@ -26,7 +26,7 @@ import com.expensedroid.expensedroid.Tools;
  */
 public class DialogAddAccount extends DialogFragment{
 
-    private final int MAXIMUM_ACCOUNT_NAME_LENGTH = 20;
+
     private boolean isAlertDialogReady;
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -72,8 +72,8 @@ public class DialogAddAccount extends DialogFragment{
                             String accountNameStr = editText.getText().toString().trim();
                             if(accountNameStr == null || accountNameStr.isEmpty()) {
                                 Toast.makeText(v.getContext(), "Account name field is empty", Toast.LENGTH_SHORT).show();
-                            }else if(accountNameStr.length() >= MAXIMUM_ACCOUNT_NAME_LENGTH){
-                                Toast.makeText(v.getContext(), "Account name must be less than "+MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_SHORT).show();
+                            }else if(accountNameStr.length() >= Tools.MAXIMUM_ACCOUNT_NAME_LENGTH){
+                                Toast.makeText(v.getContext(), "Account name must be less than "+Tools.MAXIMUM_ACCOUNT_NAME_LENGTH+" characters", Toast.LENGTH_SHORT).show();
                             } else{
                                 activity.onApplyCreateAccountBtn(accountNameStr.trim());
                                 editText.setText("");
