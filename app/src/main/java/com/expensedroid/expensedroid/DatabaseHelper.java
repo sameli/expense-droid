@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final String TABLE_HEADER_DATE = "date";
     private final String TABLE_HEADER_NOTES = "notes";
     private final String TABLE_HEADER_ACCOUNT_ID = "acct_id"; // this is used in both accounts table and transactions
-
+    private final String TABLE_HEADER_ACCOUNT_NAME = "acct_name";
 
     /*
      * This method is the constructor
@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(
                 "CREATE TABLE " + TABLE_NAME_ACCOUNTS +
-                        " ("+ TABLE_HEADER_ACCOUNT_ID +" INTEGER PRIMARY KEY, acct_name TEXT NOT NULL);"
+                        " ("+ TABLE_HEADER_ACCOUNT_ID +" INTEGER PRIMARY KEY, "+ TABLE_HEADER_ACCOUNT_NAME +" TEXT NOT NULL);"
         );
 
         sqLiteDatabase.execSQL(
@@ -110,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int insertAccount(String acctName){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("acct_name", acctName);
+        contentValues.put(TABLE_HEADER_ACCOUNT_NAME, acctName);
         return (int)db.insert(TABLE_NAME_ACCOUNTS, null, contentValues);
     }
 
@@ -136,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from " + TABLE_NAME_ACCOUNTS + " where "+ TABLE_HEADER_ACCOUNT_ID +"="+acct_id+"", null );
         res.moveToFirst();
-        String acct_name = res.getString(res.getColumnIndex("acct_name"));
+        String acct_name = res.getString(res.getColumnIndex(TABLE_HEADER_ACCOUNT_NAME));
         return acct_name;
     }
 
@@ -150,7 +150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         res.moveToFirst();
         while(res.isAfterLast() == false) {
             int acct_id = res.getInt(res.getColumnIndex(TABLE_HEADER_ACCOUNT_ID));
-            String acct_name = res.getString(res.getColumnIndex("acct_name"));
+            String acct_name = res.getString(res.getColumnIndex(TABLE_HEADER_ACCOUNT_NAME));
             AccountItem actItem = new AccountItem();
             actItem.acct_id = acct_id;
             actItem.acct_name = acct_name;
@@ -223,7 +223,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updateAccounts(Integer acct_id, String acct_name){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("acct_name", acct_name);
+        contentValues.put(TABLE_HEADER_ACCOUNT_NAME, acct_name);
         db.update(TABLE_NAME_ACCOUNTS, contentValues, TABLE_HEADER_ACCOUNT_ID + " = ? ", new String[] {Integer.toString(acct_id)});
         return true;
     }
