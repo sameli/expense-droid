@@ -28,7 +28,7 @@ export ANDROID_HOME=/path/to/your/android/sdk
 * Filter search for title
 * Sort transactions
 * Photo field for transactions (Add a "take photo" button to the edit activity)
-* Chart transactions based on type or date
+* Chart transactions based on type or date (weekly, monthly or yearly depending on the size of data)
 
 ## TODO
 
